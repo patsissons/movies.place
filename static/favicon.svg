@@ -1,0 +1,10 @@
+<svg viewBox="0 0 200 200" version="1.1" id="svg_null" xmlns="http://www.w3.org/2000/svg">
+  <rect id="background" fill="#FFF" x="0" y="0" width="200" height="200" />
+  <g id="shape" transform="matrix(1, 0, 0, 1, -0.000004, -0.000003)">
+
+    <polygon id="shape.accent" fill="#505458" points="0 200 0 0 163.107 0 62.136 100 163.107 200"></polygon>
+    <polygon id="shape.secondary" fill-opacity=".5" fill="#e4dcef"
+      transform="translate(118.446602, 100.000000) scale(-1, 1) translate(-118.446602, -100.000000)"
+      points="36.893 200 36.893 0 200 0 99.029 100 200 200"></polygon>
+  </g>
+</svg>
