@@ -5,6 +5,21 @@ type Pong {
   timestamp: DateTime
 }
 
+type ImageConfiguration {
+  baseUrl: String!
+  secureBaseUrl: String!
+  backdropSizes: [String!]!
+  logoSizes: [String!]!
+  posterSizes: [String!]!
+  profileSizes: [String!]!
+  stillSizes: [String!]!
+}
+
+type Configuration {
+  images: ImageConfiguration
+  changeKeys: [String!]!
+}
+
 type Collection {
   id: Int!
   name: String!
@@ -165,6 +180,7 @@ type PersonListResultsPage {
 }
 
 type Query {
+  configuration: Configuration!
   sortedMovies(
     sort: MovieSortType
     page: Int

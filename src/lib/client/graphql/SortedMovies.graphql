@@ -1,5 +1,5 @@
-query SortedMovies {
-  sortedMovies {
+query SortedMovies($page: Int) {
+  sortedMovies(page: $page) {
     page
     totalResults
     totalPages

@@ -42,10 +42,13 @@ export interface FetchParams
 export async function fetchJson<T = Record<string, unknown>>(
   fetch: Fetch,
   section: string,
-  path: string | number,
+  path?: string | number,
   { language = defaultLanguage, ...options }: FetchParams = {},
 ) {
-  const endpoint = [baseApiUrl, section, path].join('/')
+  const endpointParts: (string | number)[] = [baseApiUrl, section]
+  if (path) endpointParts.push(path)
+
+  const endpoint = endpointParts.join('/')
   const params = new URLSearchParams(
     omitBy(
       {
@@ -57,6 +60,8 @@ export async function fetchJson<T = Record<string, unknown>>(
     ),
   ).toString()
   const url = [endpoint, params].join('?')
+
+  // console.log('D', url)
 
   const response = await fetch(url, {
     headers: {
