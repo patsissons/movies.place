@@ -30,4 +30,15 @@ module.exports = {
     '@typescript-eslint/no-unsafe-argument': 'off',
     '@typescript-eslint/restrict-template-expressions': 'off',
   },
+  overrides: [
+    {
+      files: ['*.graphql'],
+      excludedFiles: ['schema.graphql'],
+      parser: '@graphql-eslint/eslint-plugin',
+      plugins: ['@graphql-eslint'],
+      rules: {
+        '@graphql-eslint/known-type-names': 'error',
+      },
+    },
+  ],
 }

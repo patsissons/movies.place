@@ -1,0 +1,23 @@
+query SortedMovies {
+  sortedMovies {
+    page
+    totalResults
+    totalPages
+    results {
+      id
+      title
+      posterPath
+      adult
+      overview
+      releaseDate
+      genreIds
+      originalTitle
+      originalLanguage
+      backdropPath
+      popularity
+      voteCount
+      video
+      voteAverage
+    }
+  }
+}

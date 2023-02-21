@@ -1,0 +1,190 @@
+scalar DateTime
+scalar Date
+
+type Pong {
+  timestamp: DateTime
+}
+
+type Collection {
+  id: Int!
+  name: String!
+  overview: String
+  posterPath: String
+  backdropPath: String
+}
+
+type Genre {
+  id: Int!
+  name: String!
+}
+
+type ProductionCompany {
+  id: Int!
+  name: String!
+  logoPath: String
+  originCountry: String!
+}
+
+type ProductionCountry {
+  iso31661: String!
+  name: String!
+}
+
+type SpokenLanguage {
+  iso6391: String!
+  name: String!
+}
+
+type MovieCastCredit {
+  id: Int!
+  adult: Boolean!
+  gender: Int
+  knownForDepartment: String!
+  name: String!
+  originalName: String!
+  popularity: Float!
+  profilePath: String
+  castId: Int!
+  character: String!
+  creditId: String!
+  order: Int!
+}
+
+type Movie {
+  id: Int!
+  adult: Boolean!
+  backdropPath: String
+  belongsToCollection: Collection
+  budget: Int!
+  genres: [Genre!]!
+  homepage: String
+  imdbId: String
+  originalLanguage: String!
+  originalTitle: String!
+  overview: String
+  popularity: Float!
+  posterPath: String
+  productionCompanies: [ProductionCompany!]!
+  productionCountries: [ProductionCountry!]!
+  releaseDate: String
+  revenue: Int!
+  runtime: Int
+  spokenLanguages: [SpokenLanguage!]!
+  status: String!
+  tagline: String
+  title: String!
+  video: Boolean!
+  voteAverage: Float!
+  voteCount: Int!
+  cast: [MovieCastCredit!]!
+}
+
+type MovieListResult {
+  id: Int!
+  posterPath: String
+  adult: Boolean!
+  overview: String!
+  releaseDate: String
+  genreIds: [Int!]!
+  originalTitle: String!
+  originalLanguage: String!
+  title: String!
+  backdropPath: String
+  popularity: Float!
+  voteCount: Int!
+  video: Boolean!
+  voteAverage: Float!
+}
+
+type MovieListResultsPage {
+  page: Int!
+  totalPages: Int!
+  totalResults: Int!
+  results: [MovieListResult!]!
+}
+
+enum MovieSortType {
+  LATEST
+  NOW_PLAYING
+  POPULAR
+  TOP_RATED
+  UPCOMING
+}
+
+type PersonCastCredit {
+  id: Int!
+  character: String!
+  creditId: String!
+  releaseDate: String
+  voteCount: Int!
+  video: Boolean!
+  adult: Boolean!
+  voteAverage: Float!
+  title: String!
+  genreIds: [Int!]!
+  originalLanguage: String!
+  originalTitle: String!
+  popularity: Float!
+  backdropPath: String
+  overview: String!
+  posterPath: String
+}
+
+type Person {
+  id: Int!
+  birthday: String
+  knownForDepartment: String!
+  deathday: String
+  name: String!
+  alsoKnownAs: [String!]!
+  gender: Int!
+  biography: String!
+  popularity: Float!
+  placeOfBirth: String
+  profilePath: String
+  adult: Boolean
+  imdbId: String!
+  homepage: String
+  cast: [PersonCastCredit!]!
+}
+
+type PersonListResult {
+  id: Int!
+  profilePath: String
+  adult: Boolean!
+  knownFor: [MovieListResult!]!
+  name: String!
+  popularity: Float!
+}
+
+type PersonListResultsPage {
+  page: Int!
+  totalPages: Int!
+  totalResults: Int!
+  results: [PersonListResult!]!
+}
+
+type Query {
+  sortedMovies(
+    sort: MovieSortType
+    page: Int
+    region: String
+  ): MovieListResultsPage!
+  movies(
+    query: String!
+    page: Int
+    includeAdult: Boolean
+    region: String
+    year: Int
+    primaryReleaseYear: Int
+  ): MovieListResultsPage!
+  movie(id: Int!): Movie
+  people(
+    query: String!
+    page: Int
+    includeAdult: Boolean
+    region: String
+  ): PersonListResultsPage!
+  person(id: Int!): Person
+  ping: Pong!
+}

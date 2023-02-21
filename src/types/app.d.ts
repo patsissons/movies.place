@@ -7,6 +7,10 @@ declare global {
     // interface PageData {}
     // interface Platform {}
   }
+
+  interface ImportMetaEnv {
+    TMDB_API_KEY?: string
+  }
 }
 
 export {}
