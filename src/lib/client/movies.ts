@@ -1,18 +1,22 @@
-import { fetchJson, type FetchOptions } from './json'
+import { fetchText, type FetchOptions } from './json'
 
 export interface MovieName {
   title: string
 }
 
 const endpoints = {
-  names: '',
+  names: 'https://datasets.imdbws.com/title.akas.tsv.gz',
 } as const
 
 export async function fetchMovieNames(options?: FetchOptions) {
   const endpoint = endpoints.names
   if (!endpoint) throw new Error('movies.place is coming soon 🎉')
 
-  const names = await fetchJson<MovieName[]>(endpoint, options)
+  const text = await fetchText(endpoint, options)
+  const rows = text.split('\n')
+  return rows.map((row) => {
+    const [, , title] = row.split('\t')
 
-  return names.map(({ title }) => title)
+    return title
+  })
 }

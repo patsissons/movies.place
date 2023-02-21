@@ -1,0 +1,63 @@
+query Movie($id: Int!) {
+  movie(id: $id) {
+    id
+    adult
+    backdropPath
+    belongsToCollection {
+      id
+      name
+      overview
+      posterPath
+      backdropPath
+    }
+    budget
+    genres {
+      id
+      name
+    }
+    homepage
+    imdbId
+    originalLanguage
+    originalTitle
+    overview
+    popularity
+    posterPath
+    productionCompanies {
+      id
+      name
+      logoPath
+      originCountry
+    }
+    productionCountries {
+      iso31661
+      name
+    }
+    releaseDate
+    revenue
+    runtime
+    spokenLanguages {
+      iso6391
+      name
+    }
+    status
+    tagline
+    title
+    video
+    voteAverage
+    voteCount
+    cast {
+      id
+      adult
+      gender
+      knownForDepartment
+      name
+      originalName
+      popularity
+      profilePath
+      castId
+      character
+      creditId
+      order
+    }
+  }
+}

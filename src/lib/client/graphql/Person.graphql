@@ -1,0 +1,36 @@
+query Person($id: Int!) {
+  person(id: $id) {
+    id
+    birthday
+    knownForDepartment
+    deathday
+    name
+    alsoKnownAs
+    gender
+    biography
+    popularity
+    placeOfBirth
+    profilePath
+    adult
+    imdbId
+    homepage
+    cast {
+      id
+      character
+      creditId
+      releaseDate
+      voteCount
+      video
+      adult
+      voteAverage
+      title
+      genreIds
+      originalLanguage
+      originalTitle
+      popularity
+      backdropPath
+      overview
+      posterPath
+    }
+  }
+}

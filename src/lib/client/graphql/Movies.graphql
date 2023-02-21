@@ -1,0 +1,23 @@
+query Movies($query: String!) {
+  movies(query: $query) {
+    page
+    totalPages
+    totalResults
+    results {
+      id
+      posterPath
+      adult
+      overview
+      releaseDate
+      genreIds
+      originalTitle
+      originalLanguage
+      title
+      backdropPath
+      popularity
+      voteCount
+      video
+      voteAverage
+    }
+  }
+}
