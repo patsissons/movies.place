@@ -5,6 +5,7 @@ import type {
   QueryMoviesArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
+import { loadDefaults } from './defaultPayloads'
 
 export const movies = (async (
   _source,
@@ -12,14 +13,21 @@ export const movies = (async (
   { fetch },
 ) => {
   try {
-    return await fetchJson<MovieListResultsPage>(fetch, 'search', 'movie', {
-      query,
-      page,
-      include_adult: includeAdult,
-      region,
-      year,
-      primary_release_year: primaryReleaseYear,
-    })
+    const { MoviesDefault } = await loadDefaults()
+    return await fetchJson<MovieListResultsPage>(
+      fetch,
+      'search',
+      'movie',
+      {
+        query,
+        page,
+        include_adult: includeAdult,
+        region,
+        year,
+        primary_release_year: primaryReleaseYear,
+      },
+      { defaultPayload: MoviesDefault },
+    )
   } catch (error) {
     if (error instanceof JsonError) {
       throw new GraphQLError(error.message)
@@ -27,4 +35,4 @@ export const movies = (async (
 
     throw error
   }
-}) satisfies Resolver<QueryMoviesArgs, Promise<MovieListResultsPage>, never>
+}) satisfies Resolver<QueryMoviesArgs, MovieListResultsPage, never>

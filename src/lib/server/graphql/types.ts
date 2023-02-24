@@ -1,4 +1,8 @@
-import type { IResolvers, ISchemaLevelResolver } from '@graphql-tools/utils'
+import type {
+  IResolvers,
+  ISchemaLevelResolver,
+  MaybePromise,
+} from '@graphql-tools/utils'
 import type { RequestEvent } from '@sveltejs/kit'
 
 export type Context = Pick<RequestEvent, 'fetch' | 'request'>
@@ -8,4 +12,4 @@ export type Resolver<
   Args = unknown,
   Return = unknown,
   Source = unknown,
-> = ISchemaLevelResolver<Source, Context, Args, Return>
+> = ISchemaLevelResolver<Source, Context, Args, MaybePromise<Return>>

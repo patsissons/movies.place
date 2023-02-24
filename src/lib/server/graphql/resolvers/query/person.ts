@@ -6,6 +6,7 @@ import type {
   QueryPersonArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
+import { loadDefaults } from './defaultPayloads'
 
 interface PersonPayload extends Omit<Person, 'cast'> {
   movieCredits: {
@@ -15,12 +16,19 @@ interface PersonPayload extends Omit<Person, 'cast'> {
 
 export const person = (async (_source, { id }, { fetch }) => {
   try {
+    const { PersonDefault } = await loadDefaults()
     const {
       movieCredits: { cast },
       ...payload
-    } = await fetchJson<PersonPayload>(fetch, 'person', id, {
-      append_to_response: 'movie_credits',
-    })
+    } = await fetchJson<PersonPayload>(
+      fetch,
+      'person',
+      id,
+      {
+        append_to_response: 'movie_credits',
+      },
+      { defaultPayload: PersonDefault },
+    )
 
     return {
       ...payload,
@@ -33,4 +41,4 @@ export const person = (async (_source, { id }, { fetch }) => {
 
     throw error
   }
-}) satisfies Resolver<QueryPersonArgs, Promise<Person>, never>
+}) satisfies Resolver<QueryPersonArgs, Person, never>

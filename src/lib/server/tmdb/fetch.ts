@@ -39,11 +39,16 @@ export interface FetchParams
   language?: string
 }
 
+export interface FetchOptions<T> {
+  defaultPayload?: T
+}
+
 export async function fetchJson<T = Record<string, unknown>>(
   fetch: Fetch,
   section: string,
   path?: string | number,
   { language = defaultLanguage, ...options }: FetchParams = {},
+  { defaultPayload }: FetchOptions<T> = {},
 ) {
   const endpointParts: (string | number)[] = [baseApiUrl, section]
   if (path) endpointParts.push(path)
@@ -61,32 +66,40 @@ export async function fetchJson<T = Record<string, unknown>>(
   ).toString()
   const url = [endpoint, params].join('?')
 
-  // console.log('D', url)
+  return tryFetch<T>(fetch, url, defaultPayload)
+}
 
-  const response = await fetch(url, {
-    headers: {
-      accept: 'application/json; charset=utf8;',
-      'Content-Type': 'application/json',
-    },
-    method: 'GET',
-  })
+async function tryFetch<T>(fetch: Fetch, url: string, defaultPayload?: T) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        accept: 'application/json; charset=utf8;',
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    })
 
-  if (!response.ok) {
-    const body = await response.text()
-    const error = tryParseJson(body)
+    if (!response.ok) {
+      const body = await response.text()
+      const error = tryParseJson(body)
 
-    if (JsonError.isJsonErrorStatus(error)) {
-      throw new JsonError(error)
-    } else {
-      throw new Error(body)
+      if (JsonError.isJsonErrorStatus(error)) {
+        throw new JsonError(error)
+      } else {
+        throw new Error(body)
+      }
     }
+
+    const payload = await response.json()
+
+    // console.log('D', payload)
+
+    return camelize<T>(payload)
+  } catch (error) {
+    if (defaultPayload) return defaultPayload
+
+    throw error
   }
-
-  const payload = await response.json()
-
-  // console.log('D', payload)
-
-  return camelize<T>(payload)
 }
 
 function tryParseJson<T = unknown>(text: string) {

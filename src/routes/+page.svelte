@@ -4,6 +4,10 @@
 
   export let data: PageData
 
+  let movieMap = new Map<
+    number,
+    SortedMovies$result['sortedMovies']['results'][0]
+  >()
   let movies: SortedMovies$result['sortedMovies']['results'] = []
   let movieErrors: string[] | undefined
   let page: number | undefined
@@ -13,10 +17,15 @@
   $: baseUrl = $Configuration.data?.configuration.images?.secureBaseUrl
   $: if ($SortedMovies.data && !$SortedMovies.fetching) {
     movieErrors = $SortedMovies.errors?.map(({ message }) => message)
-    page = $SortedMovies.data.sortedMovies.page
-    totalPages = $SortedMovies.data.sortedMovies.totalPages
+    const { sortedMovies } = $SortedMovies.data
+    page = sortedMovies.page
+    totalPages = sortedMovies.totalPages
 
-    movies = movies.concat($SortedMovies.data.sortedMovies.results)
+    sortedMovies.results.forEach((result) => {
+      movieMap.set(result.id, result)
+    })
+
+    movies = Array.from(movieMap.values())
   }
 
   function showMore() {
@@ -48,14 +57,26 @@
     </div>
   </div>
 {/if}
-{#if movies && baseUrl}
-  <div class="flex flex-wrap justify-center gap-[6px]">
-    {#each movies as movie}
-      <a href={`/${movie.id}`}>
-        <img
-          src={`${baseUrl}/w154${movie.posterPath}`}
-          alt={`${movie.title} poster`}
-        />
+{#if movies}
+  <div class="flex flex-wrap justify-center gap-x-[6px] gap-y-4">
+    {#each movies as movie, index}
+      <a
+        href={`/${movie.id}`}
+        class={`flex flex-col gap-2 w-[154px] animate-in slide-in-from-bottom fade-in zoom-in animate-duration-500 animate-delay-[${
+          (index % 10) * 25
+        }ms]`}
+      >
+        <div class="bg-slate-400 w-full h-[231px]">
+          {#if baseUrl}
+            <img
+              src={`${baseUrl}/w154${movie.posterPath}`}
+              alt={`${movie.title} poster`}
+            />
+          {/if}
+        </div>
+        <p class="overflow-hidden whitespace-nowrap text-ellipsis text-center">
+          {movie.title}
+        </p>
       </a>
     {/each}
   </div>

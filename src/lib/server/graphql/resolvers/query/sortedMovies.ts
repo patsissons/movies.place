@@ -1,10 +1,11 @@
+import { GraphQLError } from 'graphql'
 import type { Resolver } from '$lib/server/graphql/types'
 import { fetchJson, JsonError } from '$lib/server/tmdb'
 import type {
   MovieListResultsPage,
   QuerySortedMoviesArgs,
 } from '$lib/types/graphql.generated'
-import { GraphQLError } from 'graphql'
+import { loadDefaults } from './defaultPayloads'
 
 export const sortedMovies = (async (
   _source,
@@ -12,11 +13,14 @@ export const sortedMovies = (async (
   { fetch },
 ) => {
   try {
-    return await fetchJson<MovieListResultsPage>(
+    const { SortedMoviesDefault } = await loadDefaults()
+
+    return fetchJson<MovieListResultsPage>(
       fetch,
       'movie',
       (sort || 'POPULAR').toLowerCase(),
       { page, region },
+      { defaultPayload: SortedMoviesDefault },
     )
   } catch (error) {
     if (error instanceof JsonError) {
@@ -25,8 +29,4 @@ export const sortedMovies = (async (
 
     throw error
   }
-}) satisfies Resolver<
-  QuerySortedMoviesArgs,
-  Promise<MovieListResultsPage>,
-  never
->
+}) satisfies Resolver<QuerySortedMoviesArgs, MovieListResultsPage, never>

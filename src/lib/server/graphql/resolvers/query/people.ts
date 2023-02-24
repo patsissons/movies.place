@@ -5,6 +5,7 @@ import type {
   QueryPeopleArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
+import { loadDefaults } from './defaultPayloads'
 
 export const people = (async (
   _source,
@@ -12,6 +13,7 @@ export const people = (async (
   { fetch },
 ) => {
   try {
+    const { PeopleDefault } = await loadDefaults()
     const payload = await fetchJson<PersonListResultsPage>(
       fetch,
       'search',
@@ -22,6 +24,7 @@ export const people = (async (
         include_adult: includeAdult,
         region,
       },
+      { defaultPayload: PeopleDefault },
     )
 
     payload.results.forEach((result) => {
@@ -40,4 +43,4 @@ export const people = (async (
 
     throw error
   }
-}) satisfies Resolver<QueryPeopleArgs, Promise<PersonListResultsPage>, never>
+}) satisfies Resolver<QueryPeopleArgs, PersonListResultsPage, never>
