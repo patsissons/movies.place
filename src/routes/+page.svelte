@@ -14,6 +14,9 @@
   let totalPages: number | undefined
 
   $: ({ Configuration, SortedMovies } = data)
+  $: if ($Configuration.data?.configuration) {
+    console.log('Config', $Configuration.data.configuration)
+  }
   $: baseUrl = $Configuration.data?.configuration.images?.secureBaseUrl
   $: if ($SortedMovies.data && !$SortedMovies.fetching) {
     movieErrors = $SortedMovies.errors?.map(({ message }) => message)
@@ -58,28 +61,41 @@
   </div>
 {/if}
 {#if movies}
-  <div class="flex flex-wrap justify-center gap-x-[6px] gap-y-4">
+  <ul
+    class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 justify-items-center gap-2 animate-stagger"
+  >
     {#each movies as movie, index}
-      <a
-        href={`/${movie.id}`}
-        class={`flex flex-col gap-2 w-[154px] animate-in slide-in-from-bottom fade-in zoom-in animate-duration-500 animate-delay-[${
-          (index % 10) * 25
-        }ms]`}
+      <li
+        class="animate-in ease-out animate-duration-500 slide-in-from-bottom slide-in-from-right fill-mode-both fade-in zoom-in"
+        style={`--animation-delay-factor: ${index % 20}`}
       >
-        <div class="bg-slate-400 w-full h-[231px]">
-          {#if baseUrl}
-            <img
-              src={`${baseUrl}/w154${movie.posterPath}`}
-              alt={`${movie.title} poster`}
-            />
-          {/if}
-        </div>
-        <p class="overflow-hidden whitespace-nowrap text-ellipsis text-center">
-          {movie.title}
-        </p>
-      </a>
+        <a
+          href={`/${movie.id}`}
+          class="flex flex-col items-center gap-2 w-full"
+        >
+          <div
+            class="bg-slate-400 w-[92px] 2xl:w-[154px] h-[138px] 2xl:h-[231px]"
+          >
+            {#if baseUrl}
+              <img
+                class="hidden 2xl:block"
+                src={`${baseUrl}/w154${movie.posterPath}`}
+                alt={`${movie.title} poster`}
+              />
+              <img
+                class="2xl:hidden"
+                src={`${baseUrl}/w92${movie.posterPath}`}
+                alt={`${movie.title} poster`}
+              />
+            {/if}
+          </div>
+          <p class="w-full text-center">
+            {movie.title}
+          </p>
+        </a>
+      </li>
     {/each}
-  </div>
+  </ul>
 {/if}
 {#if page && totalPages && page < totalPages}
   <div class="text-center p-5">
@@ -90,3 +106,9 @@
     </button>
   </div>
 {/if}
+
+<style lang="scss">
+  .animate-stagger > li {
+    animation-delay: calc(var(--animation-delay-factor, 0) * 50ms);
+  }
+</style>
