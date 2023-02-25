@@ -63,7 +63,7 @@
     <div class="drawer-side">
       <label for="drawer" class="drawer-overlay" />
       <ul class="menu p-4 w-80 bg-base-100 text-base-content">
-        <li class="menu-title" style="opacity: 1;">
+        <li class="menu-title !opacity-100">
           <a class="btn btn-ghost" href={$page.url.origin}>
             <div class="flex items-center gap-2 w-full">
               <svg
@@ -86,8 +86,13 @@
           </a>
         </li>
         <div class="divider" />
-        <li><a href="/movies">By Movie</a></li>
-        <li><a href="/actors">By Actor</a></li>
+        <li class="menu-title">Popular</li>
+        <li><a href="/movies">Movies</a></li>
+        <li><a href="/actors">Actors</a></li>
+        <div class="divider" />
+        <li class="menu-title">Search</li>
+        <li><a href="/movies/search">By Movie</a></li>
+        <li><a href="/actors/search">By Actor</a></li>
         <div class="divider" />
         <li>
           <a href="/api/graphql" target="_blank" rel="noreferrer">GraphQL</a>

@@ -127,6 +127,37 @@ query Movie {
   }
 }
 
+query SortedPeople {
+  sortedPeople {
+    page
+    totalPages
+    totalResults
+    results {
+      id
+      profilePath
+      adult
+      knownFor {
+        id
+        posterPath
+        adult
+        overview
+        releaseDate
+        genreIds
+        originalTitle
+        originalLanguage
+        title
+        backdropPath
+        popularity
+        voteCount
+        video
+        voteAverage
+      }
+      name
+      popularity
+    }
+  }
+}
+
 query People {
   people(query: "Daniel Craig") {
     page

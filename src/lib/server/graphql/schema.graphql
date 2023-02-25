@@ -105,7 +105,7 @@ type MovieListResult {
   originalLanguage: String!
   title: String!
   backdropPath: String
-  popularity: Float!
+  popularity: Float
   voteCount: Int!
   video: Boolean!
   voteAverage: Float!
@@ -163,11 +163,59 @@ type Person {
   cast: [PersonCastCredit!]!
 }
 
+# type PersonKnownForMovie {
+#   id: Int!
+#   # posterPath: String
+#   # adult: Boolean
+#   # overview: String
+#   # releaseDate: String
+#   # genreIds: [Int!]
+#   # originalTitle: String
+#   # originalLanguage: String
+#   # title: String
+#   # backdropPath: String
+#   # popularity: Float
+#   # voteCount: Int
+#   # video: Boolean
+#   # voteAverage: Float
+#   #   id: Int!
+#   posterPath: String
+#   adult: Boolean
+#   overview: String!
+#   releaseDate: String
+#   genreIds: [Int!]!
+#   originalTitle: String
+#   originalLanguage: String!
+#   title: String
+#   backdropPath: String
+#   popularity: Float
+#   voteCount: Int!
+#   video: Boolean
+#   voteAverage: Float!
+# }
+# # type MovieListResult {
+# #   id: Int!
+# #   posterPath: String
+# #   adult: Boolean!
+# #   overview: String!
+# #   releaseDate: String
+# #   genreIds: [Int!]!
+# #   originalTitle: String!
+# #   originalLanguage: String!
+# #   title: String!
+# #   backdropPath: String
+# #   popularity: Float!
+# #   voteCount: Int!
+# #   video: Boolean!
+# #   voteAverage: Float!
+# # }
+
 type PersonListResult {
   id: Int!
   profilePath: String
   adult: Boolean!
   knownFor: [MovieListResult!]!
+  knownForDepartment: String
   name: String!
   popularity: Float!
 }
@@ -177,6 +225,10 @@ type PersonListResultsPage {
   totalPages: Int!
   totalResults: Int!
   results: [PersonListResult!]!
+}
+
+enum PeopleSortType {
+  POPULAR
 }
 
 type Query {
@@ -195,6 +247,11 @@ type Query {
     primaryReleaseYear: Int
   ): MovieListResultsPage!
   movie(id: Int!): Movie
+  sortedPeople(
+    sort: PeopleSortType
+    page: Int
+    region: String
+  ): PersonListResultsPage!
   people(
     query: String!
     page: Int

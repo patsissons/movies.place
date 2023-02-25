@@ -8,6 +8,7 @@ export async function loadDefaults() {
   const People = await import('$lib/_ignore/People.json')
   const Person = await import('$lib/_ignore/Person.json')
   const SortedMovies = await import('$lib/_ignore/SortedMovies.json')
+  const SortedPeople = await import('$lib/_ignore/SortedPeople.json')
 
   return {
     MovieDefault: Movie.data.movie,
@@ -15,5 +16,6 @@ export async function loadDefaults() {
     PeopleDefault: People.data.people,
     PersonDefault: Person.data.person,
     SortedMoviesDefault: SortedMovies.data.sortedMovies,
+    SortedPeopleDefault: SortedPeople.data.sortedPeople,
   }
 }

@@ -5,6 +5,7 @@ import { people } from './people'
 import { person } from './person'
 import { ping } from './ping'
 import { sortedMovies } from './sortedMovies'
+import { sortedPeople } from './sortedPeople'
 
 export const Query = {
   configuration,
@@ -12,6 +13,7 @@ export const Query = {
   movies,
   people,
   person,
-  sortedMovies,
   ping,
+  sortedMovies,
+  sortedPeople,
 }
