@@ -39,7 +39,7 @@
                   alt="movies.place logo"
                 />
               </div>
-              <span class="hidden sm:inline">movies.place</span>
+              <span class="hidden sm:inline text-secondary">movies.place</span>
             </div>
           </label>
         </div>
@@ -81,7 +81,7 @@
                   d="M490.91 244.15l-74.8-71.56V64a16 16 0 00-16-16h-48a16 16 0 00-16 16v32l-57.92-55.38C272.77 35.14 264.71 32 256 32c-8.68 0-16.72 3.14-22.14 8.63l-212.7 203.5c-6.22 6-7 15.87-1.34 22.37A16 16 0 0043 267.56L250.5 69.28a8 8 0 0111.06 0l207.52 198.28a16 16 0 0022.59-.44c6.14-6.36 5.63-16.86-.76-22.97z"
                 />
               </svg>
-              <span class="text-xl font-bold">Home</span>
+              <span class="text-xl text-secondary font-bold">Home</span>
             </div>
           </a>
         </li>
