@@ -2,7 +2,7 @@
   export let type: string
   export let page: number | undefined
   export let totalPages: number | undefined
-  export let nextPage: () => unknown
+  export let nextPage: (() => unknown) | undefined
 </script>
 
 {#if page && totalPages && page < totalPages}

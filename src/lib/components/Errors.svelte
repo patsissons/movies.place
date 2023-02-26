@@ -1,5 +1,7 @@
 <script lang="ts">
-  export let errors: string[] | undefined = undefined
+  import type { Readable } from 'svelte/store'
+
+  export let errors: string[] | undefined
 </script>
 
 {#if errors && errors.length > 0}

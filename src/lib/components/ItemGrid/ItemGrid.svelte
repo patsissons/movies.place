@@ -2,6 +2,7 @@
   import type { Item } from './types'
 
   export let items: Item[] | undefined
+  export let baseUrl: string | undefined
 </script>
 
 {#if items}
@@ -17,15 +18,15 @@
           <div
             class="bg-slate-400 w-[92px] 2xl:w-[154px] h-[138px] 2xl:h-[231px]"
           >
-            {#if item.image}
+            {#if baseUrl}
               <img
                 class="hidden 2xl:block"
-                src={item.image.large}
+                src={[baseUrl, item.image.large].join('')}
                 alt={`${item.title} poster`}
               />
               <img
                 class="2xl:hidden"
-                src={item.image.small}
+                src={[baseUrl, item.image.small].join('')}
                 alt={`${item.title} poster`}
               />
             {/if}

@@ -21,15 +21,33 @@ export function itemsFromResultListStore<
   dataTransformer: (data: Data) => ResultList<T>,
   transformer: (result: T) => Item,
 ) {
-  return derived(store, ({ data, errors, fetching }) => {
+  const errors = derived(store, ({ errors, fetching }) => {
+    if (fetching) return
+    if (errors && errors.length > 0) return errors.map(({ message }) => message)
+  })
+
+  const pagination = derived(store, ({ data, fetching }) => {
     if (!data || fetching) return {}
-    if (errors && errors.length > 0)
-      return { errors: errors.map(({ message }) => message) }
 
     const list = dataTransformer(data)
-    const { page, totalPages, results } = list
-    const items = results.map(transformer)
+    const { page, totalPages } = list
 
-    return { page, totalPages, items }
+    const nextPage = () => {
+      if (page === totalPages) return
+
+      return store.fetch({ variables: { page: page + 1 } })
+    }
+
+    return { page, totalPages, nextPage }
   })
+
+  const items = derived(store, ({ data, fetching }) => {
+    if (!data || fetching) return
+
+    const { results } = dataTransformer(data)
+
+    return results.map(transformer)
+  })
+
+  return { errors, pagination, items }
 }
