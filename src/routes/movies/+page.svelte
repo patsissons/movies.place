@@ -3,15 +3,14 @@
   import Errors from '$lib/components/Errors.svelte'
   import { ItemGrid } from '$lib/components/ItemGrid'
   import Pagination from '$lib/components/Pagination.svelte'
-  import { baseUrlFromConfigStore } from '$lib/utils/config'
-  import { itemsFromResultListStore } from '$lib/utils/items'
+  import { baseUrlStore, itemsStore } from '$lib/stores'
 
   export let data: PageData
 
   const { Configuration, SortedMovies } = data
 
-  const baseUrl = baseUrlFromConfigStore(Configuration)
-  const { errors, pagination, items } = itemsFromResultListStore(
+  const baseUrl = baseUrlStore(Configuration)
+  const { errors, pagination, items } = itemsStore(
     SortedMovies,
     (data) => data.sortedMovies,
     ({ id, title, posterPath }) => ({
@@ -24,9 +23,8 @@
       },
     }),
   )
-  const { page, totalPages, nextPage } = $pagination
 </script>
 
-<Errors errors={$errors} />
-<ItemGrid items={$items} baseUrl={$baseUrl} />
-<Pagination type="movies" {page} {totalPages} {nextPage} />
+<Errors {errors} />
+<ItemGrid {items} {baseUrl} />
+<Pagination type="movies" {pagination} />

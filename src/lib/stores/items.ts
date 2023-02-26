@@ -2,9 +2,11 @@ import type { QueryStore } from '$houdini'
 import type { GraphQLObject } from 'houdini'
 import { derived } from 'svelte/store'
 
-interface Result extends GraphQLObject {
+interface ResultItem {
   id: number
 }
+
+interface Result extends GraphQLObject, ResultItem {}
 
 interface ResultList<T extends Result> extends GraphQLObject {
   page: number
@@ -12,10 +14,17 @@ interface ResultList<T extends Result> extends GraphQLObject {
   results: T[]
 }
 
-export function itemsFromResultListStore<
+export interface Pagination {
+  page: number
+  totalPages: number
+  nextPage: () => unknown
+  fetching: boolean
+}
+
+export function itemsStore<
   Data extends GraphQLObject,
   T extends Result,
-  Item,
+  Item extends ResultItem,
 >(
   store: QueryStore<Data, Record<string, unknown>>,
   dataTransformer: (data: Data) => ResultList<T>,
@@ -27,10 +36,9 @@ export function itemsFromResultListStore<
   })
 
   const pagination = derived(store, ({ data, fetching }) => {
-    if (!data || fetching) return {}
+    if (!data) return
 
-    const list = dataTransformer(data)
-    const { page, totalPages } = list
+    const { page, totalPages } = dataTransformer(data)
 
     const nextPage = () => {
       if (page === totalPages) return
@@ -38,7 +46,7 @@ export function itemsFromResultListStore<
       return store.fetch({ variables: { page: page + 1 } })
     }
 
-    return { page, totalPages, nextPage }
+    return { page, totalPages, nextPage, fetching } as Pagination
   })
 
   const items = derived(store, ({ data, fetching }) => {
