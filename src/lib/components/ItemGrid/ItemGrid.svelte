@@ -32,7 +32,7 @@
       style={`--animation-delay-factor: ${(index - lastLength) % 20}`}
     >
       <a
-        href={`/${item.id}`}
+        href={item.url}
         class="flex flex-col items-center gap-2 w-full h-full rounded-lg p-2 btn-ghost"
       >
         <div

@@ -25,7 +25,9 @@
   <div class="drawer">
     <input id="drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
-      <div class="navbar bg-base-100">
+      <div
+        class="navbar bg-base-100 bg-opacity-75 fixed h-16 z-50 backdrop-blur"
+      >
         <div class="navbar-start">
           <label
             for="drawer"
@@ -54,7 +56,7 @@
           </label>
         </div>
       </div>
-      <div class="w-full h-full">
+      <div class="mt-16 w-full h-full">
         <div class="container mx-auto py-5">
           <slot />
         </div>
