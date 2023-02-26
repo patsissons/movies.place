@@ -6,7 +6,7 @@ import type {
   QueryMovieArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
-import { loadDefaults } from './defaultPayloads'
+import { fallbacks } from './fallbacks'
 
 interface MoviePayload extends Omit<Movie, 'cast'> {
   credits: {
@@ -16,7 +16,6 @@ interface MoviePayload extends Omit<Movie, 'cast'> {
 
 export const movie = (async (_source, { id }, { fetch }) => {
   try {
-    const { MovieDefault } = await loadDefaults()
     const {
       credits: { cast },
       ...payload
@@ -25,7 +24,7 @@ export const movie = (async (_source, { id }, { fetch }) => {
       'movie',
       id,
       { append_to_response: 'credits' },
-      { defaultPayload: MovieDefault },
+      { fallbackUrl: fallbacks.movie },
     )
 
     return {

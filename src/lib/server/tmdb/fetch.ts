@@ -39,8 +39,8 @@ export interface FetchParams
   language?: string
 }
 
-export interface FetchOptions<T> {
-  defaultPayload?: T
+export interface FetchOptions {
+  fallbackUrl?: string
 }
 
 export async function fetchJson<T = Record<string, unknown>>(
@@ -48,7 +48,7 @@ export async function fetchJson<T = Record<string, unknown>>(
   section: string,
   path?: string | number,
   { language = defaultLanguage, ...options }: FetchParams = {},
-  { defaultPayload }: FetchOptions<T> = {},
+  { fallbackUrl }: FetchOptions = {},
 ) {
   const endpointParts: (string | number)[] = [baseApiUrl, section]
   if (path) endpointParts.push(path)
@@ -66,10 +66,14 @@ export async function fetchJson<T = Record<string, unknown>>(
   ).toString()
   const url = [endpoint, params].join('?')
 
-  return tryFetch<T>(fetch, url, defaultPayload)
+  return tryFetch<T>(fetch, url, fallbackUrl)
 }
 
-async function tryFetch<T>(fetch: Fetch, url: string, defaultPayload?: T) {
+async function tryFetch<T>(
+  fetch: Fetch,
+  url: string,
+  fallbackUrl?: string,
+): Promise<T> {
   try {
     const response = await fetch(url, {
       headers: {
@@ -96,7 +100,15 @@ async function tryFetch<T>(fetch: Fetch, url: string, defaultPayload?: T) {
 
     return camelize<T>(payload)
   } catch (error) {
-    if (defaultPayload) return defaultPayload
+    if (fallbackUrl) {
+      const { data } = await tryFetch<{ data: Record<string, T> }>(
+        fetch,
+        fallbackUrl,
+      )
+      const [field] = Object.keys(data)
+
+      return data[field]
+    }
 
     throw error
   }

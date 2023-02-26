@@ -5,7 +5,7 @@ import type {
   QueryMoviesArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
-import { loadDefaults } from './defaultPayloads'
+import { fallbacks } from './fallbacks'
 
 export const movies = (async (
   _source,
@@ -13,7 +13,6 @@ export const movies = (async (
   { fetch },
 ) => {
   try {
-    const { MoviesDefault } = await loadDefaults()
     return await fetchJson<MovieListResultsPage>(
       fetch,
       'search',
@@ -26,7 +25,7 @@ export const movies = (async (
         year,
         primary_release_year: primaryReleaseYear,
       },
-      { defaultPayload: MoviesDefault },
+      { fallbackUrl: fallbacks.movies },
     )
   } catch (error) {
     if (error instanceof JsonError) {

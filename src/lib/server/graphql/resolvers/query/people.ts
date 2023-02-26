@@ -5,7 +5,7 @@ import type {
   QueryPeopleArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
-import { loadDefaults } from './defaultPayloads'
+import { fallbacks } from './fallbacks'
 
 export const people = (async (
   _source,
@@ -13,7 +13,6 @@ export const people = (async (
   { fetch },
 ) => {
   try {
-    const { PeopleDefault } = await loadDefaults()
     const payload = await fetchJson<PersonListResultsPage>(
       fetch,
       'search',
@@ -24,7 +23,7 @@ export const people = (async (
         include_adult: includeAdult,
         region,
       },
-      { defaultPayload: PeopleDefault },
+      { fallbackUrl: fallbacks.people },
     )
 
     payload.results.forEach((result) => {
