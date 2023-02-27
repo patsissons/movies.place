@@ -51,7 +51,7 @@
   <div class="flex flex-col gap-1">
     <div class="flex flex-col gap-4">
       <div
-        class="hero min-h-screen bg-base-200 bg-cover"
+        class="hero min-h-screen bg-base-200"
         style={movie.backdropPath
           ? `background-image: url(${[
               $baseUrl,
@@ -124,7 +124,7 @@
                 {/if}
               </div>
             </div>
-            <div class="flex items-center gap-1">
+            <div class="flex flex-wrap items-center gap-1">
               {#if movie.runtime}
                 <p>
                   {dayjs.duration(movie.runtime, 'minutes').format('H[h] m[m]')}
@@ -132,15 +132,19 @@
               {/if}
               {#if movie.genres.length > 0}
                 <p>•</p>
-                {#each movie.genres as genre}
-                  <div class="badge badge-primary">{genre.name}</div>
-                {/each}
+                <div class="flex flex-wrap items-center gap-1">
+                  {#each movie.genres as genre}
+                    <div class="badge badge-primary">{genre.name}</div>
+                  {/each}
+                </div>
               {/if}
               <p>•</p>
               <p class="italic">{movie.tagline}</p>
             </div>
             <p>{movie.overview}</p>
-            <div class="stats stats-vertical lg:stats-horizontal shadow">
+            <div
+              class="stats stats-vertical sm:stats-horizontal text-center sm:text-left shadow"
+            >
               <div class="stat">
                 <div class="stat-title">User rating</div>
                 <div class="stat-value text-secondary">

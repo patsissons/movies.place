@@ -20,7 +20,7 @@
   })
 </script>
 
-<div class="w-screen h-screen min-w-[352px]">
+<div class="w-screen h-screen min-w-[415px]">
   <div class="drawer">
     <input id="drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
