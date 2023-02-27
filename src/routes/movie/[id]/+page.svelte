@@ -1,13 +1,12 @@
 <script lang="ts">
   import Time from 'svelte-time'
   import dayjs from 'dayjs'
-  import { globe } from 'ionicons/icons'
   import { page } from '$app/stores'
   import Error from '$lib/components/Error.svelte'
   import { baseUrlStore } from '$lib/stores'
   import { urls } from '$lib/utils/urls'
   import type { PageData } from './$houdini'
-  import { Icon, SvgIcon } from '$lib/components/Icon'
+  import { Icon } from '$lib/components/Icon'
 
   export let data: PageData
 
@@ -59,14 +58,14 @@
           <div class="flex flex-col gap-4">
             <div class="flex items-start justify-between gap-2">
               <h1 class="text-4xl font-bold">{movie.title}</h1>
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-2 text-white">
                 <a
                   class="btn btn-ghost btn-sm"
                   href={movie.homepage}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <SvgIcon svg={globe} size={20} /></a
+                  <Icon icon="globe" size={20} /></a
                 >
                 <a
                   class="btn btn-ghost btn-sm"

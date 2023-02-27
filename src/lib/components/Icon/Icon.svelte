@@ -1,8 +1,9 @@
 <script lang="ts">
-  import ImdbIcon from './icons/imdb.svg?c'
-  import TmdbIcon from './icons/tmdb.svg?c'
+  import globe from 'ionicons/dist/svg/globe.svg?c'
+  import imdb from './icons/imdb.svg?c'
+  import tmdb from './icons/tmdb.svg?c'
 
-  const icons = { imdb: ImdbIcon, tmdb: TmdbIcon }
+  const icons = { globe, imdb, tmdb }
 
   export let icon: keyof typeof icons
   export let size: number | string
@@ -10,4 +11,11 @@
   const Component = icons[icon]
 </script>
 
-<Component width={size} height={size} />
+<Component
+  width={size}
+  height={size}
+  stroke="currentColor"
+  fill="currentColor"
+  stroke-width={0}
+  role="img"
+/>
