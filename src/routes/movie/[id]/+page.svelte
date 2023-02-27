@@ -29,31 +29,18 @@
 {#if $MovieStore.data}
   {#if movie}
     <div class="flex flex-col gap-1">
-      {#if movie.backdropPath}
-        <div class="flex justify-center">
-          <div
-            class="bg-slate-400 w-[300px] lg:w-[780px] xl:w-[1280px] h-[169px] lg:h-[439px] xl:h-[720px]"
-          >
-            <img
-              class="lg:hidden"
-              src={[$baseUrl, 'w300', movie.backdropPath].join('')}
-              alt=""
-            />
-            <img
-              class="hidden lg:block xl:hidden"
-              src={[$baseUrl, 'w780', movie.backdropPath].join('')}
-              alt=""
-            />
-            <img
-              class="hidden xl:block"
-              src={[$baseUrl, 'w1280', movie.backdropPath].join('')}
-              alt=""
-            />
-          </div>
-        </div>
-      {/if}
       <div class="flex flex-col gap-4">
-        <div class="hero min-h-screen bg-base-200">
+        <div
+          class="hero min-h-screen bg-base-200"
+          style={movie.backdropPath
+            ? `background-image: url(${[
+                $baseUrl,
+                'original',
+                movie.backdropPath,
+              ].join('')});`
+            : undefined}
+        >
+          <div class="hero-overlay backdrop-blur-sm" />
           <div class="hero-content flex-col lg:flex-row lg:items-start">
             <div class="indicator">
               {#if movie.adult}
