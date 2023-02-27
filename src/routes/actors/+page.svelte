@@ -18,8 +18,8 @@
       title,
       url: `/actor/${id}`,
       image: {
-        large: `/w154${profilePath}`,
-        small: `/w92${profilePath}`,
+        small: ['w92', profilePath].join(''),
+        large: ['w154', profilePath].join(''),
       },
     }),
   )

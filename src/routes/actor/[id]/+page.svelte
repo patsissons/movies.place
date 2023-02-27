@@ -1,17 +1,23 @@
 <script lang="ts">
   import { page } from '$app/stores'
   import Error from '$lib/components/Error.svelte'
-  import type { PageData, RouteParams } from './$types'
+  import { baseUrlStore } from '$lib/stores'
+  import type { PageData } from './$houdini'
 
   export let data: PageData
 
-  const { id } = $page.params as RouteParams
-  const { PersonStore } = data
+  const { id } = $page.route
+  const { Configuration, PersonStore } = data
   const person = $PersonStore?.data?.person
+  const baseUrl = baseUrlStore(Configuration)
 </script>
 
-{#if person}
-  <pre>{JSON.stringify(person, null, 2)}</pre>
-{:else}
-  <Error error={`Actor ${id} not found`} />
+{#if $PersonStore.data}
+  {#if person}
+    <div class="flex flex-col">
+      <pre>{JSON.stringify(person, null, 2)}</pre>
+    </div>
+  {:else}
+    <Error error={`Actor ${id} not found`} />
+  {/if}
 {/if}

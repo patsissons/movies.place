@@ -18,8 +18,8 @@
       title,
       url: `/movie/${id}`,
       image: {
-        large: `/w154${posterPath}`,
-        small: `/w92${posterPath}`,
+        small: ['w92', posterPath].join(''),
+        large: ['w154', posterPath].join(''),
       },
     }),
   )

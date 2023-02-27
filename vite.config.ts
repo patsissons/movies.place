@@ -3,11 +3,16 @@ import { sveltekit } from '@sveltejs/kit/vite'
 import houdini from 'houdini/vite'
 // import codegen from 'vite-plugin-graphql-codegen'
 import watchAndRun from 'vite-plugin-watch-and-run'
+import svelteSVG from 'vite-plugin-svelte-svg'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   plugins: [
     graphql(),
+    svelteSVG({
+      requireSuffix: false,
+      svgoConfig: {},
+    }),
     houdini(),
     sveltekit(),
     // graphql-codegen doesn't work properly for schema files unfortunately
@@ -34,6 +39,9 @@ export default defineConfig({
       },
     ]),
   ],
+  optimizeDeps: {
+    include: ['dayjs/plugin/relativeTime.js'],
+  },
   test: {
     include: ['src/**/*.{test,spec}.{js,ts}'],
   },

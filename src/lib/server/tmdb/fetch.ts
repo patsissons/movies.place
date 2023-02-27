@@ -1,7 +1,7 @@
 import omitBy from 'lodash/omitBy'
 import isNil from 'lodash/isNil'
 import { TMDB_API_KEY } from '$lib/server/env'
-import { camelize } from '../graphql/utils'
+import { camelize } from '$lib/server/graphql/utils'
 
 export const baseUrl = 'https://api.themoviedb.org'
 export const apiVersion = 3

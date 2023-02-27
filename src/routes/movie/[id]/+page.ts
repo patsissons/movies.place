@@ -1,12 +1,13 @@
+import { error } from '@sveltejs/kit'
 import { load_Movie } from '$houdini'
-import type { PageLoad } from './$types'
+import type { PageLoad } from './$houdini'
 
 export const load = (async (event) => {
   const {
     params: { id },
   } = event
 
-  if (!id) return {}
+  if (!id) throw error(429, { message: 'Missing movie ID' })
 
   const { Movie } = await load_Movie({ event, variables: { id: Number(id) } })
 
