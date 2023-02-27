@@ -8,6 +8,8 @@ module.exports = {
       plugins: ['typescript', 'typescript-document-nodes'],
       config: {
         scalars: {
+          BigInt: 'bigint',
+          Date: 'Date',
           DateTime: 'Date',
         },
       },

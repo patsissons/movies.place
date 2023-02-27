@@ -131,7 +131,7 @@
                 <div class="stat-title">Success</div>
                 <div class="stat-value text-secondary">
                   {currencyFormatter.format(
-                    (movie.revenue - movie.budget) / 1e6,
+                    Number(movie.revenue - movie.budget) / 1e6,
                   )}M
                 </div>
                 <div class="stat-desc">
@@ -139,7 +139,7 @@
                     {movie.revenue > movie.budget ? '↗︎' : '↘︎'}
                     {percentFormatter.format(
                       (movie.revenue - movie.budget) / movie.budget,
-                    )} ({currencyFormatter.format(movie.budget / 1e6)}M)
+                    )} ({currencyFormatter.format(Number(movie.budget) / 1e6)}M)
                   {/if}
                 </div>
               </div>
