@@ -23,18 +23,17 @@
 <ul
   class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 justify-items-center animate-stagger"
 >
-  {#each allItems as item, index}
+  {#each allItems as { title, url, description, image }, index}
     <li
       class="w-full animate-in ease-out animate-duration-500 slide-in-from-bottom slide-in-from-right fill-mode-both fade-in zoom-in"
       style={`--animation-delay-factor: ${(index - lastLength) % 20}`}
     >
       <Poster
-        title={item.title}
-        url={item.url}
-        src={item.image ? [$baseUrl, item.image.small].join('') : undefined}
-        srcLarge={item.image
-          ? [$baseUrl, item.image.large].join('')
-          : undefined}
+        {title}
+        {url}
+        {description}
+        src={image ? [$baseUrl, image.small].join('') : undefined}
+        srcLarge={image ? [$baseUrl, image.large].join('') : undefined}
       />
     </li>
   {/each}

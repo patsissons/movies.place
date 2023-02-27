@@ -30,11 +30,12 @@
     if (!data || !data.movie) return
 
     return data.movie.cast.map(
-      ({ id, name: title, profilePath }) =>
+      ({ id, name: title, character: description, profilePath }) =>
         ({
           id,
           title,
           url: `/actor/${id}`,
+          description,
           image: profilePath
             ? {
                 small: ['w92', profilePath].join(''),
@@ -88,7 +89,7 @@
                   ).fromNow()})`}
                 >
                   <Time
-                    class="font-mono font-thin text-base-content"
+                    class="font-mono font-light text-base-content"
                     timestamp={movie.releaseDate}
                     format="(YYYY)"
                   />

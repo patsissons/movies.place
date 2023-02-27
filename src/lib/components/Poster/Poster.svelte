@@ -3,6 +3,7 @@
 
   export let title: string
   export let url: string
+  export let description: string | undefined = undefined
   export let src: string | undefined = undefined
   export let srcLarge: string | undefined = undefined
 </script>
@@ -30,7 +31,10 @@
       <PosterImage alt={`${title} poster`} {src} {srcLarge} />
     {/if}
   </div>
-  <p class="w-full text-center">
+  <p class="w-full text-center font-bold">
     {title}
   </p>
+  {#if description}
+    <p class="w-full text-center text-sm font-light">{description}</p>
+  {/if}
 </a>
