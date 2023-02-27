@@ -39,9 +39,6 @@ export default defineConfig({
       },
     ]),
   ],
-  optimizeDeps: {
-    include: ['dayjs/plugin/relativeTime.js'],
-  },
   test: {
     include: ['src/**/*.{test,spec}.{js,ts}'],
   },

@@ -7,6 +7,8 @@
   import { urls } from '$lib/utils/urls'
   import type { PageData } from './$houdini'
   import { Icon } from '$lib/components/Icon'
+  import { ItemGrid, type Item } from '$lib/components/ItemGrid'
+  import { derived } from 'svelte/store'
 
   export let data: PageData
 
@@ -24,13 +26,29 @@
   })
 
   $: movie = $MovieStore.data?.movie
+  const items = derived(MovieStore, ({ data }) => {
+    if (!data || !data.movie) return
+
+    return data.movie.cast.map(
+      ({ id, name: title, profilePath }) =>
+        ({
+          id,
+          title,
+          url: `/actor/${id}`,
+          image: {
+            small: ['w92', profilePath].join(''),
+            large: ['w154', profilePath].join(''),
+          },
+        } as Item),
+    )
+  })
 </script>
 
 {#if movie}
   <div class="flex flex-col gap-1">
     <div class="flex flex-col gap-4">
       <div
-        class="hero min-h-screen bg-base-200"
+        class="hero min-h-screen bg-base-200 bg-cover"
         style={movie.backdropPath
           ? `background-image: url(${[
               $baseUrl,
@@ -40,7 +58,9 @@
           : undefined}
       >
         <div class="hero-overlay backdrop-blur-sm" />
-        <div class="hero-content flex-col lg:flex-row lg:items-start">
+        <div
+          class="hero-content flex-col lg:flex-row lg:items-start text-white"
+        >
           <div class="indicator">
             {#if movie.adult}
               <span
@@ -57,7 +77,21 @@
           </div>
           <div class="flex flex-col gap-4">
             <div class="flex items-start justify-between gap-2">
-              <h1 class="text-4xl font-bold">{movie.title}</h1>
+              <h1 class="text-4xl font-bold">
+                {movie.title}
+                <div
+                  class="tooltip cursor-pointer"
+                  data-tip={`${dayjs(movie.releaseDate).format('LL')} (${dayjs(
+                    movie.releaseDate,
+                  ).fromNow()})`}
+                >
+                  <Time
+                    class="font-mono font-thin text-base-content"
+                    timestamp={movie.releaseDate}
+                    format="(YYYY)"
+                  />
+                </div>
+              </h1>
               <div class="flex items-center gap-2 text-white">
                 <a
                   class="btn btn-ghost btn-sm"
@@ -87,23 +121,22 @@
                 {/if}
               </div>
             </div>
-            <p>
-              released on <strong>
-                <Time timestamp={movie.releaseDate} format="LL" />
-              </strong>
-              (<Time timestamp={movie.releaseDate} relative />)
+            <div class="flex items-center gap-1">
               {#if movie.runtime}
-                with a runtime of <strong>
-                  {dayjs.duration({ minutes: movie.runtime }).humanize()}
-                </strong>
+                <p>
+                  {dayjs.duration(movie.runtime, 'minutes').format('H[h] m[m]')}
+                </p>
               {/if}
-            </p>
-            <p>{movie.overview}</p>
-            <div class="flex gap-1">
-              {#each movie.genres as genre}
-                <div class="badge badge-primary">{genre.name}</div>
-              {/each}
+              {#if movie.genres.length > 0}
+                <p>•</p>
+                {#each movie.genres as genre}
+                  <div class="badge badge-primary">{genre.name}</div>
+                {/each}
+              {/if}
+              <p>•</p>
+              <p class="italic">{movie.tagline}</p>
             </div>
+            <p>{movie.overview}</p>
             <div class="stats stats-vertical lg:stats-horizontal shadow">
               <div class="stat">
                 <div class="stat-title">User rating</div>
@@ -144,12 +177,12 @@
                 </div>
               </div>
             </div>
-            <p class="italic">{movie.tagline}</p>
           </div>
         </div>
       </div>
     </div>
-    <pre>{JSON.stringify(movie, null, 2)}</pre>
+    <ItemGrid {items} {baseUrl} />
+    <!-- <pre>{JSON.stringify(movie, null, 2)}</pre> -->
   </div>
 {:else if $MovieStore.data}
   <Error error={`Movie ${id} not found`} />
