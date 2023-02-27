@@ -9,7 +9,7 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   plugins: ['svelte3', '@typescript-eslint'],
-  ignorePatterns: ['*.cjs', '*.js', '*.mjs'],
+  ignorePatterns: ['*.cjs', '*.js', '*.mjs', '*.graphql'],
   overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
   settings: {
     'svelte3/typescript': () => require('typescript'),
@@ -34,8 +34,12 @@ module.exports = {
     {
       files: ['*.graphql'],
       excludedFiles: ['schema.graphql'],
-      parser: '@graphql-eslint/eslint-plugin',
-      plugins: ['@graphql-eslint'],
+      extends: 'plugin:@graphql-eslint/schema-recommended',
+      // parser: '@graphql-eslint/eslint-plugin',
+      parserOptions: {
+        schema: './src/lib/server/graphql/schema.graphql',
+      },
+      // plugins: ['@graphql-eslint'],
       rules: {
         '@graphql-eslint/known-type-names': 'error',
       },
