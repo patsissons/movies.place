@@ -17,10 +17,12 @@
       id,
       title,
       url: `/actor/${id}`,
-      image: {
-        small: ['w92', profilePath].join(''),
-        large: ['w154', profilePath].join(''),
-      },
+      image: profilePath
+        ? {
+            small: ['w92', profilePath].join(''),
+            large: ['w154', profilePath].join(''),
+          }
+        : undefined,
     }),
   )
 </script>

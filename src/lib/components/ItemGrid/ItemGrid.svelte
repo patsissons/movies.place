@@ -31,8 +31,10 @@
       <Poster
         title={item.title}
         url={item.url}
-        src={[$baseUrl, item.image.small].join('')}
-        srcLarge={[$baseUrl, item.image.large].join('')}
+        src={item.image ? [$baseUrl, item.image.small].join('') : undefined}
+        srcLarge={item.image
+          ? [$baseUrl, item.image.large].join('')
+          : undefined}
       />
     </li>
   {/each}

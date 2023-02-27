@@ -2,7 +2,7 @@ export interface Item {
   id: number
   title: string
   url: string
-  image: {
+  image?: {
     large: string
     small: string
   }

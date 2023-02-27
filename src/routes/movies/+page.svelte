@@ -17,10 +17,12 @@
       id,
       title,
       url: `/movie/${id}`,
-      image: {
-        small: ['w92', posterPath].join(''),
-        large: ['w154', posterPath].join(''),
-      },
+      image: posterPath
+        ? {
+            small: ['w92', posterPath].join(''),
+            large: ['w154', posterPath].join(''),
+          }
+        : undefined,
     }),
   )
 </script>
