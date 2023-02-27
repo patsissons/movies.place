@@ -1,5 +1,6 @@
-scalar DateTime
+scalar BigInt
 scalar Date
+scalar DateTime
 
 type Pong {
   timestamp: DateTime
@@ -70,7 +71,7 @@ type Movie {
   adult: Boolean!
   backdropPath: String
   belongsToCollection: Collection
-  budget: Int!
+  budget: BigInt!
   genres: [Genre!]!
   homepage: String
   imdbId: String
@@ -82,7 +83,7 @@ type Movie {
   productionCompanies: [ProductionCompany!]!
   productionCountries: [ProductionCountry!]!
   releaseDate: String
-  revenue: Int!
+  revenue: BigInt!
   runtime: Int
   spokenLanguages: [SpokenLanguage!]!
   status: String!
@@ -162,53 +163,6 @@ type Person {
   homepage: String
   cast: [PersonCastCredit!]!
 }
-
-# type PersonKnownForMovie {
-#   id: Int!
-#   # posterPath: String
-#   # adult: Boolean
-#   # overview: String
-#   # releaseDate: String
-#   # genreIds: [Int!]
-#   # originalTitle: String
-#   # originalLanguage: String
-#   # title: String
-#   # backdropPath: String
-#   # popularity: Float
-#   # voteCount: Int
-#   # video: Boolean
-#   # voteAverage: Float
-#   #   id: Int!
-#   posterPath: String
-#   adult: Boolean
-#   overview: String!
-#   releaseDate: String
-#   genreIds: [Int!]!
-#   originalTitle: String
-#   originalLanguage: String!
-#   title: String
-#   backdropPath: String
-#   popularity: Float
-#   voteCount: Int!
-#   video: Boolean
-#   voteAverage: Float!
-# }
-# # type MovieListResult {
-# #   id: Int!
-# #   posterPath: String
-# #   adult: Boolean!
-# #   overview: String!
-# #   releaseDate: String
-# #   genreIds: [Int!]!
-# #   originalTitle: String!
-# #   originalLanguage: String!
-# #   title: String!
-# #   backdropPath: String
-# #   popularity: Float!
-# #   voteCount: Int!
-# #   video: Boolean!
-# #   voteAverage: Float!
-# # }
 
 type PersonListResult {
   id: Int!
