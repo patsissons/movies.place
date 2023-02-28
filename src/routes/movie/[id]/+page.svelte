@@ -175,7 +175,7 @@
                   )}M
                 </div>
                 <div class="stat-desc">
-                  {#if movie.budget}
+                  {#if movie.budget > 0}
                     {movie.revenue > movie.budget ? '↗︎' : '↘︎'}
                     {percentFormatter.format(
                       (movie.revenue - movie.budget) / movie.budget,
