@@ -3,6 +3,7 @@ export interface Item {
   title: string
   url: string
   description?: string
+  rating?: number
   image?: {
     large: string
     small: string

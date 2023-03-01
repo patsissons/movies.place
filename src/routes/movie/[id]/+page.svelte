@@ -96,22 +96,24 @@
                 </div>
               </h1>
               <div class="flex items-center gap-2 text-white">
-                <a
-                  class="btn btn-ghost btn-sm"
-                  href={movie.homepage}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Icon icon="globe" size={20} /></a
-                >
+                {#if movie.homepage}
+                  <a
+                    class="btn btn-ghost btn-sm"
+                    href={movie.homepage}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Icon icon="globe" size={20} />
+                  </a>
+                {/if}
                 <a
                   class="btn btn-ghost btn-sm"
                   href={urls.tmdb(movie.id)}
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <Icon icon="tmdb" size={20} /></a
-                >
+                  <Icon icon="tmdb" size={20} />
+                </a>
                 {#if movie.imdbId}
                   <a
                     class="btn btn-ghost btn-sm"
@@ -119,8 +121,8 @@
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <Icon icon="imdb" size={20} /></a
-                  >
+                    <Icon icon="imdb" size={20} />
+                  </a>
                 {/if}
               </div>
             </div>
@@ -141,49 +143,65 @@
               <p>•</p>
               <p class="italic">{movie.tagline}</p>
             </div>
-            <p>{movie.overview}</p>
-            <div
-              class="stats stats-vertical sm:stats-horizontal text-center sm:text-left shadow"
-            >
-              <div class="stat">
-                <div class="stat-title">User rating</div>
-                <div class="stat-value text-secondary">
-                  {movie.voteAverage} / 10
-                </div>
-                <div class="stat-desc">{movie.voteCount} votes</div>
+            {#if movie.overview}
+              <div class="flex flex-col gap-4">
+                {#each movie.overview.split(/\n+/) as text}
+                  <p>{text}</p>
+                {/each}
               </div>
+            {/if}
+            {#if movie.voteAverage || movie.popularity || movie.budget}
+              <div
+                class="stats stats-vertical sm:stats-horizontal text-center sm:text-left shadow"
+              >
+                {#if movie.voteCount}
+                  <div class="stat">
+                    <div class="stat-title">User rating</div>
+                    <div class="stat-value text-secondary">
+                      {movie.voteAverage} / 10
+                    </div>
+                    <div class="stat-desc">{movie.voteCount} votes</div>
+                  </div>
+                {/if}
 
-              <div class="stat">
-                <div class="stat-title">Popularity</div>
-                <div class="stat-value text-secondary">
-                  {movie.popularity}
-                </div>
-                <div class="stat-desc">
-                  <a
-                    class="link"
-                    href="https://developers.themoviedb.org/3/getting-started/popularity"
-                    >See explanation</a
-                  >
-                </div>
-              </div>
+                {#if movie.popularity}
+                  <div class="stat">
+                    <div class="stat-title">Popularity</div>
+                    <div class="stat-value text-secondary">
+                      {movie.popularity}
+                    </div>
+                    <div class="stat-desc">
+                      <a
+                        class="link"
+                        href="https://developers.themoviedb.org/3/getting-started/popularity"
+                        >See explanation</a
+                      >
+                    </div>
+                  </div>
+                {/if}
 
-              <div class="stat">
-                <div class="stat-title">Success</div>
-                <div class="stat-value text-secondary">
-                  {currencyFormatter.format(
-                    Number(movie.revenue - movie.budget) / 1e6,
-                  )}M
-                </div>
-                <div class="stat-desc">
-                  {#if movie.budget > 0}
-                    {movie.revenue > movie.budget ? '↗︎' : '↘︎'}
-                    {percentFormatter.format(
-                      (movie.revenue - movie.budget) / movie.budget,
-                    )} ({currencyFormatter.format(Number(movie.budget) / 1e6)}M)
-                  {/if}
-                </div>
+                {#if movie.budget}
+                  <div class="stat">
+                    <div class="stat-title">Success</div>
+                    <div class="stat-value text-secondary">
+                      {currencyFormatter.format(
+                        Number(movie.revenue - movie.budget) / 1e6,
+                      )}M
+                    </div>
+                    <div class="stat-desc">
+                      {#if movie.budget > 0}
+                        {movie.revenue > movie.budget ? '↗︎' : '↘︎'}
+                        {percentFormatter.format(
+                          (movie.revenue - movie.budget) / movie.budget,
+                        )} ({currencyFormatter.format(
+                          Number(movie.budget) / 1e6,
+                        )}M)
+                      {/if}
+                    </div>
+                  </div>
+                {/if}
               </div>
-            </div>
+            {/if}
           </div>
         </div>
       </div>

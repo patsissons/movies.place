@@ -1,4 +1,5 @@
 <script lang="ts">
+  import meanBy from 'lodash/meanBy'
   import type { PageData } from './$houdini'
   import Errors from '$lib/components/Errors.svelte'
   import { ItemGrid } from '$lib/components/ItemGrid'
@@ -13,9 +14,11 @@
   const { errors, pagination, items } = itemsStore(
     SortedPeople,
     (data) => data.sortedPeople,
-    ({ id, name: title, profilePath }) => ({
+    ({ id, name: title, knownFor, knownFor: [movie], profilePath }) => ({
       id,
       title,
+      description: movie?.title,
+      rating: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
       url: `/actor/${id}`,
       image: profilePath
         ? {
@@ -30,3 +33,4 @@
 <Errors {errors} />
 <ItemGrid {items} {baseUrl} />
 <Pagination type="movies" {pagination} />
+<!-- <pre>{JSON.stringify($SortedPeople.data?.sortedPeople, null, 2)}</pre> -->

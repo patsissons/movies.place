@@ -1,8 +1,8 @@
 export const urls = {
-  tmdb(id: number) {
-    return ['https://www.themoviedb.org/movie', id].join('/')
+  tmdb(id: number, type: 'movie' | 'person' = 'movie') {
+    return ['https://www.themoviedb.org', type, id].join('/')
   },
-  imdb(id: string) {
-    return ['https://www.imdb.com/title', id].join('/')
+  imdb(id: string, type: 'title' | 'name' = 'title') {
+    return ['https://www.imdb.com', type, id].join('/')
   },
 }

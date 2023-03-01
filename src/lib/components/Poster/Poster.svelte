@@ -2,7 +2,6 @@
   import PosterImage from './PosterImage.svelte'
 
   export let title: string
-  export let url: string
   export let description: string | undefined = undefined
   export let src: string | undefined = undefined
   export let srcLarge: string | undefined = undefined
@@ -22,19 +21,14 @@
 
  -->
 
-<a
-  href={url}
-  class="flex flex-col items-center gap-2 w-full h-full rounded-lg p-2 btn-ghost"
->
-  <div class="bg-slate-400 w-[92px] 2xl:w-[154px] h-[138px] 2xl:h-[231px]">
-    {#if src}
-      <PosterImage alt={`${title} poster`} {src} {srcLarge} />
-    {/if}
-  </div>
-  <p class="w-full text-center font-bold">
-    {title}
-  </p>
-  {#if description}
-    <p class="w-full text-center text-sm font-light">{description}</p>
+<div class="bg-slate-400 w-[92px] 2xl:w-[154px] h-[138px] 2xl:h-[231px]">
+  {#if src}
+    <PosterImage alt={`${title} poster`} {src} {srcLarge} />
   {/if}
-</a>
+</div>
+<p class="w-full text-center font-bold">
+  {title}
+</p>
+{#if description}
+  <p class="w-full text-center text-sm font-light">{description}</p>
+{/if}
