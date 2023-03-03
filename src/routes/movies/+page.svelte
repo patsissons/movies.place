@@ -1,9 +1,7 @@
 <script lang="ts">
   import type { PageData } from './$houdini'
-  import Errors from '$lib/components/Errors.svelte'
-  import { ItemGrid } from '$lib/components/ItemGrid'
-  import Pagination from '$lib/components/Pagination.svelte'
-  import { baseUrlStore, itemsStore } from '$lib/stores'
+  import { Items } from '$lib/components/Items'
+  import { baseUrlStore, itemsStorePaginated } from '$lib/stores'
   import dayjs from 'dayjs'
 
   export let data: PageData
@@ -11,7 +9,7 @@
   const { Configuration, SortedMovies } = data
 
   const baseUrl = baseUrlStore(Configuration)
-  const { errors, pagination, items } = itemsStore(
+  const { errors, pagination, items } = itemsStorePaginated(
     SortedMovies,
     (data) => data.sortedMovies,
     ({ id, title, releaseDate, voteAverage, posterPath }) => ({
@@ -30,7 +28,5 @@
   )
 </script>
 
-<Errors {errors} />
-<ItemGrid {items} {baseUrl} />
-<Pagination type="movies" {pagination} />
+<Items {baseUrl} {errors} {items} itemType="movies" {pagination} />
 <!-- <pre>{JSON.stringify($SortedMovies.data?.sortedMovies, null, 2)}</pre> -->

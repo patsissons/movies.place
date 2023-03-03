@@ -2,42 +2,22 @@
   import type { Readable } from 'svelte/store'
   import { Poster } from '$lib/components/Poster'
   import type { Item } from './types'
+  import { ratingColor } from './utils'
+  import { lastLengthStore } from './stores'
 
-  export let items: Readable<Item[] | undefined>
+  export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
 
-  const itemMap = new Map<number, Item>()
-  let allItems: Item[] = []
-  let lastLength = 0
-  const percentFormatter = new Intl.NumberFormat(undefined, {
-    style: 'percent',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  })
-
-  $: if ($items) {
-    lastLength = allItems.length
-    $items.forEach((item) => {
-      if (!itemMap.has(item.id)) itemMap.set(item.id, item)
-    })
-
-    allItems = Array.from(itemMap.values())
-  }
-
-  function ratingColor(rating: number) {
-    if (rating >= 70) return 'su'
-    if (rating >= 50) return 'wa'
-    return 'er'
-  }
+  const lastLength = lastLengthStore(items)
 </script>
 
 <ul
   class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 gap-y-2 justify-items-center animate-stagger"
 >
-  {#each allItems as { title, url, description, rating, image }, index}
+  {#each $items as { title, url, description, rating, image }, index}
     <li
       class="w-full animate-in ease-out animate-duration-500 slide-in-from-bottom slide-in-from-right fill-mode-both fade-in zoom-in"
-      style={`--animation-delay-factor: ${(index - lastLength) % 20}`}
+      style={`--animation-delay-factor: ${(index - $lastLength) % 20}`}
     >
       <div class="relative w-full h-full">
         <div class="relative pl-2 pt-4 left-0 top-0 h-0">
@@ -76,11 +56,11 @@
   .radial-progress {
     color: hsla(var(--color) / var(--tw-text-opacity, 1));
 
-    > p:after {
+    > p::after {
+      content: '%';
+      font-size: 50%;
       position: relative;
       top: -25%;
-      font-size: 50%;
-      content: '%';
     }
   }
 </style>

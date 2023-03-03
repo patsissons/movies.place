@@ -2,15 +2,19 @@
   import Time from 'svelte-time'
   import dayjs from 'dayjs'
   import { page } from '$app/stores'
-  import Error from '$lib/components/Error.svelte'
-  import { baseUrlStore } from '$lib/stores'
+  import { Error } from '$lib/components/Errors'
+  import { baseUrlStore, itemsStore } from '$lib/stores'
   import { urls } from '$lib/utils/urls'
   import type { PageData } from './$houdini'
   import { Icon } from '$lib/components/Icon'
-  import { ItemGrid, type Item } from '$lib/components/ItemGrid'
-  import { derived } from 'svelte/store'
+  import { Items, type Item } from '$lib/components/Items'
+  import type { Movie$input, Movie$result, QueryStore } from '$houdini'
 
   export let data: PageData
+
+  // strip out the bigint fields to fix houdini bug
+  type Movie = Omit<NonNullable<Movie$result['movie']>, 'budget' | 'revenue'>
+  type Store = QueryStore<{ movie: Movie }, Movie$input>
 
   const { id } = $page.route
   const { Configuration, MovieStore } = data
@@ -26,25 +30,23 @@
   })
 
   $: movie = $MovieStore.data?.movie
-  const items = derived(MovieStore, ({ data }) => {
-    if (!data || !data.movie) return
-
-    return data.movie.cast.map(
-      ({ id, name: title, character: description, profilePath }) =>
-        ({
-          id,
-          title,
-          url: `/actor/${id}`,
-          description,
-          image: profilePath
-            ? {
-                small: ['w92', profilePath].join(''),
-                large: ['w154', profilePath].join(''),
-              }
-            : undefined,
-        } as Item),
-    )
-  })
+  const { errors, items } = itemsStore(
+    MovieStore as Store,
+    (data) => data.movie.cast,
+    ({ id, name: title, character: description, profilePath }) =>
+      ({
+        id,
+        title,
+        url: `/actor/${id}`,
+        description,
+        image: profilePath
+          ? {
+              small: ['w92', profilePath].join(''),
+              large: ['w154', profilePath].join(''),
+            }
+          : undefined,
+      } as Item),
+  )
 </script>
 
 {#if movie}
@@ -206,7 +208,7 @@
         </div>
       </div>
     </div>
-    <ItemGrid {items} {baseUrl} />
+    <Items {baseUrl} {errors} {items} itemType="actors" />
     <!-- <pre>{JSON.stringify(movie, null, 2)}</pre> -->
   </div>
 {:else if $MovieStore.data}

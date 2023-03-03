@@ -1,3 +1,3 @@
 export { baseUrlStore } from './baseUrl'
-export { itemsStore } from './items'
+export { itemsStore, itemsStorePaginated } from './items'
 export type { Pagination } from './items'

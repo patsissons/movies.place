@@ -1,14 +1,13 @@
 <script lang="ts">
   import meanBy from 'lodash/meanBy'
   import { page } from '$app/stores'
-  import Error from '$lib/components/Error.svelte'
+  import { Error } from '$lib/components/Errors'
   import { Icon } from '$lib/components/Icon'
-  import { baseUrlStore } from '$lib/stores'
+  import { baseUrlStore, itemsStore } from '$lib/stores'
   import { urls } from '$lib/utils/urls'
   import type { PageData } from './$houdini'
   import dayjs from 'dayjs'
-  import { derived } from 'svelte/store'
-  import { ItemGrid, type Item } from '$lib/components/ItemGrid'
+  import { Items, type Item } from '$lib/components/Items'
 
   export let data: PageData
 
@@ -17,28 +16,26 @@
   const baseUrl = baseUrlStore(Configuration)
 
   $: person = $PersonStore.data?.person
-  const items = derived(PersonStore, ({ data }) => {
-    if (!data || !data.person) return
-
-    return data.person.cast.map(
-      ({ id, title, character, releaseDate, voteAverage, posterPath }) =>
-        ({
-          id,
-          title,
-          url: `/actor/${id}`,
-          rating: voteAverage * 10,
-          description: `${character}${
-            releaseDate ? ` (${dayjs(releaseDate).year()})` : ''
-          }`,
-          image: posterPath
-            ? {
-                small: ['w92', posterPath].join(''),
-                large: ['w154', posterPath].join(''),
-              }
-            : undefined,
-        } as Item),
-    )
-  })
+  const { errors, items } = itemsStore(
+    PersonStore,
+    (data) => data.person?.cast,
+    ({ id, title, character, releaseDate, voteAverage, posterPath }) =>
+      ({
+        id,
+        title,
+        url: `/actor/${id}`,
+        rating: voteAverage * 10,
+        description: `${character}${
+          releaseDate ? ` (${dayjs(releaseDate).year()})` : ''
+        }`,
+        image: posterPath
+          ? {
+              small: ['w92', posterPath].join(''),
+              large: ['w154', posterPath].join(''),
+            }
+          : undefined,
+      } as Item),
+  )
 </script>
 
 {#if person}
@@ -143,16 +140,6 @@
                       ? dayjs(person.birthday).from(person.deathday)
                       : dayjs(person.birthday).fromNow(true)}
                   </div>
-                  <!-- <div class="stat-desc">
-                    {#if movie.budget > 0}
-                      {movie.revenue > movie.budget ? '↗︎' : '↘︎'}
-                      {percentFormatter.format(
-                        (movie.revenue - movie.budget) / movie.budget,
-                      )} ({currencyFormatter.format(
-                        Number(movie.budget) / 1e6,
-                      )}M)
-                    {/if}
-                  </div> -->
                 </div>
               {/if}
             </div>
@@ -160,7 +147,7 @@
         </div>
       </div>
     </div>
-    <ItemGrid {items} {baseUrl} />
+    <Items {baseUrl} {errors} {items} itemType="movies" />
     <!-- <pre>{JSON.stringify(person, null, 2)}</pre> -->
   </div>
 {:else if $PersonStore.data}

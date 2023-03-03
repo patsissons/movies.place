@@ -4,13 +4,15 @@
   import type { FormEventHandler } from 'svelte/elements'
 
   export let placeholder: string
+  export let center = false
   export let wait = 300
+  export let value = ''
 
   const dispatch = createEventDispatcher<{ value: string }>()
 
   const handleInput = debounce(
     (({ currentTarget, target }) => {
-      const value = (currentTarget ?? target)?.value ?? ''
+      value = (currentTarget ?? target)?.value ?? ''
 
       dispatch('value', value)
     }) satisfies FormEventHandler<HTMLInputElement>,
@@ -18,9 +20,11 @@
   )
 </script>
 
-<input
-  class="input input-ghost focus:input-info w-full max-w-xs"
-  type="text"
-  {placeholder}
-  on:input={handleInput}
-/>
+<div class="flex" class:justify-center={center}>
+  <input
+    class="input input-ghost input-bordered focus:input-info w-full max-w-xs"
+    type="text"
+    {placeholder}
+    on:input={handleInput}
+  />
+</div>
