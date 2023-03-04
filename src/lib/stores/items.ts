@@ -1,14 +1,14 @@
-import type { QueryStore } from '$houdini'
-import type { GraphQLObject } from 'houdini'
 import { derived } from 'svelte/store'
+import type { QueryStore } from '$houdini'
+import type { LocalGraphQLObject } from '$lib/types/graphql'
 
 interface ResultItem {
   id: number
 }
 
-interface Result extends GraphQLObject, ResultItem {}
+interface Result extends LocalGraphQLObject, ResultItem {}
 
-interface ResultList<T extends Result> extends GraphQLObject {
+interface ResultList<T extends Result> extends LocalGraphQLObject {
   page: number
   totalPages: number
   results?: T[]
@@ -22,7 +22,7 @@ export interface Pagination {
 }
 
 export function itemsStore<
-  Data extends GraphQLObject,
+  Data extends LocalGraphQLObject,
   T extends Result,
   Item extends ResultItem,
 >(
@@ -52,7 +52,7 @@ export interface PaginatedInput extends Record<string, unknown> {
 }
 
 export function itemsStorePaginated<
-  Data extends GraphQLObject,
+  Data extends LocalGraphQLObject,
   Input extends PaginatedInput,
   T extends Result,
   Item extends ResultItem,

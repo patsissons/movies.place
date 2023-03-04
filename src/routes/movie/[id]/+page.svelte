@@ -8,13 +8,10 @@
   import type { PageData } from './$houdini'
   import { Icon } from '$lib/components/Icon'
   import { Items, type Item } from '$lib/components/Items'
-  import type { Movie$input, Movie$result, QueryStore } from '$houdini'
+  import type { Movie$result } from '$houdini'
+  import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
 
   export let data: PageData
-
-  // strip out the bigint fields to fix houdini bug
-  type Movie = Omit<NonNullable<Movie$result['movie']>, 'budget' | 'revenue'>
-  type Store = QueryStore<{ movie: Movie }, Movie$input>
 
   const { id } = $page.route
   const { Configuration, MovieStore } = data
@@ -31,8 +28,11 @@
 
   $: movie = $MovieStore.data?.movie
   const { errors, items } = itemsStore(
-    MovieStore as Store,
-    (data) => data.movie.cast,
+    MovieStore as QueryStoreWithoutCustomScalars<
+      typeof MovieStore,
+      Movie$result
+    >,
+    (data) => data.movie?.cast,
     ({ id, name: title, character: description, profilePath }) =>
       ({
         id,

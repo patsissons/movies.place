@@ -11,6 +11,32 @@
   let sort: SortField | undefined
   let dir: SortDir | undefined
 
+  $: sortedItems = $items.sort((a, b) => {
+    if (sort === 'title') {
+      if (dir === 'asc') {
+        return a.title.localeCompare(b.title)
+      } else if (dir === 'desc') {
+        return b.title.localeCompare(a.title)
+      }
+    }
+
+    if (sort === 'description') {
+      if (dir === 'asc') {
+        if (!a.description) return -1
+        if (!b.description) return 1
+
+        return a.description.localeCompare(b.description)
+      } else if (dir === 'desc') {
+        if (!a.description) return -1
+        if (!b.description) return 1
+
+        return b.description.localeCompare(a.description)
+      }
+    }
+
+    return 0
+  })
+
   function handleSort(field: typeof sort) {
     if (!sort) {
       sort = field
