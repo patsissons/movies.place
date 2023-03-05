@@ -182,22 +182,35 @@
                   </div>
                 {/if}
 
-                {#if movie.budget}
+                {#if movie.revenue > 0 || movie.budget > 0}
                   <div class="stat">
                     <div class="stat-title">Success</div>
                     <div class="stat-value text-secondary">
-                      {currencyFormatter.format(
-                        Number(movie.revenue - movie.budget) / 1e6,
-                      )}M
+                      {#if movie.revenue > 0}
+                        {currencyFormatter.format(
+                          Number(movie.revenue - movie.budget) / 1e6,
+                        )}M
+                      {:else}
+                        -
+                      {/if}
                     </div>
                     <div class="stat-desc">
-                      {#if movie.budget > 0}
+                      {#if movie.revenue > 0 && movie.budget > 0}
                         {movie.revenue > movie.budget ? '↗︎' : '↘︎'}
                         {percentFormatter.format(
                           (movie.revenue - movie.budget) / movie.budget,
-                        )} ({currencyFormatter.format(
-                          Number(movie.budget) / 1e6,
-                        )}M)
+                        )}
+                      {/if}
+
+                      {#if movie.budget > 0}
+                        <div
+                          class="tooltip tooltip-right"
+                          data-tip={currencyFormatter.format(movie.budget)}
+                        >
+                          ({currencyFormatter.format(
+                            Number(movie.budget) / 1e6,
+                          )}M)
+                        </div>
                       {/if}
                     </div>
                   </div>
@@ -214,6 +227,7 @@
       {items}
       itemType="actors"
       descriptionLabel="Character"
+      filterable
     />
     <!-- <pre>{JSON.stringify(movie, null, 2)}</pre> -->
   </div>

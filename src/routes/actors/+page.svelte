@@ -38,5 +38,6 @@
   {pagination}
   itemType="actors"
   descriptionLabel="Known for"
+  filterable
 />
 <!-- <pre>{JSON.stringify($SortedPeople.data?.sortedPeople, null, 2)}</pre> -->

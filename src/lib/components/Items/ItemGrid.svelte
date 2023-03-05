@@ -20,7 +20,7 @@
       style={`--animation-delay-factor: ${(index - $lastLength) % 20}`}
     >
       <div class="relative w-full h-full">
-        <div class="relative pl-2 pt-4 left-0 top-0 h-0">
+        <div class="relative left-1 top-1 h-0">
           {#if rating}
             <Rating {rating} />
           {/if}

@@ -35,5 +35,6 @@
   {pagination}
   itemType="movies"
   descriptionLabel="Release date"
+  filterable
 />
 <!-- <pre>{JSON.stringify($SortedMovies.data?.sortedMovies, null, 2)}</pre> -->

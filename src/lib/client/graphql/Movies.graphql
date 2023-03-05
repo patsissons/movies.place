@@ -1,5 +1,5 @@
-query Movies($query: String!) {
-  movies(query: $query) {
+query Movies($query: String!, $page: Int) {
+  movies(query: $query, page: $page) {
     page
     totalPages
     totalResults

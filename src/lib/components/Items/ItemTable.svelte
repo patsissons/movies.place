@@ -14,31 +14,6 @@
   let sort: SortField = 'title'
   let dir: SortDir = 'asc'
 
-  // $: sortedItems = $items.sort((a, b) => {
-  //   if (sort === 'title') {
-  //     if (dir === 'asc') {
-  //       return a.title.localeCompare(b.title)
-  //     } else if (dir === 'desc') {
-  //       return b.title.localeCompare(a.title)
-  //     }
-  //   }
-
-  //   if (sort === 'description') {
-  //     if (dir === 'asc') {
-  //       if (!a.description) return -1
-  //       if (!b.description) return 1
-
-  //       return a.description.localeCompare(b.description)
-  //     } else if (dir === 'desc') {
-  //       if (!a.description) return -1
-  //       if (!b.description) return 1
-
-  //       return b.description.localeCompare(a.description)
-  //     }
-  //   }
-
-  //   return 0
-  // })
   $: sortedItems = orderBy($items, [sort], [dir])
 
   function handleSort(field: typeof sort) {
@@ -55,7 +30,7 @@
 </script>
 
 <div class="overflow-x-auto w-full">
-  <table class="table table-zebra w-full">
+  <table class="table table-zebra table-compact w-full">
     <thead class="border-b border-slate-500">
       <tr>
         <th class="p-0">

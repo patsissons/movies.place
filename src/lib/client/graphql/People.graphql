@@ -1,5 +1,5 @@
-query People($query: String!) {
-  people(query: $query) {
+query People($query: String!, $page: Int) {
+  people(query: $query, page: $page) {
     page
     totalPages
     totalResults

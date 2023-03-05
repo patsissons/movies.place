@@ -153,6 +153,7 @@
       {items}
       itemType="movies"
       descriptionLabel="Character"
+      filterable
     />
     <!-- <pre>{JSON.stringify(person, null, 2)}</pre> -->
   </div>

@@ -17,9 +17,13 @@
   export let descriptionLabel: string
   export let pagination: Readable<PaginationState | undefined> | undefined =
     undefined
+  export let filterable = false
+  export let resetKey: Readable<string> | undefined = undefined
 
   const itemMap = new Map<number, Item>()
   const filter = writable('')
+
+  resetKey?.subscribe(() => itemMap.clear())
 
   const loadedItems = derived(items, ($items) => {
     if (!$items) return
@@ -30,6 +34,7 @@
 
     return Array.from(itemMap.values())
   })
+
   const filteredItems = derived([filter, loadedItems], ([$filter, $items]) => {
     if (!$items) return []
 
@@ -53,11 +58,13 @@
 </script>
 
 <Errors {errors} />
-<Input
-  center
-  placeholder={`Filter ${itemType} below...`}
-  bind:value={$filter}
-/>
+{#if filterable}
+  <Input
+    center
+    placeholder={`Filter ${itemType} below...`}
+    bind:value={$filter}
+  />
+{/if}
 <Tabs>
   <span slot="grid"><ItemGrid {baseUrl} items={filteredItems} /></span>
   <span slot="table"

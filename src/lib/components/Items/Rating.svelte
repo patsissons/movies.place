@@ -10,7 +10,7 @@
 
 <div
   class="radial-progress text-xs font-bold bg-black bg-opacity-75"
-  style={`--size:2rem; --thickness: 2px; --value:${rating}; --color:var(--${ratingColor(
+  style={`--size:2.25rem; --thickness: 2px; --value:${rating}; --color:var(--${ratingColor(
     rating,
   )});`}
 >

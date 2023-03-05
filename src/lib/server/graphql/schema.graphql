@@ -159,7 +159,7 @@ type Person {
   placeOfBirth: String
   profilePath: String
   adult: Boolean
-  imdbId: String!
+  imdbId: String
   homepage: String
   cast: [PersonCastCredit!]!
 }
