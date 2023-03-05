@@ -142,8 +142,10 @@
                   {/each}
                 </div>
               {/if}
-              <p>•</p>
-              <p class="italic">{movie.tagline}</p>
+              {#if movie.tagline}
+                <p>•</p>
+                <p class="italic">{movie.tagline}</p>
+              {/if}
             </div>
             {#if movie.overview}
               <div class="flex flex-col gap-4">
@@ -187,29 +189,49 @@
                     <div class="stat-title">Success</div>
                     <div class="stat-value text-secondary">
                       {#if movie.revenue > 0}
-                        {currencyFormatter.format(
-                          Number(movie.revenue - movie.budget) / 1e6,
-                        )}M
+                        <div
+                          class="tooltip tooltip-info tooltip-top"
+                          data-tip={`${currencyFormatter.format(
+                            movie.revenue,
+                          )} revenue`}
+                        >
+                          {currencyFormatter.format(
+                            Number(movie.revenue - movie.budget) / 1e6,
+                          )}M profit
+                        </div>
                       {:else}
                         -
                       {/if}
                     </div>
-                    <div class="stat-desc">
+                    <div class="stat-desc opacity-100">
                       {#if movie.revenue > 0 && movie.budget > 0}
-                        {movie.revenue > movie.budget ? '↗︎' : '↘︎'}
-                        {percentFormatter.format(
-                          (movie.revenue - movie.budget) / movie.budget,
-                        )}
+                        <span
+                          class="opacity-60"
+                          class:text-success={movie.revenue > movie.budget}
+                          class:text-error={movie.budget > movie.revenue}
+                        >
+                          {movie.revenue > movie.budget ? '↗︎' : '↘︎'}
+                          {percentFormatter.format(
+                            Number(
+                              ((movie.revenue - movie.budget) * 100n) /
+                                movie.budget,
+                            ) / 100.0,
+                          )}
+                        </span>
                       {/if}
 
                       {#if movie.budget > 0}
                         <div
-                          class="tooltip tooltip-right"
-                          data-tip={currencyFormatter.format(movie.budget)}
+                          class="tooltip tooltip-info tooltip-top"
+                          data-tip={`${currencyFormatter.format(
+                            movie.budget,
+                          )} budget`}
                         >
-                          ({currencyFormatter.format(
-                            Number(movie.budget) / 1e6,
-                          )}M)
+                          <span class="opacity-60">
+                            ({currencyFormatter.format(
+                              Number(movie.budget) / 1e6,
+                            )}M)
+                          </span>
                         </div>
                       {/if}
                     </div>
@@ -229,8 +251,8 @@
       descriptionLabel="Character"
       filterable
     />
-    <!-- <pre>{JSON.stringify(movie, null, 2)}</pre> -->
   </div>
 {:else if $MovieStore.data}
   <Error error={`Movie ${id} not found`} />
 {/if}
+<!-- <pre>{JSON.stringify(movie, null, 2)}</pre> -->

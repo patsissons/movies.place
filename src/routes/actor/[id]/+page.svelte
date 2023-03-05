@@ -155,8 +155,8 @@
       descriptionLabel="Character"
       filterable
     />
-    <!-- <pre>{JSON.stringify(person, null, 2)}</pre> -->
   </div>
 {:else if $PersonStore.data}
   <Error error={`Actor ${id} not found`} />
 {/if}
+<!-- <pre>{JSON.stringify(person, null, 2)}</pre> -->
