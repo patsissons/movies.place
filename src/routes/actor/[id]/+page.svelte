@@ -51,7 +51,7 @@
             </span>
           {/if}
           <img
-            class={`max-w-sm rounded-lg shadow-2xl ${
+            class={`max-w-[358px] rounded-lg shadow-2xl ${
               person.deathday ? 'grayscale' : ''
             }`}
             src={[$baseUrl, 'original', person.profilePath].join('')}

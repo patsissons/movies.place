@@ -33,7 +33,7 @@
   <table class="table table-zebra table-compact w-full">
     <thead class="border-b border-slate-500">
       <tr>
-        <th class="p-0">
+        <th class="p-0 !static">
           <button
             class="btn btn-ghost btn-block h-20 justify-start rounded-none"
             on:click={() => handleSort('title')}

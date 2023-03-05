@@ -75,7 +75,7 @@
               </span>
             {/if}
             <img
-              class="max-w-sm rounded-lg shadow-2xl"
+              class="max-w-[358px] rounded-lg shadow-2xl"
               src={[$baseUrl, 'original', movie.posterPath].join('')}
               alt={`${movie.title} poster`}
             />

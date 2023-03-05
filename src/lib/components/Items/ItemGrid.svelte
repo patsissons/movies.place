@@ -12,7 +12,7 @@
 </script>
 
 <ul
-  class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 gap-y-2 justify-items-center animate-stagger"
+  class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 gap-y-2 justify-items-center overflow-x-hidden animate-stagger"
 >
   {#each $items as { title, url, description, rating, image }, index}
     <li
@@ -20,7 +20,7 @@
       style={`--animation-delay-factor: ${(index - $lastLength) % 20}`}
     >
       <div class="relative w-full h-full">
-        <div class="relative left-1 top-1 h-0">
+        <div class="relative left-2 top-1 h-0">
           {#if rating}
             <Rating {rating} />
           {/if}
