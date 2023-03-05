@@ -23,7 +23,7 @@
       ({
         id,
         title,
-        url: `/actor/${id}`,
+        url: `/movie/${id}`,
         rating: voteAverage * 10,
         description: `${character}${
           releaseDate ? ` (${dayjs(releaseDate).year()})` : ''
