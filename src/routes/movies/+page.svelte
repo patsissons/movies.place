@@ -28,5 +28,12 @@
   )
 </script>
 
-<Items {baseUrl} {errors} {items} itemType="movies" {pagination} />
+<Items
+  {baseUrl}
+  {errors}
+  {items}
+  {pagination}
+  itemType="movies"
+  descriptionLabel="Release date"
+/>
 <!-- <pre>{JSON.stringify($SortedMovies.data?.sortedMovies, null, 2)}</pre> -->

@@ -12,10 +12,13 @@
   const { errors, pagination, items } = itemsStorePaginated(
     SortedPeople,
     (data) => data.sortedPeople,
-    ({ id, name: title, knownFor, knownFor: [movie], profilePath }) => ({
+    ({ id, name: title, knownFor, profilePath }) => ({
       id,
       title,
-      description: movie?.title,
+      description: knownFor
+        .slice(0, 5)
+        .map(({ title }) => title)
+        .join(', '),
       rating: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
       url: `/actor/${id}`,
       image: profilePath
@@ -28,5 +31,12 @@
   )
 </script>
 
-<Items {baseUrl} {errors} {items} itemType="actors" {pagination} />
+<Items
+  {baseUrl}
+  {errors}
+  {items}
+  {pagination}
+  itemType="actors"
+  descriptionLabel="Known for"
+/>
 <!-- <pre>{JSON.stringify($SortedPeople.data?.sortedPeople, null, 2)}</pre> -->

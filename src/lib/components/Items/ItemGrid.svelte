@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Readable } from 'svelte/store'
   import { Poster } from '$lib/components/Poster'
+  import Rating from './Rating.svelte'
   import type { Item } from './types'
-  import { ratingColor } from './utils'
   import { lastLengthStore } from './stores'
 
   export let items: Readable<Item[]>
@@ -22,14 +22,7 @@
       <div class="relative w-full h-full">
         <div class="relative pl-2 pt-4 left-0 top-0 h-0">
           {#if rating}
-            <div
-              class="radial-progress text-xs font-bold bg-black bg-opacity-75"
-              style={`--size:2rem; --thickness: 2px; --value:${rating}; --color:var(--${ratingColor(
-                rating,
-              )});`}
-            >
-              <p>{Math.floor(rating)}</p>
-            </div>
+            <Rating {rating} />
           {/if}
         </div>
         <a
@@ -51,16 +44,5 @@
 <style lang="scss">
   .animate-stagger > li {
     animation-delay: calc(var(--animation-delay-factor, 0) * 50ms);
-  }
-
-  .radial-progress {
-    color: hsla(var(--color) / var(--tw-text-opacity, 1));
-
-    > p::after {
-      content: '%';
-      font-size: 50%;
-      position: relative;
-      top: -25%;
-    }
   }
 </style>

@@ -13,7 +13,8 @@
   export let baseUrl: Readable<string | undefined>
   export let errors: Readable<string[] | undefined>
   export let items: Readable<Item[] | undefined>
-  export let itemType: string
+  export let itemType: 'movies' | 'actors'
+  export let descriptionLabel: string
   export let pagination: Readable<PaginationState | undefined> | undefined =
     undefined
 
@@ -59,7 +60,9 @@
 />
 <Tabs>
   <span slot="grid"><ItemGrid {baseUrl} items={filteredItems} /></span>
-  <span slot="table"><ItemTable {baseUrl} items={filteredItems} /> </span>
+  <span slot="table"
+    ><ItemTable {baseUrl} items={filteredItems} {descriptionLabel} />
+  </span>
 </Tabs>
 {#if pagination}
   <Pagination type={itemType} {pagination} />

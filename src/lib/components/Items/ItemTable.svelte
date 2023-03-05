@@ -1,41 +1,45 @@
 <script lang="ts">
+  import orderBy from 'lodash/orderBy'
   import type { Readable } from 'svelte/store'
+  import Rating from './Rating.svelte'
   import type { Item } from './types'
 
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
+  export let descriptionLabel: string
 
   type SortField = 'title' | 'description' | 'rating'
   type SortDir = 'asc' | 'desc'
 
-  let sort: SortField | undefined
-  let dir: SortDir | undefined
+  let sort: SortField = 'title'
+  let dir: SortDir = 'asc'
 
-  $: sortedItems = $items.sort((a, b) => {
-    if (sort === 'title') {
-      if (dir === 'asc') {
-        return a.title.localeCompare(b.title)
-      } else if (dir === 'desc') {
-        return b.title.localeCompare(a.title)
-      }
-    }
+  // $: sortedItems = $items.sort((a, b) => {
+  //   if (sort === 'title') {
+  //     if (dir === 'asc') {
+  //       return a.title.localeCompare(b.title)
+  //     } else if (dir === 'desc') {
+  //       return b.title.localeCompare(a.title)
+  //     }
+  //   }
 
-    if (sort === 'description') {
-      if (dir === 'asc') {
-        if (!a.description) return -1
-        if (!b.description) return 1
+  //   if (sort === 'description') {
+  //     if (dir === 'asc') {
+  //       if (!a.description) return -1
+  //       if (!b.description) return 1
 
-        return a.description.localeCompare(b.description)
-      } else if (dir === 'desc') {
-        if (!a.description) return -1
-        if (!b.description) return 1
+  //       return a.description.localeCompare(b.description)
+  //     } else if (dir === 'desc') {
+  //       if (!a.description) return -1
+  //       if (!b.description) return 1
 
-        return b.description.localeCompare(a.description)
-      }
-    }
+  //       return b.description.localeCompare(a.description)
+  //     }
+  //   }
 
-    return 0
-  })
+  //   return 0
+  // })
+  $: sortedItems = orderBy($items, [sort], [dir])
 
   function handleSort(field: typeof sort) {
     if (!sort) {
@@ -52,30 +56,35 @@
 
 <div class="overflow-x-auto w-full">
   <table class="table table-zebra w-full">
-    <!-- head -->
-    <thead>
+    <thead class="border-b border-slate-500">
       <tr>
-        <th>
-          <button class="btn btn-ghost" on:click={() => handleSort('title')}>
+        <th class="p-0">
+          <button
+            class="btn btn-ghost btn-block h-20 justify-start rounded-none"
+            on:click={() => handleSort('title')}
+          >
             Title
             {#if sort === 'title' && dir}
               {dir === 'asc' ? '↑' : '↓'}
             {/if}
           </button>
         </th>
-        <th>
+        <th class="p-0 w-80">
           <button
-            class="btn btn-ghost"
+            class="btn btn-ghost btn-block h-20 justify-start rounded-none"
             on:click={() => handleSort('description')}
           >
-            Description
+            {descriptionLabel}
             {#if sort === 'description' && dir}
               {dir === 'asc' ? '↑' : '↓'}
             {/if}
           </button>
         </th>
-        <th>
-          <button class="btn btn-ghost" on:click={() => handleSort('rating')}>
+        <th class="p-0 w-48">
+          <button
+            class="btn btn-ghost btn-block h-20 justify-start rounded-none"
+            on:click={() => handleSort('rating')}
+          >
             Rating
             {#if sort === 'rating' && dir}
               {dir === 'asc' ? '↑' : '↓'}
@@ -85,10 +94,13 @@
       </tr>
     </thead>
     <tbody>
-      {#each $items as { title, description, image, rating, url }}
+      {#each sortedItems as { title, description, image, rating, url }}
         <tr class="hover">
           <td class="p-0">
-            <a class="block w-full p-4" href={url}>
+            <a
+              class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+              href={url}
+            >
               <div class="flex items-center gap-4">
                 {#if image}
                   <div class="avatar">
@@ -109,23 +121,32 @@
             </a>
           </td>
           <td class="p-0">
-            <a class="block w-full p-4" href={url}>
-              <p>{description}</p>
-            </a>
+            {#if description}
+              <a
+                class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+                href={url}
+              >
+                <p>{description}</p>
+              </a>
+            {/if}
           </td>
           <td class="p-0">
-            <a class="block w-full p-4" href={url}>
-              <p>{rating}</p>
-            </a>
+            {#if rating}
+              <a
+                class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+                href={url}
+              >
+                <Rating {rating} />
+              </a>
+            {/if}
           </td>
         </tr>
       {/each}
     </tbody>
-    <!-- foot -->
-    <tfoot>
+    <tfoot class="border-t border-slate-500">
       <tr>
         <th>Title</th>
-        <th>Description</th>
+        <th>{descriptionLabel}</th>
         <th>Rating</th>
       </tr>
     </tfoot>

@@ -8,9 +8,7 @@
   }
 </script>
 
-<div class="flex flex-col items-center gap-4">
-  <Input placeholder="Find an actor..." on:value={handleValue} />
-  {#if filter}
-    <p>Searching for {filter}...</p>
-  {/if}
-</div>
+<Input center placeholder="Find an actor..." on:value={handleValue} />
+{#if filter}
+  <p>Searching for {filter}...</p>
+{/if}

@@ -147,7 +147,13 @@
         </div>
       </div>
     </div>
-    <Items {baseUrl} {errors} {items} itemType="movies" />
+    <Items
+      {baseUrl}
+      {errors}
+      {items}
+      itemType="movies"
+      descriptionLabel="Character"
+    />
     <!-- <pre>{JSON.stringify(person, null, 2)}</pre> -->
   </div>
 {:else if $PersonStore.data}
