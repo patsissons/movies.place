@@ -6,6 +6,7 @@
   import { Items } from '$lib/components/Items'
   import type { PageData } from './$houdini'
   import { derived, writable } from 'svelte/store'
+  import DebugData from '$lib/components/DebugData.svelte'
 
   export let data: PageData
 
@@ -53,4 +54,4 @@
   itemType="movies"
   descriptionLabel="Release date"
 />
-<!-- <pre>{JSON.stringify($store.data?.movies, null, 2)}</pre> -->
+<DebugData {store} />

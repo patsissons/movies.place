@@ -6,6 +6,7 @@
   import { baseUrlStore, itemsStorePaginated } from '$lib/stores'
   import { derived, writable } from 'svelte/store'
   import type { PageData } from './$houdini'
+  import DebugData from '$lib/components/DebugData.svelte'
 
   export let data: PageData
 
@@ -56,4 +57,4 @@
   itemType="actors"
   descriptionLabel="Known for"
 />
-<!-- <pre>{JSON.stringify($store.data?.people, null, 2)}</pre> -->
+<DebugData {store} />

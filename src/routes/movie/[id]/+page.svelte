@@ -10,6 +10,7 @@
   import { Items, type Item } from '$lib/components/Items'
   import type { Movie$result } from '$houdini'
   import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
+  import DebugData from '$lib/components/DebugData.svelte'
 
   export let data: PageData
 
@@ -255,4 +256,4 @@
 {:else if $MovieStore.data}
   <Error error={`Movie ${id} not found`} />
 {/if}
-<!-- <pre>{JSON.stringify(movie, null, 2)}</pre> -->
+<DebugData store={MovieStore} />

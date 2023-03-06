@@ -8,6 +8,7 @@
   import type { PageData } from './$houdini'
   import dayjs from 'dayjs'
   import { Items, type Item } from '$lib/components/Items'
+  import DebugData from '$lib/components/DebugData.svelte'
 
   export let data: PageData
 
@@ -159,4 +160,4 @@
 {:else if $PersonStore.data}
   <Error error={`Actor ${id} not found`} />
 {/if}
-<!-- <pre>{JSON.stringify(person, null, 2)}</pre> -->
+<DebugData store={PersonStore} />

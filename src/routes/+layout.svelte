@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import '$lib/styles/global.scss'
+  import { debuggingStore } from '$lib/stores/debugging'
 
   let documentElement: HTMLElement | undefined
   let dark = true
@@ -18,6 +19,10 @@
     dark = window.matchMedia('(prefers-color-scheme: dark)').matches
     documentElement = document.documentElement
   })
+
+  function toggleDebugging() {
+    debuggingStore.update((value) => !value)
+  }
 </script>
 
 <div class="w-screen h-screen min-w-[390px]">
@@ -64,17 +69,29 @@
     <div class="drawer-side">
       <label for="drawer" class="drawer-overlay" />
       <ul class="menu p-4 w-80 bg-base-100 text-base-content">
-        <li class="menu-title">Popular</li>
-        <li><a href="/movies">Movies</a></li>
-        <li><a href="/actors">Actors</a></li>
-        <div class="divider" />
         <li class="menu-title">Search</li>
         <li><a href="/movies/search">By Movie</a></li>
         <li><a href="/actors/search">By Actor</a></li>
         <div class="divider" />
+        <li class="menu-title">Popular</li>
+        <li><a href="/movies">Movies</a></li>
+        <li><a href="/actors">Actors</a></li>
+        <div class="divider" />
         <li>
           <a href="/api/graphql" target="_blank" rel="noreferrer">GraphQL</a>
         </li>
+        <div class="divider" />
+        <div class="form-control">
+          <label class="label cursor-pointer px-4 py-3">
+            <span>Debugging</span>
+            <input
+              type="checkbox"
+              class="toggle"
+              checked={$debuggingStore}
+              on:change={toggleDebugging}
+            />
+          </label>
+        </div>
       </ul>
     </div>
   </div>

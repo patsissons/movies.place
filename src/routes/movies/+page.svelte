@@ -3,6 +3,7 @@
   import { Items } from '$lib/components/Items'
   import { baseUrlStore, itemsStorePaginated } from '$lib/stores'
   import dayjs from 'dayjs'
+  import DebugData from '$lib/components/DebugData.svelte'
 
   export let data: PageData
 
@@ -37,4 +38,4 @@
   descriptionLabel="Release date"
   filterable
 />
-<!-- <pre>{JSON.stringify($SortedMovies.data?.sortedMovies, null, 2)}</pre> -->
+<DebugData store={SortedMovies} />
