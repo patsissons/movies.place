@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { derived, type Readable } from 'svelte/store'
+  import type { Readable } from 'svelte/store'
 
   export let baseUrl: Readable<string | undefined>
   export let src: string
@@ -9,28 +9,23 @@
 
   let className: string | undefined = undefined
   export { className as class }
-
-  const props = derived(baseUrl, ($baseUrl) => {
-    if (!$baseUrl) return
-    if (!widths || widths.length === 0) return { src: [$baseUrl, src].join('') }
-
-    return {
-      src: [$baseUrl, widths[widths.length - 1], src].join(''),
-      srcset: widths
-        .filter((width) => width !== 'original')
-        .map((width) => {
-          const path = [$baseUrl, width, src].join('')
-
-          return [path, width].join(' ')
-        })
-        .join(', '),
-      sizes,
-    }
-  })
 </script>
 
-{#if $props}
-  <img class={className} {...$props} {alt} />
+{#if $baseUrl}
+  {#if !widths || widths.length === 0}
+    <img class={className} {alt} src={[$baseUrl, src].join('')} />
+  {:else}
+    <img
+      class={className}
+      {alt}
+      {sizes}
+      src={[$baseUrl, widths[widths.length - 1], src].join('')}
+      srcset={widths
+        .filter((width) => width !== 'original')
+        .map((width) => [[$baseUrl, width, src].join(''), width].join(' '))
+        .join(', ')}
+    />
+  {/if}
   <!-- <img
     alt="testing srcset"
     src="http://placehold.jp/3840x5760.png"
