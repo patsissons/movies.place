@@ -7,7 +7,9 @@ import type {
   QueryMovieArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
-import { fallbacks } from '$lib/server/tmdb/fallbacks'
+import { fallbacks as tmbdFallbacks } from '$lib/server/tmdb/fallbacks'
+import { fetchOMDBJson } from '$lib/server/omdb'
+import { ratingsFromMovie, type OMDBMovie } from '$lib/server/omdb/ratings'
 
 interface MoviePayload extends Omit<Movie, 'cast'> {
   credits: {
@@ -25,8 +27,18 @@ export const movie = (async (_source, { id }, { fetch }) => {
       'movie',
       id,
       { append_to_response: 'credits' },
-      { fallbackUrl: fallbacks.movie },
+      { fallbackUrl: tmbdFallbacks.movie },
     )
+
+    if (payload.imdbId) {
+      const omdb = await fetchOMDBJson<OMDBMovie | undefined>(fetch, {
+        i: payload.imdbId,
+      })
+
+      if (omdb) {
+        payload.omdb = ratingsFromMovie(omdb)
+      }
+    }
 
     return {
       ...payload,

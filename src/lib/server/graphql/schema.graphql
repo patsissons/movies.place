@@ -66,8 +66,17 @@ type MovieCastCredit {
   order: Int!
 }
 
+type OMDBRatings {
+  id: String!
+  metascore: Int
+  imdbRating: Float
+  imdbVotes: Int
+  rottenTomatoesScore: Int
+}
+
 type Movie {
   id: Int!
+  omdb: OMDBRatings
   adult: Boolean!
   backdropPath: String
   belongsToCollection: Collection

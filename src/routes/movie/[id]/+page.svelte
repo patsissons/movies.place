@@ -167,6 +167,16 @@
                 {/each}
               </div>
             {/if}
+            {#if movie.omdb}
+              <div class="flex gap-2">
+                {#if movie.omdb.metascore}
+                  <p>Metascore: {movie.omdb.metascore}</p>
+                {/if}
+                {#if movie.omdb.rottenTomatoesScore}
+                  <p>Rotten tomatoes: {movie.omdb.rottenTomatoesScore}</p>
+                {/if}
+              </div>
+            {/if}
             {#if movie.voteAverage || movie.popularity || movie.budget}
               <div
                 class="stats stats-vertical md:stats-horizontal text-center md:text-left shadow"

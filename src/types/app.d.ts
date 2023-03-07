@@ -9,7 +9,8 @@ declare global {
   }
 
   interface ImportMetaEnv {
-    TMDB_API_KEY?: string
+    VITE_TMDB_API_KEY?: string
+    VITE_OMDB_API_KEY?: string
   }
 }
 

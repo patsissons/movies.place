@@ -1,6 +1,13 @@
 query Movie($id: Int!) {
   movie(id: $id) {
     id
+    omdb {
+      id
+      metascore
+      imdbRating
+      imdbVotes
+      rottenTomatoesScore
+    }
     adult
     backdropPath
     belongsToCollection {
