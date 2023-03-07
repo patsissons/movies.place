@@ -1,1 +1,1 @@
-export { fetchJson, JsonError } from './fetch'
+export { fetchTMDBJson } from './fetch'

@@ -1,12 +1,13 @@
+import { JsonError } from '$lib/server/fetchJson'
 import type { Resolver } from '$lib/server/graphql/types'
-import { fetchJson, JsonError } from '$lib/server/tmdb'
+import { fetchTMDBJson } from '$lib/server/tmdb'
 import type {
   Movie,
   MovieCastCredit,
   QueryMovieArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
-import { fallbacks } from './fallbacks'
+import { fallbacks } from '$lib/server/tmdb/fallbacks'
 
 interface MoviePayload extends Omit<Movie, 'cast'> {
   credits: {
@@ -19,7 +20,7 @@ export const movie = (async (_source, { id }, { fetch }) => {
     const {
       credits: { cast },
       ...payload
-    } = await fetchJson<MoviePayload>(
+    } = await fetchTMDBJson<MoviePayload>(
       fetch,
       'movie',
       id,

@@ -1,11 +1,12 @@
 import { GraphQLError } from 'graphql'
 import type { Resolver } from '$lib/server/graphql/types'
-import { fetchJson, JsonError } from '$lib/server/tmdb'
+import { fetchTMDBJson } from '$lib/server/tmdb'
 import type {
   PersonListResultsPage,
   QuerySortedPeopleArgs,
 } from '$lib/types/graphql.generated'
-import { fallbacks } from './fallbacks'
+import { fallbacks } from '$lib/server/tmdb/fallbacks'
+import { JsonError } from '$lib/server/fetchJson'
 
 export const sortedPeople = (async (
   _source,
@@ -13,7 +14,7 @@ export const sortedPeople = (async (
   { fetch },
 ) => {
   try {
-    const payload = await fetchJson<PersonListResultsPage>(
+    const payload = await fetchTMDBJson<PersonListResultsPage>(
       fetch,
       'person',
       (sort || 'POPULAR').toLowerCase(),

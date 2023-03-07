@@ -1,123 +1,40 @@
 import omitBy from 'lodash/omitBy'
 import isNil from 'lodash/isNil'
 import { TMDB_API_KEY } from '$lib/server/env'
-import { camelize } from '$lib/server/graphql/utils'
+import { fetchJson, type Fetch, type FetchOptions } from '$lib/server/fetchJson'
 
 export const baseUrl = 'https://api.themoviedb.org'
 export const apiVersion = 3
 export const baseApiUrl = [baseUrl, apiVersion].join('/')
 export const defaultLanguage = 'en-US'
 
-type Fetch = typeof fetch
-
-export interface JsonErrorStatus {
-  status_code: number
-  status_message: string
-}
-
-export class JsonError extends Error {
-  public static isJsonErrorStatus(
-    payload: unknown,
-  ): payload is JsonErrorStatus {
-    if (!payload || typeof payload !== 'object') return false
-    if ('status_code' in payload && 'status_message' in payload) return true
-
-    return false
-  }
-
-  public readonly code: number
-
-  constructor({ status_code, status_message }: JsonErrorStatus) {
-    super(status_message)
-
-    this.code = status_code
-  }
-}
-
 export interface FetchParams
   extends Record<string, string | number | boolean | null | undefined> {
   language?: string
 }
 
-export interface FetchOptions {
-  fallbackUrl?: string
-}
-
-export async function fetchJson<T = Record<string, unknown>>(
+export async function fetchTMDBJson<Result = Record<string, unknown>>(
   fetch: Fetch,
   section: string,
   path?: string | number,
-  { language = defaultLanguage, ...options }: FetchParams = {},
-  { fallbackUrl }: FetchOptions = {},
+  { language = defaultLanguage, ...params }: FetchParams = {},
+  options?: FetchOptions,
 ) {
   const endpointParts: (string | number)[] = [baseApiUrl, section]
   if (path) endpointParts.push(path)
 
   const endpoint = endpointParts.join('/')
-  const params = new URLSearchParams(
+  const urlParams = new URLSearchParams(
     omitBy(
       {
         api_key: TMDB_API_KEY || '',
         language,
-        ...options,
+        ...params,
       },
       isNil,
     ),
   ).toString()
-  const url = [endpoint, params].join('?')
+  const url = [endpoint, urlParams].join('?')
 
-  return tryFetch<T>(fetch, url, fallbackUrl)
-}
-
-async function tryFetch<T>(
-  fetch: Fetch,
-  url: string,
-  fallbackUrl?: string,
-): Promise<T> {
-  try {
-    const response = await fetch(url, {
-      headers: {
-        accept: 'application/json; charset=utf8;',
-        'Content-Type': 'application/json',
-      },
-      method: 'GET',
-    })
-
-    if (!response.ok) {
-      const body = await response.text()
-      const error = tryParseJson(body)
-
-      if (JsonError.isJsonErrorStatus(error)) {
-        throw new JsonError(error)
-      } else {
-        throw new Error(body)
-      }
-    }
-
-    const payload = await response.json()
-
-    // console.log('D', payload)
-
-    return camelize<T>(payload)
-  } catch (error) {
-    if (fallbackUrl) {
-      const { data } = await tryFetch<{ data: Record<string, T> }>(
-        fetch,
-        fallbackUrl,
-      )
-      const [field] = Object.keys(data)
-
-      return data[field]
-    }
-
-    throw error
-  }
-}
-
-function tryParseJson<T = unknown>(text: string) {
-  try {
-    return JSON.parse(text) as T
-  } catch {
-    // do nothing
-  }
+  return fetchJson<Result>(fetch, url, options)
 }

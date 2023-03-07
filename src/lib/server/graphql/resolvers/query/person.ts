@@ -1,12 +1,13 @@
+import { JsonError } from '$lib/server/fetchJson'
 import type { Resolver } from '$lib/server/graphql/types'
-import { fetchJson, JsonError } from '$lib/server/tmdb'
+import { fetchTMDBJson } from '$lib/server/tmdb'
 import type {
   Person,
   PersonCastCredit,
   QueryPersonArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
-import { fallbacks } from './fallbacks'
+import { fallbacks } from '$lib/server/tmdb/fallbacks'
 
 interface PersonPayload extends Omit<Person, 'cast'> {
   movieCredits: {
@@ -19,7 +20,7 @@ export const person = (async (_source, { id }, { fetch }) => {
     const {
       movieCredits: { cast },
       ...payload
-    } = await fetchJson<PersonPayload>(
+    } = await fetchTMDBJson<PersonPayload>(
       fetch,
       'person',
       id,

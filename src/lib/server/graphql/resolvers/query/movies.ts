@@ -1,11 +1,12 @@
+import { JsonError } from '$lib/server/fetchJson'
 import type { Resolver } from '$lib/server/graphql/types'
-import { fetchJson, JsonError } from '$lib/server/tmdb'
+import { fetchTMDBJson } from '$lib/server/tmdb'
 import type {
   MovieListResultsPage,
   QueryMoviesArgs,
 } from '$lib/types/graphql.generated'
 import { GraphQLError } from 'graphql'
-import { fallbacks } from './fallbacks'
+import { fallbacks } from '$lib/server/tmdb/fallbacks'
 
 export const movies = (async (
   _source,
@@ -13,7 +14,7 @@ export const movies = (async (
   { fetch },
 ) => {
   try {
-    return await fetchJson<MovieListResultsPage>(
+    return await fetchTMDBJson<MovieListResultsPage>(
       fetch,
       'search',
       'movie',

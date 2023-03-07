@@ -1,7 +1,7 @@
 import { isDevelopment } from '$lib/server/env'
 
 function fallback(name: string) {
-  return `/data/_ignore/${name}.json`
+  return `/data/_ignore/tmdb/${name}.json`
 }
 
 export const fallbacks = isDevelopment
