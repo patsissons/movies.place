@@ -1,6 +1,7 @@
 <script lang="ts">
   import orderBy from 'lodash/orderBy'
   import type { Readable } from 'svelte/store'
+  import { PosterImage } from '$lib/components/Poster'
   import Rating from './Rating.svelte'
   import type { Item } from './types'
 
@@ -80,9 +81,11 @@
                 {#if image}
                   <div class="avatar">
                     <div class="w-8 !aspect-auto">
-                      <img
-                        src={[$baseUrl, image.small].join('')}
-                        alt={`${title} poster`}
+                      <PosterImage
+                        {baseUrl}
+                        sizes="32px"
+                        {...image}
+                        alt={`${title} image`}
                       />
                     </div>
                   </div>
@@ -120,9 +123,9 @@
     </tbody>
     <tfoot class="border-t border-slate-500">
       <tr>
-        <th>Title</th>
-        <th>{descriptionLabel}</th>
-        <th>Rating</th>
+        <th class="px-4">Title</th>
+        <th class="px-4">{descriptionLabel}</th>
+        <th class="px-4">Rating</th>
       </tr>
     </tfoot>
   </table>

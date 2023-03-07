@@ -11,12 +11,16 @@
   import type { Movie$result } from '$houdini'
   import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
   import DebugData from '$lib/components/DebugData.svelte'
+  import { PosterImage } from '$lib/components/Poster'
+  import { imagesStore } from '$lib/stores/imagesStore'
 
   export let data: PageData
 
   const { id } = $page.route
   const { Configuration, MovieStore } = data
   const baseUrl = baseUrlStore(Configuration)
+  const images = imagesStore(Configuration)
+
   const currencyFormatter = new Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: 'USD',
@@ -29,12 +33,13 @@
 
   $: movie = $MovieStore.data?.movie
   const { errors, items } = itemsStore(
+    Configuration,
     MovieStore as QueryStoreWithoutCustomScalars<
       typeof MovieStore,
       Movie$result
     >,
     (data) => data.movie?.cast,
-    ({ id, name: title, character: description, profilePath }) =>
+    ({ id, name: title, character: description, profilePath }, images) =>
       ({
         id,
         title,
@@ -42,8 +47,8 @@
         description,
         image: profilePath
           ? {
-              small: ['w92', profilePath].join(''),
-              large: ['w154', profilePath].join(''),
+              src: profilePath,
+              widths: images.profileSizes,
             }
           : undefined,
       } as Item),
@@ -75,11 +80,15 @@
                 adult
               </span>
             {/if}
-            <img
-              class="max-w-[358px] rounded-lg shadow-2xl"
-              src={[$baseUrl, 'original', movie.posterPath].join('')}
-              alt={`${movie.title} poster`}
-            />
+            {#if movie.posterPath && $images}
+              <PosterImage
+                class="rounded-lg shadow-2xl"
+                {baseUrl}
+                src={movie.posterPath}
+                widths={$images.posterSizes}
+                alt={`${movie.title} image`}
+              />
+            {/if}
           </div>
           <div class="flex flex-col gap-4">
             <div class="flex items-start justify-between gap-2">

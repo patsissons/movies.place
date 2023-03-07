@@ -19,24 +19,24 @@
       class="w-full animate-in ease-out animate-duration-500 slide-in-from-bottom slide-in-from-right fill-mode-both fade-in zoom-in"
       style={`--animation-delay-factor: ${(index - $lastLength) % 20}`}
     >
-      <div class="relative w-full h-full">
-        <div class="relative left-2 top-1 h-0">
-          {#if rating}
-            <Rating {rating} />
-          {/if}
-        </div>
-        <a
-          href={url}
-          class="flex flex-col items-center gap-2 w-full h-full rounded-lg p-2 pt-4 btn-ghost"
+      <a
+        href={url}
+        class="flex flex-col items-center gap-2 w-full h-full rounded-lg p-2 btn-ghost"
+      >
+        <Poster
+          {title}
+          {baseUrl}
+          sizes="(max-width: 1024px) 10vw, (max-width: 480px) 20vw, 33vw"
+          {...image}
+          {description}
         >
-          <Poster
-            {title}
-            {description}
-            src={image ? [$baseUrl, image.small].join('') : undefined}
-            srcLarge={image ? [$baseUrl, image.large].join('') : undefined}
-          />
-        </a>
-      </div>
+          {#if rating}
+            <div class="absolute left-0 top-0">
+              <Rating {rating} />
+            </div>
+          {/if}
+        </Poster>
+      </a>
     </li>
   {/each}
 </ul>

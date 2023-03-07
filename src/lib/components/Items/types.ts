@@ -5,7 +5,8 @@ export interface Item {
   description?: string
   rating?: number
   image?: {
-    large: string
-    small: string
+    src: string
+    widths: string[]
+    sizes?: string
   }
 }

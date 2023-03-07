@@ -18,9 +18,10 @@
   const hasQuery = derived(filter, ($filter) => Boolean($filter))
 
   const { errors, pagination, items } = itemsStorePaginated(
+    Configuration,
     store,
     (data) => data.people,
-    ({ id, name: title, knownFor, profilePath }) => ({
+    ({ id, name: title, knownFor, profilePath }, images) => ({
       id,
       title,
       description: knownFor
@@ -31,8 +32,8 @@
       url: `/actor/${id}`,
       image: profilePath
         ? {
-            small: ['w92', profilePath].join(''),
-            large: ['w154', profilePath].join(''),
+            src: profilePath,
+            widths: images.profileSizes,
           }
         : undefined,
     }),

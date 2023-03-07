@@ -1,6 +1,8 @@
 import { derived, type Readable } from 'svelte/store'
-import type { QueryStore } from '$houdini'
+import type { ConfigurationStore, QueryStore } from '$houdini'
 import type { LocalGraphQLObject } from '$lib/types/graphql'
+import type { Configuration$result } from '$houdini'
+import { imagesStore } from './imagesStore'
 
 interface ResultItem {
   id: number
@@ -14,6 +16,8 @@ interface ResultList<T extends Result> extends LocalGraphQLObject {
   results?: T[]
 }
 
+type Images = NonNullable<Configuration$result['configuration']['images']>
+
 export interface Pagination {
   page: number
   totalPages: number
@@ -26,9 +30,10 @@ export function itemsStore<
   T extends Result,
   Item extends ResultItem,
 >(
+  config: ConfigurationStore,
   store: QueryStore<Data, Record<string, unknown>>,
   listTransformer: (data: Data) => T[] | undefined,
-  transformer: (result: T) => Item,
+  transformer: (result: T, images: Images) => Item,
   conditional?: Readable<boolean>,
 ) {
   const errors = derived(store, ({ errors, fetching }) => {
@@ -36,13 +41,15 @@ export function itemsStore<
     if (errors && errors.length > 0) return errors.map(({ message }) => message)
   })
 
-  const items = derived(store, ({ data }) => {
-    if (!data) return
+  const images = imagesStore(config)
+
+  const items = derived([images, store], ([$images, { data }]) => {
+    if (!data || !$images) return
 
     const results = listTransformer(data)
     if (!results) return
 
-    return results.map(transformer)
+    return results.map((result) => transformer(result, $images))
   })
 
   if (!conditional) return { errors, items }
@@ -65,12 +72,14 @@ export function itemsStorePaginated<
   T extends Result,
   Item extends ResultItem,
 >(
+  config: ConfigurationStore,
   store: QueryStore<Data, Input>,
   resultTransformer: (data: Data) => ResultList<T>,
-  transformer: (result: T) => Item,
+  transformer: (result: T, images: Images) => Item,
   conditional?: Readable<boolean>,
 ) {
   const { errors, items } = itemsStore(
+    config,
     store,
     (data) => resultTransformer(data).results,
     transformer,

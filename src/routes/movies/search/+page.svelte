@@ -18,9 +18,10 @@
   const hasQuery = derived(filter, ($filter) => Boolean($filter))
 
   const { errors, pagination, items } = itemsStorePaginated(
+    Configuration,
     store,
     (data) => data.movies,
-    ({ id, title, releaseDate, voteAverage, posterPath }) => ({
+    ({ id, title, releaseDate, voteAverage, posterPath }, images) => ({
       id,
       title,
       description: dayjs(releaseDate).format('ll'),
@@ -28,8 +29,8 @@
       url: `/movie/${id}`,
       image: posterPath
         ? {
-            small: ['w92', posterPath].join(''),
-            large: ['w154', posterPath].join(''),
+            src: posterPath,
+            widths: images.posterSizes,
           }
         : undefined,
     }),

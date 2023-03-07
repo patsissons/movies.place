@@ -3,24 +3,28 @@
   import { page } from '$app/stores'
   import { Error } from '$lib/components/Errors'
   import { Icon } from '$lib/components/Icon'
+  import { PosterImage } from '$lib/components/Poster'
   import { baseUrlStore, itemsStore } from '$lib/stores'
   import { urls } from '$lib/utils/urls'
   import type { PageData } from './$houdini'
   import dayjs from 'dayjs'
   import { Items, type Item } from '$lib/components/Items'
   import DebugData from '$lib/components/DebugData.svelte'
+  import { imagesStore } from '$lib/stores/imagesStore'
 
   export let data: PageData
 
   const { id } = $page.route
   const { Configuration, PersonStore } = data
   const baseUrl = baseUrlStore(Configuration)
+  const images = imagesStore(Configuration)
 
   $: person = $PersonStore.data?.person
   const { errors, items } = itemsStore(
+    Configuration,
     PersonStore,
     (data) => data.person?.cast,
-    ({ id, title, character, releaseDate, voteAverage, posterPath }) =>
+    ({ id, title, character, releaseDate, voteAverage, posterPath }, images) =>
       ({
         id,
         title,
@@ -31,8 +35,8 @@
         }`,
         image: posterPath
           ? {
-              small: ['w92', posterPath].join(''),
-              large: ['w154', posterPath].join(''),
+              src: posterPath,
+              widths: images.posterSizes,
             }
           : undefined,
       } as Item),
@@ -51,13 +55,15 @@
               adult
             </span>
           {/if}
-          <img
-            class={`max-w-[358px] rounded-lg shadow-2xl ${
-              person.deathday ? 'grayscale' : ''
-            }`}
-            src={[$baseUrl, 'original', person.profilePath].join('')}
-            alt={`${person.name} poster`}
-          />
+          {#if person.profilePath && $images}
+            <PosterImage
+              class="rounded-lg shadow-2xl"
+              {baseUrl}
+              src={person.profilePath}
+              widths={$images.profileSizes}
+              alt={`${person.name} image`}
+            />
+          {/if}
         </div>
         <div class="flex flex-col gap-4">
           <div class="flex items-start justify-between gap-2">
