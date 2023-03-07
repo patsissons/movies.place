@@ -47,7 +47,7 @@
   <div class="flex flex-col gap-2">
     <div class="hero min-h-screen bg-base-200">
       <div class="hero-content flex-col lg:flex-row lg:items-start text-white">
-        <div class="indicator w-full">
+        <div class="indicator w-full lg:w-auto">
           {#if person.adult}
             <span
               class="indicator-item indicator-start indicator-top badge badge-secondary"

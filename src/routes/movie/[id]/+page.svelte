@@ -72,7 +72,7 @@
         <div
           class="hero-content flex-col lg:flex-row lg:items-start text-white"
         >
-          <div class="indicator w-full">
+          <div class="indicator w-full lg:w-auto">
             {#if movie.adult}
               <span
                 class="indicator-item indicator-start indicator-top badge badge-secondary"
