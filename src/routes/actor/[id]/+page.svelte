@@ -44,10 +44,10 @@
 </script>
 
 {#if person}
-  <div class="flex flex-col gap-1">
+  <div class="flex flex-col gap-2">
     <div class="hero min-h-screen bg-base-200">
       <div class="hero-content flex-col lg:flex-row lg:items-start text-white">
-        <div class="indicator">
+        <div class="indicator w-full">
           {#if person.adult}
             <span
               class="indicator-item indicator-start indicator-top badge badge-secondary"
@@ -61,24 +61,15 @@
               {baseUrl}
               src={person.profilePath}
               widths={$images.profileSizes}
+              sizes="(max-width: 1280px) 183px, (max-width: 1024px) 119px, 100vw"
               alt={`${person.name} image`}
             />
           {/if}
         </div>
         <div class="flex flex-col gap-4">
-          <div class="flex items-start justify-between gap-2">
+          <div class="flex flex-wrap items-center justify-between gap-2">
             <h1 class="text-4xl font-bold">{person.name}</h1>
             <div class="flex items-center gap-2 text-white">
-              {#if person.homepage}
-                <a
-                  class="btn btn-ghost btn-sm"
-                  href={person.homepage}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Icon icon="globe" size={20} />
-                </a>
-              {/if}
               <a
                 class="btn btn-ghost btn-sm"
                 href={urls.tmdb(person.id, 'person')}
@@ -97,6 +88,16 @@
                   <Icon icon="imdb" size={20} />
                 </a>
               {/if}
+              {#if person.homepage}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={person.homepage}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="globe" size={20} />
+                </a>
+              {/if}
             </div>
           </div>
           <div class="flex flex-col gap-4">
@@ -106,7 +107,7 @@
           </div>
           {#if person.cast.length > 0 || person.popularity || person.birthday}
             <div
-              class="stats stats-vertical sm:stats-horizontal text-center sm:text-left shadow"
+              class="stats stats-vertical md:stats-horizontal text-center md:text-left shadow"
             >
               {#if person.cast.length > 0}
                 <div class="stat">

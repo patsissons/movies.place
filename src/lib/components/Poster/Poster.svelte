@@ -10,8 +10,10 @@
   export let description: string | undefined = undefined
 </script>
 
-<div class="relative w-full">
-  <div class="bg-slate-400 rounded-tl-[18px] overflow-hidden">
+<div class="relative w-full h-full">
+  <div
+    class="bg-slate-400 rounded-tl-[18px] overflow-hidden w-full aspect-[2/3]"
+  >
     {#if src}
       <PosterImage {baseUrl} {src} {widths} {sizes} alt={`${title} image`} />
     {/if}

@@ -56,7 +56,7 @@
 </script>
 
 {#if movie}
-  <div class="flex flex-col gap-1">
+  <div class="flex flex-col gap-2">
     <div class="flex flex-col gap-4">
       <div
         class="hero min-h-screen bg-base-200"
@@ -72,7 +72,7 @@
         <div
           class="hero-content flex-col lg:flex-row lg:items-start text-white"
         >
-          <div class="indicator">
+          <div class="indicator w-full">
             {#if movie.adult}
               <span
                 class="indicator-item indicator-start indicator-top badge badge-secondary"
@@ -86,6 +86,7 @@
                 {baseUrl}
                 src={movie.posterPath}
                 widths={$images.posterSizes}
+                sizes="(max-width: 1280px) 460px, (max-width: 1024px) 254px, 100vw"
                 alt={`${movie.title} image`}
               />
             {/if}
@@ -107,17 +108,9 @@
                   />
                 </div>
               </h1>
-              <div class="flex items-center gap-2 text-white">
-                {#if movie.homepage}
-                  <a
-                    class="btn btn-ghost btn-sm"
-                    href={movie.homepage}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <Icon icon="globe" size={20} />
-                  </a>
-                {/if}
+              <div
+                class="flex flex-col sm:flex-row items-center gap-2 text-white"
+              >
                 <a
                   class="btn btn-ghost btn-sm"
                   href={urls.tmdb(movie.id)}
@@ -134,6 +127,16 @@
                     rel="noreferrer"
                   >
                     <Icon icon="imdb" size={20} />
+                  </a>
+                {/if}
+                {#if movie.homepage}
+                  <a
+                    class="btn btn-ghost btn-sm"
+                    href={movie.homepage}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Icon icon="globe" size={20} />
                   </a>
                 {/if}
               </div>
@@ -166,7 +169,7 @@
             {/if}
             {#if movie.voteAverage || movie.popularity || movie.budget}
               <div
-                class="stats stats-vertical sm:stats-horizontal text-center sm:text-left shadow"
+                class="stats stats-vertical md:stats-horizontal text-center md:text-left shadow"
               >
                 {#if movie.voteCount}
                   <div class="stat">
