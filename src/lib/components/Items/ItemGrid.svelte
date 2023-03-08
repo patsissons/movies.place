@@ -14,7 +14,7 @@
 <ul
   class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 gap-y-2 justify-items-center overflow-x-hidden animate-stagger"
 >
-  {#each $items as { title, url, description, date, ratings, image }, index}
+  {#each $items as { title, url, description, date, ratings = { }, image }, index}
     <li
       class="w-full animate-in ease-out animate-duration-500 slide-in-from-bottom slide-in-from-right fill-mode-both fade-in zoom-in"
       style={`--animation-delay-factor: ${(index - $lastLength) % 20}`}
@@ -31,9 +31,14 @@
           {description}
           {date}
         >
-          {#if ratings && ratings.some(({ value }) => Boolean(value))}
+          {#if ratings.rt || ratings.meta || ratings.imdb || ratings.tmdb}
             <div class="absolute left-0 top-0">
-              <Rating rating={ratings.find((value) => Boolean(value))} />
+              <Rating
+                rating={ratings.rt ||
+                  ratings.meta ||
+                  ratings.imdb ||
+                  ratings.tmdb}
+              />
             </div>
           {/if}
         </Poster>

@@ -24,12 +24,21 @@
     Configuration,
     PersonStore,
     (data) => data.person?.cast,
-    ({ id, title, character, releaseDate, voteAverage, posterPath }, images) =>
+    (
+      { id, title, character, releaseDate, voteAverage, voteCount, posterPath },
+      images,
+    ) =>
       ({
         id,
         title,
         url: `/movie/${id}`,
-        ratings: [{ label: 'TMDB', value: voteAverage * 10 }],
+        ratings: {
+          tmdb: {
+            label: 'TMDB',
+            value: voteAverage * 10,
+            description: `${voteCount} votes`,
+          },
+        },
         description: character,
         date: releaseDate ?? undefined,
         image: posterPath

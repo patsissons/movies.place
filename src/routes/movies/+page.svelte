@@ -14,11 +14,20 @@
     Configuration,
     SortedMovies,
     (data) => data.sortedMovies,
-    ({ id, title, releaseDate, voteAverage, posterPath }, images) => ({
+    (
+      { id, title, releaseDate, voteAverage, voteCount, posterPath },
+      images,
+    ) => ({
       id,
       title,
       date: releaseDate ?? undefined,
-      ratings: [{ label: 'TMDB', value: voteAverage * 10 }],
+      ratings: {
+        tmdb: {
+          label: 'TMDB',
+          value: voteAverage * 10,
+          description: `${voteCount} votes`,
+        },
+      },
       url: `/movie/${id}`,
       image: posterPath
         ? {

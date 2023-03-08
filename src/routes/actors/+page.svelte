@@ -24,12 +24,13 @@
           releaseDate ? `${title} (${dayjs(releaseDate).year()})` : title,
         )
         .join(', '),
-      ratings: [
-        {
+      ratings: {
+        tmdb: {
           label: 'TMDB',
           value: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
+          description: `${knownFor.length} movies`,
         },
-      ],
+      },
       url: `/actor/${id}`,
       image: profilePath
         ? {

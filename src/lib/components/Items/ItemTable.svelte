@@ -1,32 +1,48 @@
 <script lang="ts">
   import orderBy from 'lodash/orderBy'
+  import mapValues from 'lodash/mapValues'
   import type { Readable } from 'svelte/store'
   import { PosterImage } from '$lib/components/Poster'
   import Rating from './Rating.svelte'
-  import type { Item } from './types'
+  import type { Item, RatingID } from './types'
 
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
   export let descriptionLabel: string | undefined = undefined
 
-  type SortField = 'title' | 'description' | 'date' | 'rating'
+  type SortField = 'title' | 'description' | 'date' | RatingID
   type SortDir = 'asc' | 'desc'
 
   let sort: SortField = 'title'
   let dir: SortDir = 'asc'
 
   $: hasDates = $items.some(({ date }) => Boolean(date))
-  $: sortedItems = orderBy($items, [sort], [dir])
+  $: tableItems = $items.map(
+    ({ title, description, date, image, url, ratings }) => ({
+      title,
+      description,
+      date,
+      image,
+      url,
+      ratings,
+      ...mapValues(ratings, (rating) => rating?.value),
+    }),
+  )
+  $: ratingIds = Object.keys(tableItems[0]).filter((key) =>
+    ['tmdb', 'imdb', 'rt', 'meta'].includes(key),
+  ) as RatingID[]
+  $: sortedItems = orderBy(tableItems, [sort], [dir])
+
+  $: {
+    console.log('D', tableItems)
+  }
 
   function handleSort(field: typeof sort) {
-    if (!sort) {
-      sort = field
-      dir = 'asc'
-    } else if (sort === field) {
+    if (sort === field) {
       dir = dir === 'asc' ? 'desc' : 'asc'
     } else {
       sort = field
-      dir = 'asc'
+      dir = 'desc'
     }
   }
 </script>
@@ -72,21 +88,23 @@
             </button>
           </th>
         {/if}
-        <th class="p-0 w-48">
-          <button
-            class="btn btn-ghost btn-block h-20 justify-start rounded-none"
-            on:click={() => handleSort('rating')}
-          >
-            Rating
-            {#if sort === 'rating' && dir}
-              {dir === 'asc' ? '↑' : '↓'}
-            {/if}
-          </button>
-        </th>
+        {#each ratingIds as id}
+          <th class="p-0 w-48">
+            <button
+              class="btn btn-ghost btn-block h-20 justify-start rounded-none"
+              on:click={() => handleSort(id)}
+            >
+              {tableItems[0]?.ratings?.[id]?.label ?? id}
+              {#if sort === id && dir}
+                {dir === 'asc' ? '↑' : '↓'}
+              {/if}
+            </button>
+          </th>
+        {/each}
       </tr>
     </thead>
     <tbody>
-      {#each sortedItems as { title, description, date, image, ratings, url }}
+      {#each sortedItems as { title, description, date, image, url, ratings }}
         <tr class="hover">
           <td class="p-0">
             <a
@@ -138,16 +156,18 @@
               {/if}
             </td>
           {/if}
-          <td class="p-0">
-            {#if ratings && ratings.some(({ value }) => Boolean(value))}
-              <a
-                class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
-                href={url}
-              >
-                <Rating rating={ratings.find((value) => Boolean(value))} />
-              </a>
-            {/if}
-          </td>
+          {#each ratingIds as id}
+            <td class="p-0">
+              {#if ratings && ratings[id]}
+                <a
+                  class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+                  href={url}
+                >
+                  <Rating rating={ratings[id]} />
+                </a>
+              {/if}
+            </td>
+          {/each}
         </tr>
       {/each}
     </tbody>
@@ -160,7 +180,9 @@
         {#if hasDates}
           <th class="px-4">Date</th>
         {/if}
-        <th class="px-4">Rating</th>
+        {#each ratingIds as id}
+          <th class="px-4">{tableItems[0]?.ratings?.[id]?.label ?? id}</th>
+        {/each}
       </tr>
     </tfoot>
   </table>
