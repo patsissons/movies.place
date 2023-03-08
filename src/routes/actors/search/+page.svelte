@@ -7,6 +7,7 @@
   import { derived, writable } from 'svelte/store'
   import type { PageData } from './$houdini'
   import DebugData from '$lib/components/DebugData.svelte'
+  import dayjs from 'dayjs'
 
   export let data: PageData
 
@@ -26,7 +27,9 @@
       title,
       description: knownFor
         .slice(0, 5)
-        .map(({ title }) => title)
+        .map(({ title, releaseDate }) =>
+          releaseDate ? `${title} (${dayjs(releaseDate).year()})` : title,
+        )
         .join(', '),
       ratings: [
         {

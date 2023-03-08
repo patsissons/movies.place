@@ -24,7 +24,7 @@
     ({ id, title, releaseDate, voteAverage, posterPath }, images) => ({
       id,
       title,
-      description: dayjs(releaseDate).format('ll'),
+      date: releaseDate ?? undefined,
       ratings: [{ label: 'TMDB', value: voteAverage * 10 }],
       url: `/movie/${id}`,
       image: posterPath

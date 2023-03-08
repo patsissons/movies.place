@@ -14,7 +14,7 @@
   export let errors: Readable<string[] | undefined>
   export let items: Readable<Item[] | undefined>
   export let itemType: 'movies' | 'actors'
-  export let descriptionLabel: string
+  export let descriptionLabel: string | undefined = undefined
   export let pagination: Readable<PaginationState | undefined> | undefined =
     undefined
   export let filterable = false
@@ -41,8 +41,8 @@
     const regex = filterRegex($filter)
     if (!regex) return $items
 
-    return $items.filter(({ title, description }) =>
-      [title, description].some((field) => field && regex.test(field)),
+    return $items.filter(({ title, description, date }) =>
+      [title, description, date].some((field) => field && regex.test(field)),
     )
   })
 

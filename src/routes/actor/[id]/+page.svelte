@@ -30,9 +30,8 @@
         title,
         url: `/movie/${id}`,
         ratings: [{ label: 'TMDB', value: voteAverage * 10 }],
-        description: `${character}${
-          releaseDate ? ` (${dayjs(releaseDate).year()})` : ''
-        }`,
+        description: character,
+        date: releaseDate ?? undefined,
         image: posterPath
           ? {
               src: posterPath,

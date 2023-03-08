@@ -1,4 +1,5 @@
 <script lang="ts">
+  import dayjs from 'dayjs'
   import type { Readable } from 'svelte/store'
   import PosterImage from './PosterImage.svelte'
 
@@ -8,6 +9,21 @@
   export let widths: string[] | undefined = undefined
   export let sizes: string | undefined = undefined
   export let description: string | undefined = undefined
+  export let date: string | Date | undefined = undefined
+
+  let desc: string | undefined
+
+  $: {
+    if (date && description) {
+      desc = `${description} (${dayjs(date).year()})`
+    }
+
+    if (date) {
+      desc = dayjs(date).format('ll')
+    }
+
+    desc = description
+  }
 </script>
 
 <div class="relative w-full h-full">
@@ -21,8 +37,8 @@
   <p class="w-full text-center font-bold">
     {title}
   </p>
-  {#if description}
-    <p class="w-full text-center text-sm font-light">{description}</p>
+  {#if desc}
+    <p class="w-full text-center text-sm font-light">{desc}</p>
   {/if}
   <slot />
 </div>

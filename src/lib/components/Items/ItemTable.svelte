@@ -7,14 +7,15 @@
 
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
-  export let descriptionLabel: string
+  export let descriptionLabel: string | undefined = undefined
 
-  type SortField = 'title' | 'description' | 'rating'
+  type SortField = 'title' | 'description' | 'date' | 'rating'
   type SortDir = 'asc' | 'desc'
 
   let sort: SortField = 'title'
   let dir: SortDir = 'asc'
 
+  $: hasDates = $items.some(({ date }) => Boolean(date))
   $: sortedItems = orderBy($items, [sort], [dir])
 
   function handleSort(field: typeof sort) {
@@ -45,17 +46,32 @@
             {/if}
           </button>
         </th>
-        <th class="p-0 w-80">
-          <button
-            class="btn btn-ghost btn-block h-20 justify-start rounded-none"
-            on:click={() => handleSort('description')}
-          >
-            {descriptionLabel}
-            {#if sort === 'description' && dir}
-              {dir === 'asc' ? '↑' : '↓'}
-            {/if}
-          </button>
-        </th>
+        {#if descriptionLabel}
+          <th class="p-0 w-80">
+            <button
+              class="btn btn-ghost btn-block h-20 justify-start rounded-none"
+              on:click={() => handleSort('description')}
+            >
+              {descriptionLabel}
+              {#if sort === 'description' && dir}
+                {dir === 'asc' ? '↑' : '↓'}
+              {/if}
+            </button>
+          </th>
+        {/if}
+        {#if hasDates}
+          <th class="p-0 w-80">
+            <button
+              class="btn btn-ghost btn-block h-20 justify-start rounded-none"
+              on:click={() => handleSort('date')}
+            >
+              Date
+              {#if sort === 'date' && dir}
+                {dir === 'asc' ? '↑' : '↓'}
+              {/if}
+            </button>
+          </th>
+        {/if}
         <th class="p-0 w-48">
           <button
             class="btn btn-ghost btn-block h-20 justify-start rounded-none"
@@ -70,7 +86,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each sortedItems as { title, description, image, ratings, url }}
+      {#each sortedItems as { title, description, date, image, ratings, url }}
         <tr class="hover">
           <td class="p-0">
             <a
@@ -98,16 +114,30 @@
               </div>
             </a>
           </td>
-          <td class="p-0">
-            {#if description}
-              <a
-                class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
-                href={url}
-              >
-                <p>{description}</p>
-              </a>
-            {/if}
-          </td>
+          {#if descriptionLabel}
+            <td class="p-0">
+              {#if description}
+                <a
+                  class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+                  href={url}
+                >
+                  <p>{description}</p>
+                </a>
+              {/if}
+            </td>
+          {/if}
+          {#if hasDates}
+            <td class="p-0">
+              {#if date}
+                <a
+                  class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+                  href={url}
+                >
+                  <p>{date}</p>
+                </a>
+              {/if}
+            </td>
+          {/if}
           <td class="p-0">
             {#if ratings && ratings.some(({ value }) => Boolean(value))}
               <a
@@ -124,7 +154,12 @@
     <tfoot class="border-t border-slate-500">
       <tr>
         <th class="px-4">Title</th>
-        <th class="px-4">{descriptionLabel}</th>
+        {#if descriptionLabel}
+          <th class="px-4">{descriptionLabel}</th>
+        {/if}
+        {#if hasDates}
+          <th class="px-4">Date</th>
+        {/if}
         <th class="px-4">Rating</th>
       </tr>
     </tfoot>

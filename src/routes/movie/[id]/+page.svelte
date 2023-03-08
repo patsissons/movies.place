@@ -95,18 +95,20 @@
             <div class="flex items-start justify-between gap-2">
               <h1 class="text-4xl font-bold">
                 {movie.title}
-                <div
-                  class="tooltip cursor-pointer"
-                  data-tip={`${dayjs(movie.releaseDate).format('LL')} (${dayjs(
-                    movie.releaseDate,
-                  ).fromNow()})`}
-                >
-                  <Time
-                    class="font-mono font-light text-base-content"
-                    timestamp={movie.releaseDate}
-                    format="(YYYY)"
-                  />
-                </div>
+                {#if movie.releaseDate}
+                  <div
+                    class="tooltip cursor-pointer"
+                    data-tip={`${dayjs(movie.releaseDate).format(
+                      'LL',
+                    )} (${dayjs(movie.releaseDate).fromNow()})`}
+                  >
+                    <Time
+                      class="font-mono font-light text-base-content"
+                      timestamp={movie.releaseDate}
+                      format="(YYYY)"
+                    />
+                  </div>
+                {/if}
               </h1>
               <div
                 class="flex flex-col sm:flex-row items-center gap-2 text-white"
