@@ -29,7 +29,7 @@
         id,
         title,
         url: `/movie/${id}`,
-        rating: voteAverage * 10,
+        ratings: [{ label: 'TMDB', value: voteAverage * 10 }],
         description: `${character}${
           releaseDate ? ` (${dayjs(releaseDate).year()})` : ''
         }`,

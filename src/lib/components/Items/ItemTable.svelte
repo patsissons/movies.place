@@ -70,7 +70,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each sortedItems as { title, description, image, rating, url }}
+      {#each sortedItems as { title, description, image, ratings, url }}
         <tr class="hover">
           <td class="p-0">
             <a
@@ -109,12 +109,12 @@
             {/if}
           </td>
           <td class="p-0">
-            {#if rating}
+            {#if ratings && ratings.some(({ value }) => Boolean(value))}
               <a
                 class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
                 href={url}
               >
-                <Rating {rating} />
+                <Rating rating={ratings.find((value) => Boolean(value))} />
               </a>
             {/if}
           </td>

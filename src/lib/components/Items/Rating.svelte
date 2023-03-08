@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let rating: number
+  export let rating: { label: string; value: number } | undefined
 
   export function ratingColor(rating: number) {
     if (rating >= 70) return 'su'
@@ -8,14 +8,18 @@
   }
 </script>
 
-<div
-  class="radial-progress text-xs font-bold bg-black bg-opacity-75"
-  style={`--size:2.25rem; --thickness: 2px; --value:${rating}; --color:var(--${ratingColor(
-    rating,
-  )});`}
->
-  <p>{Math.floor(rating)}</p>
-</div>
+{#if rating}
+  <div
+    class="radial-progress text-xs font-bold bg-black bg-opacity-75"
+    style={`--size:2.25rem; --thickness: 2px; --value:${
+      rating.value
+    }; --color:var(--${ratingColor(rating.value)});`}
+  >
+    <div class="tooltip tooltip-bottom" data-tip={rating.label}>
+      <p>{Math.floor(rating.value)}</p>
+    </div>
+  </div>
+{/if}
 
 <style lang="scss">
   .radial-progress {

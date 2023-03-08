@@ -25,7 +25,7 @@
       id,
       title,
       description: dayjs(releaseDate).format('ll'),
-      rating: voteAverage * 10,
+      ratings: [{ label: 'TMDB', value: voteAverage * 10 }],
       url: `/movie/${id}`,
       image: posterPath
         ? {

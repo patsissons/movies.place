@@ -3,7 +3,10 @@ export interface Item {
   title: string
   url: string
   description?: string
-  rating?: number
+  ratings?: {
+    label: string
+    value: number
+  }[]
   image?: {
     src: string
     widths: string[]

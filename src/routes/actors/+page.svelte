@@ -21,7 +21,12 @@
         .slice(0, 5)
         .map(({ title }) => title)
         .join(', '),
-      rating: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
+      ratings: [
+        {
+          label: 'TMDB',
+          value: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
+        },
+      ],
       url: `/actor/${id}`,
       image: profilePath
         ? {
