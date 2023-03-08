@@ -25,11 +25,10 @@
   .radial-progress {
     color: hsla(var(--color) / var(--tw-text-opacity, 1));
 
-    > p::after {
+    p::after {
       content: '%';
       font-size: 50%;
-      position: relative;
-      top: -25%;
+      vertical-align: super;
     }
   }
 </style>
