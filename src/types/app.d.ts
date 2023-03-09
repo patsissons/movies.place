@@ -7,6 +7,11 @@ declare global {
     // interface PageData {}
     // interface Platform {}
   }
+
+  interface ImportMetaEnv {
+    VITE_TMDB_API_KEY?: string
+    VITE_OMDB_API_KEY?: string
+  }
 }
 
 export {}

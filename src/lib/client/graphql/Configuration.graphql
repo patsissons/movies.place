@@ -1,0 +1,14 @@
+query Configuration {
+  configuration {
+    images {
+      baseUrl
+      secureBaseUrl
+      backdropSizes
+      logoSizes
+      posterSizes
+      profileSizes
+      stillSizes
+    }
+    changeKeys
+  }
+}

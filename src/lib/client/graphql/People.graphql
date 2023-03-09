@@ -1,0 +1,30 @@
+query People($query: String!, $page: Int) {
+  people(query: $query, page: $page) {
+    page
+    totalPages
+    totalResults
+    results {
+      id
+      profilePath
+      adult
+      knownFor {
+        id
+        posterPath
+        adult
+        overview
+        releaseDate
+        genreIds
+        originalTitle
+        originalLanguage
+        title
+        backdropPath
+        popularity
+        voteCount
+        video
+        voteAverage
+      }
+      name
+      popularity
+    }
+  }
+}

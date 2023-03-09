@@ -1,0 +1,1 @@
+export { fetchTMDBJson } from './fetch'

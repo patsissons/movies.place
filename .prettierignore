@@ -12,4 +12,7 @@ pnpm-lock.yaml
 package-lock.json
 yarn.lock
 
+_ignore
+*.generated.*
+$houdini
 static/data

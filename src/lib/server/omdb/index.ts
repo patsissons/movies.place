@@ -1,0 +1,1 @@
+export { fetchOMDBJson } from './fetch'

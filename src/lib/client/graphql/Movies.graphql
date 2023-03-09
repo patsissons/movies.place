@@ -1,0 +1,40 @@
+query Movies($query: String!, $page: Int) {
+  movies(query: $query, page: $page) {
+    page
+    totalPages
+    totalResults
+    results {
+      id
+      movie {
+        externalIds {
+          id
+          imdbId
+          facebookId
+          instagramId
+          twitterId
+          wikidataId
+        }
+        omdb {
+          id
+          metascore
+          imdbRating
+          imdbVotes
+          rottenTomatoesScore
+        }
+      }
+      posterPath
+      adult
+      overview
+      releaseDate
+      genreIds
+      originalTitle
+      originalLanguage
+      title
+      backdropPath
+      popularity
+      voteCount
+      video
+      voteAverage
+    }
+  }
+}
