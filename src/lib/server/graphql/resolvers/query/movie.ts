@@ -24,7 +24,7 @@ export const movie = (async (_source, { id }, { fetch }) => {
       fetch,
       'movie',
       id,
-      { append_to_response: 'credits' },
+      { append_to_response: 'external_ids,credits' },
       { fallbackUrl: fallbacks.movie },
     )
 
@@ -39,4 +39,4 @@ export const movie = (async (_source, { id }, { fetch }) => {
 
     throw error
   }
-}) satisfies Resolver<QueryMovieArgs, Movie, never>
+}) satisfies Resolver<QueryMovieArgs, Movie, unknown>

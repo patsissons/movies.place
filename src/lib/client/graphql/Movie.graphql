@@ -1,6 +1,14 @@
 query Movie($id: Int!) {
   movie(id: $id) {
     id
+    externalIds {
+      id
+      imdbId
+      facebookId
+      instagramId
+      twitterId
+      wikidataId
+    }
     omdb {
       id
       metascore

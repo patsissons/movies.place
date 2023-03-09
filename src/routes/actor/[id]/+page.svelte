@@ -32,6 +32,7 @@
         id,
         title,
         url: `/movie/${id}`,
+        description: character,
         ratings: {
           tmdb: {
             label: 'TMDB',
@@ -39,7 +40,6 @@
             description: `${voteCount} votes`,
           },
         },
-        description: character,
         date: releaseDate ?? undefined,
         image: posterPath
           ? {

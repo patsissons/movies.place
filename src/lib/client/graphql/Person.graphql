@@ -1,6 +1,19 @@
 query Person($id: Int!) {
   person(id: $id) {
     id
+    externalIds {
+      id
+      imdbId
+      facebookId
+      freebaseMid
+      freebaseId
+      tvrageId
+      twitterId
+      instagramId
+      wikidataId
+      tiktokId
+      youtubeId
+    }
     birthday
     knownForDepartment
     deathday
@@ -16,6 +29,23 @@ query Person($id: Int!) {
     homepage
     cast {
       id
+      movie {
+        externalIds {
+          id
+          imdbId
+          facebookId
+          instagramId
+          twitterId
+          wikidataId
+        }
+        omdb {
+          id
+          metascore
+          imdbRating
+          imdbVotes
+          rottenTomatoesScore
+        }
+      }
       character
       creditId
       releaseDate

@@ -38,4 +38,4 @@ export const sortedPeople = (async (
 
     throw error
   }
-}) satisfies Resolver<QuerySortedPeopleArgs, PersonListResultsPage, never>
+}) satisfies Resolver<QuerySortedPeopleArgs, PersonListResultsPage, unknown>

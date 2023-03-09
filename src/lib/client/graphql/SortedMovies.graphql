@@ -5,6 +5,23 @@ query SortedMovies($page: Int) {
     totalPages
     results {
       id
+      movie {
+        externalIds {
+          id
+          imdbId
+          facebookId
+          instagramId
+          twitterId
+          wikidataId
+        }
+        omdb {
+          id
+          metascore
+          imdbRating
+          imdbVotes
+          rottenTomatoesScore
+        }
+      }
       title
       posterPath
       adult

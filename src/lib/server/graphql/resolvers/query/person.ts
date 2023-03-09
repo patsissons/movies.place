@@ -25,7 +25,7 @@ export const person = (async (_source, { id }, { fetch }) => {
       'person',
       id,
       {
-        append_to_response: 'movie_credits',
+        append_to_response: 'external_ids,movie_credits',
       },
       { fallbackUrl: fallbacks.person },
     )
@@ -41,4 +41,4 @@ export const person = (async (_source, { id }, { fetch }) => {
 
     throw error
   }
-}) satisfies Resolver<QueryPersonArgs, Person, never>
+}) satisfies Resolver<QueryPersonArgs, Person, unknown>

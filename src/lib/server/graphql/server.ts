@@ -1,8 +1,17 @@
 // import { useGraphQlJit } from '@envelop/graphql-jit'
+import { print } from 'graphql'
 import { createYoga } from 'graphql-yoga'
 import { context } from './context'
 import { schema } from './schema'
 import type { Context } from './types'
+
+import ConfigurationQuery from '$lib/client/graphql/Configuration.graphql'
+import MovieQuery from '$lib/client/graphql/Movie.graphql'
+import MoviesQuery from '$lib/client/graphql/Movies.graphql'
+import PeopleQuery from '$lib/client/graphql/People.graphql'
+import PersonQuery from '$lib/client/graphql/Person.graphql'
+import SortedMoviesQuery from '$lib/client/graphql/SortedMovies.graphql'
+import SortedPeopleQuery from '$lib/client/graphql/SortedPeople.graphql'
 
 export const server = createYoga<Context>({
   logging: true,
@@ -14,218 +23,24 @@ export const server = createYoga<Context>({
   // plugins: [useGraphQlJit()],
   graphqlEndpoint: '/api/graphql',
   graphiql: {
+    title: 'movies.place GraphiQL explorer',
     defaultQuery: `
-query SortedMovies {
-  sortedMovies {
-    page
-    totalResults
-    totalPages
-    results {
-      id
-      title
-      posterPath
-      adult
-      overview
-      releaseDate
-      genreIds
-      originalTitle
-      originalLanguage
-      backdropPath
-      popularity
-      voteCount
-      video
-      voteAverage
-    }
-  }
-}
-
-query Movies {
-  movies(query: "skyfall") {
-    page
-    totalPages
-    totalResults
-    results {
-      id
-      posterPath
-      adult
-      overview
-      releaseDate
-      genreIds
-      originalTitle
-      originalLanguage
-      title
-      backdropPath
-      popularity
-      voteCount
-      video
-      voteAverage
-    }
-  }
-}
-
-query Movie {
-  movie(id: 37724) {
-    id
-    adult
-    backdropPath
-    belongsToCollection {
-      id
-      name
-      overview
-      posterPath
-      backdropPath
-    }
-    budget
-    genres {
-      id
-      name
-    }
-    homepage
-    imdbId
-    originalLanguage
-    originalTitle
-    overview
-    popularity
-    posterPath
-    productionCompanies {
-      id
-      name
-      logoPath
-      originCountry
-    }
-    productionCountries {
-      iso31661
-      name
-    }
-    releaseDate
-    revenue
-    runtime
-    spokenLanguages {
-      iso6391
-      name
-    }
-    status
-    tagline
-    title
-    video
-    voteAverage
-    voteCount
-    cast {
-      id
-      adult
-      gender
-      knownForDepartment
-      name
-      originalName
-      popularity
-      profilePath
-      castId
-      character
-      creditId
-      order
-    }
-  }
-}
-
-query SortedPeople {
-  sortedPeople {
-    page
-    totalPages
-    totalResults
-    results {
-      id
-      profilePath
-      adult
-      knownFor {
-        id
-        posterPath
-        adult
-        overview
-        releaseDate
-        genreIds
-        originalTitle
-        originalLanguage
-        title
-        backdropPath
-        popularity
-        voteCount
-        video
-        voteAverage
-      }
-      name
-      popularity
-    }
-  }
-}
-
-query People {
-  people(query: "Daniel Craig") {
-    page
-    totalPages
-    totalResults
-    results {
-      id
-      profilePath
-      adult
-      knownFor {
-        id
-        posterPath
-        adult
-        overview
-        releaseDate
-        genreIds
-        originalTitle
-        originalLanguage
-        title
-        backdropPath
-        popularity
-        voteCount
-        video
-        voteAverage
-      }
-      name
-      popularity
-    }
-  }
-}
-
-query Person {
-  person(id: 8784) {
-    id
-    birthday
-    knownForDepartment
-    deathday
-    name
-    alsoKnownAs
-    gender
-    biography
-    popularity
-    placeOfBirth
-    profilePath
-    adult
-    imdbId
-    homepage
-    cast {
-      id
-      character
-      creditId
-      releaseDate
-      voteCount
-      video
-      adult
-      voteAverage
-      title
-      genreIds
-      originalLanguage
-      originalTitle
-      popularity
-      backdropPath
-      overview
-      posterPath
-    }
-  }
-}
-`,
+${print(SortedMoviesQuery)}
+${print(MoviesQuery)
+  .replaceAll('$query', '$movieQuery')
+  .replace('$movieQuery: String!', '$movieQuery: String! = "skyfall"')}
+${print(MovieQuery)
+  .replaceAll('$id', '$movieId')
+  .replace('$movieId: Int!', '$movieId: Int! = 37724')}
+${print(SortedPeopleQuery)}
+${print(PeopleQuery)
+  .replaceAll('$query', '$peopleQuery')
+  .replace('$peopleQuery: String!', '$peopleQuery: String! = "Daniel Craig"')}
+${print(PersonQuery)
+  .replaceAll('$id', '$personId')
+  .replace('$personId: Int!', '$personId: Int! = 8784')}
+${print(ConfigurationQuery)}
+`.trim(),
   },
   fetchAPI: globalThis,
 })

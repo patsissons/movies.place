@@ -21,4 +21,4 @@ export const configuration = (async (_source, _, { fetch }) => {
 
     throw error
   }
-}) satisfies Resolver<never, Promise<Configuration>, never>
+}) satisfies Resolver<never, Promise<Configuration>, unknown>

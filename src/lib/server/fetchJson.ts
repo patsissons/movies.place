@@ -36,6 +36,7 @@ export async function fetchJson<Result = Record<string, unknown>>(
   { fallbackUrl }: FetchOptions = {},
 ): Promise<Result> {
   try {
+    // console.log('D', `fetching ${url}`)
     const response = await fetch(url, {
       headers: {
         accept: 'application/json; charset=utf8;',

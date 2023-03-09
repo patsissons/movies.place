@@ -53,6 +53,7 @@ type SpokenLanguage {
 
 type MovieCastCredit {
   id: Int!
+  actor: Person!
   adult: Boolean!
   gender: Int
   knownForDepartment: String!
@@ -66,6 +67,15 @@ type MovieCastCredit {
   order: Int!
 }
 
+type ExternalMovieIds {
+  id: Int
+  imdbId: String
+  facebookId: String
+  instagramId: String
+  twitterId: String
+  wikidataId: String
+}
+
 type OMDBRatings {
   id: String!
   metascore: Int
@@ -76,6 +86,7 @@ type OMDBRatings {
 
 type Movie {
   id: Int!
+  externalIds: ExternalMovieIds!
   omdb: OMDBRatings
   adult: Boolean!
   backdropPath: String
@@ -106,6 +117,7 @@ type Movie {
 
 type MovieListResult {
   id: Int!
+  movie: Movie!
   posterPath: String
   adult: Boolean!
   overview: String!
@@ -138,6 +150,7 @@ enum MovieSortType {
 
 type PersonCastCredit {
   id: Int!
+  movie: Movie!
   character: String!
   creditId: String!
   releaseDate: String
@@ -155,8 +168,23 @@ type PersonCastCredit {
   posterPath: String
 }
 
+type ExternalPersonIds {
+  id: Int
+  imdbId: String
+  facebookId: String
+  freebaseMid: String
+  freebaseId: String
+  tvrageId: Int
+  twitterId: String
+  instagramId: String
+  wikidataId: String
+  tiktokId: String
+  youtubeId: String
+}
+
 type Person {
   id: Int!
+  externalIds: ExternalPersonIds!
   birthday: String
   knownForDepartment: String!
   deathday: String

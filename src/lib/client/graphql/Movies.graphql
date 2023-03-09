@@ -5,6 +5,23 @@ query Movies($query: String!, $page: Int) {
     totalResults
     results {
       id
+      movie {
+        externalIds {
+          id
+          imdbId
+          facebookId
+          instagramId
+          twitterId
+          wikidataId
+        }
+        omdb {
+          id
+          metascore
+          imdbRating
+          imdbVotes
+          rottenTomatoesScore
+        }
+      }
       posterPath
       adult
       overview

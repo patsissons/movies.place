@@ -9,4 +9,4 @@ export const ping = (() => {
   return {
     timestamp: new Date(),
   }
-}) satisfies Resolver<never, Pong>
+}) satisfies Resolver<unknown, Pong>

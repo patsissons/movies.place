@@ -33,10 +33,6 @@
   ) as RatingID[]
   $: sortedItems = orderBy(tableItems, [sort], [dir])
 
-  $: {
-    console.log('D', tableItems)
-  }
-
   function handleSort(field: typeof sort) {
     if (sort === field) {
       dir = dir === 'asc' ? 'desc' : 'asc'

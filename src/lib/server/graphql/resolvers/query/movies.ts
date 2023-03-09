@@ -35,4 +35,4 @@ export const movies = (async (
 
     throw error
   }
-}) satisfies Resolver<QueryMoviesArgs, MovieListResultsPage, never>
+}) satisfies Resolver<QueryMoviesArgs, MovieListResultsPage, unknown>

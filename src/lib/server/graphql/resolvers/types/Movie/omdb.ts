@@ -4,20 +4,21 @@ import type { Movie, OmdbRatings } from '$lib/types/graphql.generated'
 // import { fallbacks } from '$lib/server/omdb/fallbacks'
 import { fetchOMDBJson } from '$lib/server/omdb'
 import { ratingsFromMovie, type OMDBMovie } from '$lib/server/omdb/ratings'
+import { OMDBError } from '$lib/server/omdb/fetch'
 
-export const omdb = (async (source, _args, { fetch }) => {
+export const omdb = (async ({ imdbId }, _args, { fetch }) => {
   try {
-    if (!source.imdbId) return null
+    if (!imdbId) return null
 
     const omdb = await fetchOMDBJson<OMDBMovie | undefined>(fetch, {
-      i: source.imdbId,
+      i: imdbId,
     })
 
     if (!omdb) return null
 
     return ratingsFromMovie(omdb) ?? null
   } catch (error) {
-    if (error instanceof JsonError) {
+    if (error instanceof JsonError || error instanceof OMDBError) {
       return null
     }
 

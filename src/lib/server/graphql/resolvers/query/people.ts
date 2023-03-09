@@ -43,4 +43,4 @@ export const people = (async (
 
     throw error
   }
-}) satisfies Resolver<QueryPeopleArgs, PersonListResultsPage, never>
+}) satisfies Resolver<QueryPeopleArgs, PersonListResultsPage, unknown>

@@ -20,25 +20,28 @@ export function ratingsFromMovie({
   imdbVotes,
   ratings,
 }: OMDBMovie): OMDBRatings {
+  if (!id) return
+
   const rtRating = ratings?.find(({ source }) => source === 'Rotten Tomatoes')
 
   return {
     id,
-    metascore: metascore ? Number(metascore) : undefined,
-    imdbRating: imdbRating ? Number(imdbRating) : undefined,
-    imdbVotes: imdbVotes ? Number(imdbVotes.replaceAll(',', '')) : undefined,
-    rottenTomatoesScore: rtRating
-      ? Number(rtRating.value.replace('%', ''))
-      : undefined,
+    metascore: toNumber(metascore),
+    imdbRating: toNumber(imdbRating),
+    imdbVotes: toNumber(imdbVotes?.replaceAll(',', '')),
+    rottenTomatoesScore: toNumber(rtRating?.value?.replace('%', '')),
   }
 }
 
-// "Ratings": [
-//   { "Source": "Internet Movie Database", "Value": "8.3/10" },
-//   { "Source": "Rotten Tomatoes", "Value": "96%" },
-//   { "Source": "Metacritic", "Value": "78/100" }
-// ],
-// "Metascore": "78",
-// "imdbRating": "8.3",
-// "imdbVotes": "538,106",
-// "imdbID": "tt1745960",
+export function toNumber(input?: string) {
+  try {
+    if (!input) return
+
+    const value = Number(input)
+    if (isNaN(value)) return
+
+    return value
+  } catch {
+    // do nothing
+  }
+}
