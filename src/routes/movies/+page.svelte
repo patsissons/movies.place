@@ -2,7 +2,6 @@
   import type { PageData } from './$houdini'
   import { Items } from '$lib/components/Items'
   import { baseUrlStore, itemsStorePaginated } from '$lib/stores'
-  import dayjs from 'dayjs'
   import DebugData from '$lib/components/DebugData.svelte'
 
   export let data: PageData
@@ -15,13 +14,42 @@
     SortedMovies,
     (data) => data.sortedMovies,
     (
-      { id, title, releaseDate, voteAverage, voteCount, posterPath },
+      {
+        id,
+        title,
+        releaseDate,
+        voteAverage,
+        voteCount,
+        posterPath,
+        movie: { omdb },
+      },
       images,
     ) => ({
       id,
       title,
       date: releaseDate ?? undefined,
       ratings: {
+        ...(omdb && {
+          rottentomatoes: omdb.rottenTomatoesScore
+            ? {
+                label: 'Rotten Tomatoes',
+                value: omdb.rottenTomatoesScore,
+              }
+            : undefined,
+          metacritic: omdb.metascore
+            ? {
+                label: 'Metacritic',
+                value: omdb.metascore,
+              }
+            : undefined,
+          imdb: omdb.imdbRating
+            ? {
+                label: 'IMDB',
+                value: omdb.imdbRating * 10,
+                description: `${omdb.imdbVotes} votes`,
+              }
+            : undefined,
+        }),
         tmdb: {
           label: 'TMDB',
           value: voteAverage * 10,

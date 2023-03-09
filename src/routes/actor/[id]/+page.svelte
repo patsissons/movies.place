@@ -77,7 +77,7 @@
         <div class="flex flex-col gap-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <h1 class="text-4xl font-bold">{person.name}</h1>
-            <div class="flex items-center gap-2 text-white">
+            <div class="flex flex-wrap items-center gap-2 text-white">
               <a
                 class="btn btn-ghost btn-sm"
                 href={urls.tmdb(person.id, 'person')}
@@ -106,6 +106,96 @@
                   <Icon icon="globe" size={20} />
                 </a>
               {/if}
+              {#if person.externalIds.facebookId}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={`https://facebook.com/${person.externalIds.facebookId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="facebook" size={20} />
+                </a>
+              {/if}
+              {#if person.externalIds.instagramId}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={`https://www.instagram.com/${person.externalIds.instagramId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="instagram" size={20} />
+                </a>
+              {/if}
+              {#if person.externalIds.twitterId}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={`https://twitter.com/${person.externalIds.twitterId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="twitter" size={20} />
+                </a>
+              {/if}
+              {#if person.externalIds.youtubeId}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={`https://youtube.com/${person.externalIds.youtubeId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="youtube" size={20} />
+                </a>
+              {/if}
+              {#if person.externalIds.tiktokId}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={`https://tiktok.com/${person.externalIds.tiktokId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="tiktok" size={20} />
+                </a>
+              {/if}
+              {#if person.externalIds.wikidataId}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={`https://www.wikidata.org/wiki/${person.externalIds.wikidataId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="wikidata" size={20} />
+                </a>
+              {/if}
+              <!-- {#if person.externalIds.tvrageId}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={`https://www.tvrage.com/${person.externalIds.tvrageId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="tvrage" size={20} />
+                </a>
+              {/if} -->
+              <!-- {#if person.externalIds.freebaseId}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={`https://www.freebase.com/m/${person.externalIds.freebaseId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="freebase" size={20} />
+                </a>
+              {/if} -->
+              <!-- {#if person.externalIds.freebaseMid && !person.externalIds.freebaseId}
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={`https://www.freebase.com/${person.externalIds.freebaseMid}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Icon icon="freebase" size={20} />
+                </a>
+              {/if} -->
             </div>
           </div>
           <div class="flex flex-col gap-4">

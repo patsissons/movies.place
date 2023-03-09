@@ -1,4 +1,22 @@
-export type RatingID = 'tmdb' | 'imdb' | 'rt' | 'meta'
+export const allRatingIds = [
+  'tmdb',
+  'imdb',
+  'rottentomatoes',
+  'metacritic',
+  'aggregate',
+] as const
+
+export type RatingID = (typeof allRatingIds)[number]
+export type Ratings = Partial<
+  Record<
+    RatingID,
+    {
+      label: string
+      value: number
+      description?: string
+    }
+  >
+>
 
 export interface Item {
   id: number
@@ -6,16 +24,7 @@ export interface Item {
   url: string
   description?: string
   date?: string
-  ratings?: Partial<
-    Record<
-      RatingID,
-      {
-        label: string
-        value: number
-        description?: string
-      }
-    >
-  >
+  ratings?: Ratings
   image?: {
     src: string
     widths: string[]

@@ -4,7 +4,8 @@
   import type { Readable } from 'svelte/store'
   import { PosterImage } from '$lib/components/Poster'
   import Rating from './Rating.svelte'
-  import type { Item, RatingID } from './types'
+  import { allRatingIds, type Item, type RatingID } from './types'
+  import { Icon } from '../Icon'
 
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
@@ -25,11 +26,11 @@
       image,
       url,
       ratings,
-      ...mapValues(ratings, (rating) => rating?.value),
+      ...mapValues(ratings, (rating) => rating?.value ?? 0),
     }),
   )
   $: ratingIds = Object.keys(tableItems[0]).filter((key) =>
-    ['tmdb', 'imdb', 'rt', 'meta'].includes(key),
+    allRatingIds.includes(key as RatingID),
   ) as RatingID[]
   $: sortedItems = orderBy(tableItems, [sort], [dir])
 
@@ -85,12 +86,16 @@
           </th>
         {/if}
         {#each ratingIds as id}
-          <th class="p-0 w-48">
+          <th class="p-0 w-[68px]">
             <button
-              class="btn btn-ghost btn-block h-20 justify-start rounded-none"
+              class="btn btn-ghost btn-block h-20 justify-center rounded-none"
               on:click={() => handleSort(id)}
             >
-              {tableItems[0]?.ratings?.[id]?.label ?? id}
+              {#if id === 'aggregate'}
+                ⅀
+              {:else}
+                <Icon icon={id} size={36} />
+              {/if}
               {#if sort === id && dir}
                 {dir === 'asc' ? '↑' : '↓'}
               {/if}
@@ -177,7 +182,13 @@
           <th class="px-4">Date</th>
         {/if}
         {#each ratingIds as id}
-          <th class="px-4">{tableItems[0]?.ratings?.[id]?.label ?? id}</th>
+          <th class="px-4">
+            {#if id === 'aggregate'}
+              ⅀
+            {:else}
+              <Icon icon={id} size={36} />
+            {/if}
+          </th>
         {/each}
       </tr>
     </tfoot>

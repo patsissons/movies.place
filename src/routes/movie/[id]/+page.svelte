@@ -7,12 +7,13 @@
   import { urls } from '$lib/utils/urls'
   import type { PageData } from './$houdini'
   import { Icon } from '$lib/components/Icon'
-  import { Items, type Item } from '$lib/components/Items'
+  import { Items, type Item, type RatingID } from '$lib/components/Items'
   import type { Movie$result } from '$houdini'
   import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
   import DebugData from '$lib/components/DebugData.svelte'
   import { PosterImage } from '$lib/components/Poster'
   import { imagesStore } from '$lib/stores/imagesStore'
+  import Rating from '$lib/components/Items/Rating.svelte'
 
   export let data: PageData
 
@@ -53,6 +54,14 @@
           : undefined,
       } as Item),
   )
+  $: ratings = movie
+    ? (Object.entries({
+        rottentomatoes: movie.omdb?.rottenTomatoesScore,
+        metacritic: movie.omdb?.metascore,
+        imdb: movie.omdb?.imdbRating && movie.omdb.imdbRating * 10,
+        tmdb: movie.voteAverage * 10,
+      }) as [RatingID, number | undefined][])
+    : undefined
 </script>
 
 {#if movie}
@@ -110,9 +119,7 @@
                   </div>
                 {/if}
               </h1>
-              <div
-                class="flex flex-col sm:flex-row items-center gap-2 text-white"
-              >
+              <div class="flex flex-wrap items-center gap-2 text-white">
                 <a
                   class="btn btn-ghost btn-sm"
                   href={urls.tmdb(movie.id)}
@@ -139,6 +146,46 @@
                     rel="noreferrer"
                   >
                     <Icon icon="globe" size={20} />
+                  </a>
+                {/if}
+                {#if movie.externalIds.facebookId}
+                  <a
+                    class="btn btn-ghost btn-sm"
+                    href={`https://facebook.com/${movie.externalIds.facebookId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Icon icon="facebook" size={20} />
+                  </a>
+                {/if}
+                {#if movie.externalIds.instagramId}
+                  <a
+                    class="btn btn-ghost btn-sm"
+                    href={`https://www.instagram.com/${movie.externalIds.instagramId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Icon icon="instagram" size={20} />
+                  </a>
+                {/if}
+                {#if movie.externalIds.twitterId}
+                  <a
+                    class="btn btn-ghost btn-sm"
+                    href={`https://twitter.com/${movie.externalIds.twitterId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Icon icon="twitter" size={20} />
+                  </a>
+                {/if}
+                {#if movie.externalIds.wikidataId}
+                  <a
+                    class="btn btn-ghost btn-sm"
+                    href={`https://www.wikidata.org/wiki/${movie.externalIds.wikidataId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <Icon icon="wikidata" size={20} />
                   </a>
                 {/if}
               </div>
@@ -169,14 +216,20 @@
                 {/each}
               </div>
             {/if}
-            {#if movie.omdb}
-              <div class="flex gap-2">
-                {#if movie.omdb.metascore}
-                  <p>Metascore: {movie.omdb.metascore}</p>
-                {/if}
-                {#if movie.omdb.rottenTomatoesScore}
-                  <p>Rotten tomatoes: {movie.omdb.rottenTomatoesScore}</p>
-                {/if}
+            {#if ratings}
+              <div class="flex flex-wrap items-center justify-center gap-2">
+                {#each ratings as [label, value]}
+                  {#if value}
+                    <div class="flex flex-col items-center gap-2">
+                      {#if label === 'aggregate'}
+                        ⅀
+                      {:else}
+                        <Icon icon={label} size={36} />
+                      {/if}
+                      <Rating rating={{ label, value }} />
+                    </div>
+                  {/if}
+                {/each}
               </div>
             {/if}
             {#if movie.voteAverage || movie.popularity || movie.budget}
