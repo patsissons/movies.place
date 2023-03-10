@@ -32,11 +32,14 @@
         )
         .join(', '),
       ratings: {
-        tmdb: {
-          label: 'TMDB',
-          value: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
-          description: `${knownFor.length} movies`,
-        },
+        tmdb:
+          knownFor.length > 0
+            ? {
+                label: 'TMDB',
+                value: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
+                description: `${knownFor.length} movies`,
+              }
+            : undefined,
       },
       url: `/actor/${id}`,
       image: profilePath
