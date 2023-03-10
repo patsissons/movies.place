@@ -40,10 +40,12 @@ query Person($id: Int!) {
         }
         omdb {
           id
-          metascore
-          imdbRating
-          imdbVotes
-          rottenTomatoesScore
+          numericalRatings {
+            metascore
+            imdbRating
+            imdbVotes
+            rottenTomatoesScore
+          }
         }
       }
       character

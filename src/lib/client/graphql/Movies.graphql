@@ -16,10 +16,12 @@ query Movies($query: String!, $page: Int) {
         }
         omdb {
           id
-          metascore
-          imdbRating
-          imdbVotes
-          rottenTomatoesScore
+          numericalRatings {
+            metascore
+            imdbRating
+            imdbVotes
+            rottenTomatoesScore
+          }
         }
       }
       posterPath

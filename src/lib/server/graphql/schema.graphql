@@ -76,18 +76,52 @@ type ExternalMovieIds {
   wikidataId: String
 }
 
-type OMDBRatings {
-  id: String!
+type OMDBNumericalRatings {
   metascore: Int
   imdbRating: Float
   imdbVotes: Int
   rottenTomatoesScore: Int
 }
 
+type OMDBRating {
+  source: String
+  value: String
+}
+
+type OMDBMovie {
+  id: ID!
+  numericalRatings: OMDBNumericalRatings
+  title: String
+  year: String
+  rated: String
+  released: String
+  runtime: String
+  genre: String
+  director: String
+  writer: String
+  actors: String
+  plot: String
+  language: String
+  country: String
+  awards: String
+  poster: String
+  ratings: [OMDBRating!]
+  metascore: String
+  imdbRating: String
+  imdbVotes: String
+  imdbId: String!
+  type: String
+  dvd: String
+  boxOffice: String
+  production: String
+  website: String
+  response: String
+}
+
 type Movie {
   id: Int!
   externalIds: ExternalMovieIds!
-  omdb: OMDBRatings
+  omdb: OMDBMovie
   adult: Boolean!
   backdropPath: String
   belongsToCollection: Collection

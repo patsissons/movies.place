@@ -11,10 +11,12 @@ query Movie($id: Int!) {
     }
     omdb {
       id
-      metascore
-      imdbRating
-      imdbVotes
-      rottenTomatoesScore
+      numericalRatings {
+        metascore
+        imdbRating
+        imdbVotes
+        rottenTomatoesScore
+      }
     }
     adult
     backdropPath

@@ -37,24 +37,24 @@
       title,
       date: releaseDate ?? undefined,
       ratings: {
-        ...(omdb && {
-          rottentomatoes: omdb.rottenTomatoesScore
+        ...(omdb?.numericalRatings && {
+          rottentomatoes: omdb.numericalRatings.rottenTomatoesScore
             ? {
                 label: 'Rotten Tomatoes',
-                value: omdb.rottenTomatoesScore,
+                value: omdb.numericalRatings.rottenTomatoesScore,
               }
             : undefined,
-          metacritic: omdb.metascore
+          metacritic: omdb.numericalRatings.metascore
             ? {
                 label: 'Metacritic',
-                value: omdb.metascore,
+                value: omdb.numericalRatings.metascore,
               }
             : undefined,
-          imdb: omdb.imdbRating
+          imdb: omdb.numericalRatings.imdbRating
             ? {
                 label: 'IMDB',
-                value: omdb.imdbRating * 10,
-                description: `${omdb.imdbVotes} votes`,
+                value: omdb.numericalRatings.imdbRating * 10,
+                description: `${omdb.numericalRatings.imdbVotes} votes`,
               }
             : undefined,
         }),
