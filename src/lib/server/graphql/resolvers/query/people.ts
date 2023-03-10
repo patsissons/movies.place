@@ -29,7 +29,10 @@ export const people = (async (
 
     payload.results.forEach((result) => {
       result.knownFor = result.knownFor.filter((item) => {
-        const mediaType = (item as Record<string, unknown>).mediaType as string
+        const mediaType = (item as Record<string, unknown>).mediaType as
+          | string
+          | undefined
+        if (!mediaType) return true
 
         return mediaType === 'movie'
       })
