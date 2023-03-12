@@ -1,18 +1,17 @@
-import { JsonError } from '$lib/server/fetchJson'
 import type { Resolver } from '$lib/server/graphql/types'
 import type { Movie, OmdbMovie } from '$lib/types/graphql.generated'
 import { fallbacks } from '$lib/server/omdb/fallbacks'
 import { fetchOMDBJson } from '$lib/server/omdb'
-import { OMDBError } from '$lib/server/omdb/fetch'
 
 interface OMDBMovieJson {
   imdbId: string
+  response?: string
 }
 
 export const omdb = (async ({ imdbId }, _args, { fetch }) => {
-  try {
-    if (!imdbId) return null
+  if (!imdbId) return null
 
+  try {
     const omdb = await fetchOMDBJson<OMDBMovieJson>(
       fetch,
       {
@@ -21,15 +20,24 @@ export const omdb = (async ({ imdbId }, _args, { fetch }) => {
       { fallbackUrl: fallbacks.movie },
     )
 
-    if (!omdb) return null
+    if (!omdb) return { id: imdbId, response: 'null' }
 
     return {
       ...omdb,
-      id: omdb.imdbId,
+      id: imdbId,
+      response: omdb.response ?? '',
     }
   } catch (error) {
-    console.log('OMDB Error', error)
+    if (error instanceof Error) {
+      return {
+        id: imdbId,
+        response: error.message,
+      }
+    }
 
-    return null
+    return {
+      id: imdbId,
+      response: String(error),
+    }
   }
 }) satisfies Resolver<unknown, OmdbMovie | null, Movie>

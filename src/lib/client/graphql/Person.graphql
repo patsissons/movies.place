@@ -40,6 +40,7 @@ query Person($id: Int!) {
         }
         omdb {
           id
+          response
           numericalRatings {
             metascore
             imdbRating

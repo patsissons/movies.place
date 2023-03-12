@@ -11,6 +11,7 @@ query Movie($id: Int!) {
     }
     omdb {
       id
+      response
       numericalRatings {
         metascore
         imdbRating

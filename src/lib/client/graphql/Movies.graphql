@@ -16,6 +16,7 @@ query Movies($query: String!, $page: Int) {
         }
         omdb {
           id
+          response
           numericalRatings {
             metascore
             imdbRating
