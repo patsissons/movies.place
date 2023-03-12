@@ -56,9 +56,11 @@
   )
   $: ratings = movie
     ? (Object.entries({
-        rottentomatoes: movie.omdb?.rottenTomatoesScore,
-        metacritic: movie.omdb?.metascore,
-        imdb: movie.omdb?.imdbRating && movie.omdb.imdbRating * 10,
+        rottentomatoes: movie.omdb?.numericalRatings?.rottenTomatoesScore,
+        metacritic: movie.omdb?.numericalRatings?.metascore,
+        imdb:
+          movie.omdb?.numericalRatings?.imdbRating &&
+          movie.omdb.numericalRatings?.imdbRating * 10,
         tmdb: movie.voteAverage * 10,
       }) as [RatingID, number | undefined][])
     : undefined

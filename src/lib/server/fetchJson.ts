@@ -36,7 +36,7 @@ export async function fetchJson<Result = Record<string, unknown>>(
   { fallbackUrl }: FetchOptions = {},
 ): Promise<Result> {
   try {
-    // console.log('D', `fetching ${url}`)
+    // console.log('D', `wget -q -O- "${url}"`)
     const response = await fetch(url, {
       headers: {
         accept: 'application/json; charset=utf8;',
@@ -63,13 +63,7 @@ export async function fetchJson<Result = Record<string, unknown>>(
     return camelize<Result>(payload)
   } catch (error) {
     if (fallbackUrl) {
-      const { data } = await fetchJson<{ data: Record<string, Result> }>(
-        fetch,
-        fallbackUrl,
-      )
-      const [field] = Object.keys(data)
-
-      return data[field]
+      return await fetchJson<Result>(fetch, fallbackUrl)
     }
 
     throw error
