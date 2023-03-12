@@ -28,10 +28,8 @@ export const omdb = (async ({ imdbId }, _args, { fetch }) => {
       id: omdb.imdbId,
     }
   } catch (error) {
-    if (error instanceof JsonError || error instanceof OMDBError) {
-      return null
-    }
+    console.log('OMDB Error', error)
 
-    throw error
+    return null
   }
 }) satisfies Resolver<unknown, OmdbMovie | null, Movie>
