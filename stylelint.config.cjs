@@ -6,9 +6,10 @@ module.exports = {
     'stylelint-config-tailwindcss',
   ],
   plugins: ['stylelint-order'],
-  customSyntax: 'postcss-html',
+  customSyntax: 'postcss-scss',
   rules: {
-    'at-rule-no-unknown': [
+    // ignore tailwind at rules
+    'scss/at-rule-no-unknown': [
       true,
       {
         ignoreAtRules: [
@@ -20,6 +21,14 @@ module.exports = {
         ],
       },
     ],
+
+    // autoformat properties in a consistent order
     'order/properties-alphabetical-order': true,
   },
+  overrides: [
+    {
+      files: ['*.html', '*.svelte'],
+      customSyntax: 'postcss-html',
+    },
+  ],
 }

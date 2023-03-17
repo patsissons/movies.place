@@ -1,36 +1,65 @@
 /** @type {import('eslint').ESLint.ConfigData} */
 module.exports = {
   root: true,
-  parser: '@typescript-eslint/parser',
   extends: [
     'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:import/recommended',
     'plugin:prettier/recommended',
+    'prettier',
   ],
-  plugins: ['svelte3', '@typescript-eslint'],
-  ignorePatterns: ['*.cjs', '*.js', '*.mjs', '*.graphql'],
-  overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
-  settings: {
-    'svelte3/typescript': () => require('typescript'),
-  },
-  parserOptions: {
-    project: ['./tsconfig.json'],
-    sourceType: 'module',
-    ecmaVersion: 2020,
-  },
   env: {
     browser: true,
     es2017: true,
     node: true,
   },
-  rules: {
-    // these rules interfere with svelte's loader signatures (e.g., PageLoad)
-    '@typescript-eslint/no-unsafe-assignment': 'off',
-    '@typescript-eslint/no-unsafe-argument': 'off',
-    '@typescript-eslint/restrict-template-expressions': 'off',
+  parserOptions: {
+    sourceType: 'module',
+    ecmaVersion: 2020,
+    project: ['./tsconfig.json'],
+  },
+  settings: {
+    'import/extensions': ['.js', '.cjs'],
+    'import/resolver': {
+      'eslint-import-resolver-custom-alias': {
+        alias: {
+          $lib: './src/lib',
+          $houdini: './$houdini',
+        },
+        extensions: ['.js', '.ts', '.svelte'],
+      },
+      typescript: true,
+    },
   },
   overrides: [
+    {
+      files: ['*.ts'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
+      settings: {
+        'import/extensions': ['.ts'],
+      },
+      plugins: ['@typescript-eslint'],
+      parser: '@typescript-eslint/parser',
+      rules: {
+        // 'import/no-unresolved': 'off',
+      },
+    },
+    {
+      files: ['*.svelte'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
+      processor: 'svelte3/svelte3',
+      settings: {
+        'svelte3/typescript': () => require('typescript'),
+        'import/extensions': ['.svelte'],
+      },
+      plugins: ['svelte3', '@typescript-eslint'],
+      parser: '@typescript-eslint/parser',
+    },
     {
       files: ['*.graphql'],
       excludedFiles: ['schema.graphql'],
