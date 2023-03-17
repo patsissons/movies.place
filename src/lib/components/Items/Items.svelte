@@ -12,6 +12,7 @@
 
   export let baseUrl: Readable<string | undefined>
   export let errors: Readable<string[] | undefined>
+  export let fetching: Readable<boolean>
   export let items: Readable<Item[] | undefined>
   export let itemType: 'movies' | 'actors'
   export let descriptionLabel: string | undefined = undefined
@@ -20,10 +21,10 @@
   export let filterable = false
   export let queryFilter: Readable<string> | undefined = undefined
 
-  const itemMap = new Map<number, Item>()
+  let itemMap = new Map<number, Item>()
   const filter = writable('')
 
-  queryFilter?.subscribe(() => itemMap.clear())
+  queryFilter?.subscribe(resetList)
 
   const loadedItems = derived(items, ($items) => {
     if (!$items) return
@@ -55,6 +56,11 @@
       return new RegExp(escapeRegExp(filter))
     }
   }
+
+  function resetList() {
+    console.info('resetting list...')
+    itemMap = new Map<number, Item>()
+  }
 </script>
 
 <Errors {errors} />
@@ -72,7 +78,7 @@
       ><ItemTable {baseUrl} items={filteredItems} {descriptionLabel} />
     </span>
   </Tabs>
-{:else}
+{:else if !$fetching}
   <div class="p-4 text-center">
     {#if $queryFilter}
       <p>{`No ${itemType} found for "${$queryFilter}"`}</p>

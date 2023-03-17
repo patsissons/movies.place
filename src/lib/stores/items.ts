@@ -55,10 +55,17 @@ export function itemsStore<
     return results.map((result) => transformer(result, $images))
   })
 
-  if (!conditional) return { errors, items }
+  const fetching = derived(store, ({ fetching }) => fetching)
+
+  const result = {
+    errors,
+    fetching,
+  }
+
+  if (!conditional) return { ...result, items }
 
   return {
-    errors,
+    ...result,
     items: derived([items, conditional], ([$items, $conditional]) => {
       return $conditional ? $items : undefined
     }),
@@ -81,7 +88,7 @@ export function itemsStorePaginated<
   transformer: (result: T, images: Images) => Item,
   conditional?: Readable<boolean>,
 ) {
-  const { errors, items } = itemsStore(
+  const result = itemsStore(
     config,
     store,
     (data) => resultTransformer(data).results,
@@ -107,11 +114,10 @@ export function itemsStorePaginated<
     return { page, totalPages, nextPage, fetching } as Pagination
   })
 
-  if (!conditional) return { errors, pagination, items }
+  if (!conditional) return { ...result, pagination }
 
   return {
-    errors,
-    items,
+    ...result,
     pagination: derived(
       [pagination, conditional],
       ([$pagination, $conditional]) => {

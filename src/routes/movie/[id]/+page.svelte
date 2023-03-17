@@ -33,7 +33,7 @@
   })
 
   $: movie = $MovieStore.data?.movie
-  const { errors, items } = itemsStore(
+  const { errors, fetching, items } = itemsStore(
     Configuration,
     MovieStore as QueryStoreWithoutCustomScalars<
       typeof MovieStore,
@@ -326,6 +326,7 @@
     <Items
       {baseUrl}
       {errors}
+      {fetching}
       {items}
       itemType="actors"
       descriptionLabel="Character"
