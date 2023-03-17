@@ -70,13 +70,13 @@
           </label>
         </div>
       </div>
-      <div class="mt-16 w-full h-full">
+      <div class="w-full h-full pt-16">
         <div class="container mx-auto py-5">
           <slot />
         </div>
       </div>
     </div>
-    <div class="drawer-side">
+    <div class="drawer-side" class:overflow-hidden={!drawerOpen}>
       <label for="drawer" class="drawer-overlay" />
       <ul class="menu p-4 w-80 bg-base-100 text-base-content">
         <li class="menu-title">Search</li>

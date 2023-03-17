@@ -22,7 +22,7 @@
 
 <div class="flex" class:justify-center={center}>
   <input
-    class="input input-ghost input-bordered focus:input-info w-full max-w-xs"
+    class="input input-ghost input-bordered focus:input-info !outline-none w-full max-w-xs"
     type="text"
     {placeholder}
     on:input={handleInput}
