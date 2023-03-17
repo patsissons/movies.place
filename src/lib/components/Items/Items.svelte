@@ -98,10 +98,13 @@
       <p>{`No ${itemType} found for "${$queryFilter}"`}</p>
     {:else}
       <p>
-        Not sure what to look for? try browsing <a
-          class="text-secondary font-bold"
-          href={`/${itemType}`}>popular {itemType}</a
-        >
+        <span class="whitespace-nowrap"> Not sure what to look for? </span>
+        <span class="whitespace-nowrap">
+          Try browsing
+          <a class="text-secondary font-bold" href={`/${itemType}`}
+            >popular {itemType}</a
+          >
+        </span>
       </p>
     {/if}
   </div>
