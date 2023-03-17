@@ -3,6 +3,7 @@
   import { derived, writable, type Readable } from 'svelte/store'
   import Input from '$lib/components/Input.svelte'
   import { Errors } from '$lib/components/Errors'
+  import Spinner from '$lib/components/Spinner.svelte'
   import type { Pagination as PaginationState } from '$lib/stores'
   import ItemGrid from './ItemGrid.svelte'
   import Tabs from './Tabs.svelte'
@@ -107,6 +108,10 @@
         </span>
       </p>
     {/if}
+  </div>
+{:else}
+  <div class="p-4 text-center">
+    <Spinner />
   </div>
 {/if}
 {#if pagination}
