@@ -48,7 +48,7 @@
             class="btn btn-ghost drawer-button text-xl font-bold"
           >
             <div class="flex items-center gap-2">
-              <div>
+              <div class="ring sm:ring-0 rounded animate-pulse">
                 <img
                   class="w-8 h-8 p-1"
                   src="/favicon.svg"
