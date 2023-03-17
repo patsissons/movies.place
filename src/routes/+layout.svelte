@@ -30,7 +30,7 @@
   }
 </script>
 
-<div class="w-screen h-screen min-w-[375px]">
+<div class="min-w-[375px]">
   <div class="drawer">
     <input
       id="drawer"
@@ -70,7 +70,7 @@
           </label>
         </div>
       </div>
-      <div class="w-full h-full pt-16">
+      <div class="pt-16">
         <div class="container mx-auto py-5">
           <slot />
         </div>
