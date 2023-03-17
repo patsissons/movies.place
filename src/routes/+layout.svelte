@@ -5,6 +5,7 @@
 
   let documentElement: HTMLElement | undefined
   let dark = true
+  let drawerOpen = false
 
   $: if (documentElement) {
     documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
@@ -20,6 +21,10 @@
     documentElement = document.documentElement
   })
 
+  function closeDrawer() {
+    drawerOpen = false
+  }
+
   function toggleDebugging() {
     debuggingStore.update((value) => !value)
   }
@@ -27,7 +32,12 @@
 
 <div class="w-screen h-screen min-w-[375px]">
   <div class="drawer">
-    <input id="drawer" type="checkbox" class="drawer-toggle" />
+    <input
+      id="drawer"
+      type="checkbox"
+      class="drawer-toggle"
+      bind:checked={drawerOpen}
+    />
     <div class="drawer-content">
       <div
         class="navbar bg-base-100 bg-opacity-75 fixed h-16 z-50 backdrop-blur"
@@ -70,15 +80,20 @@
       <label for="drawer" class="drawer-overlay" />
       <ul class="menu p-4 w-80 bg-base-100 text-base-content">
         <li class="menu-title">Search</li>
-        <li><a href="/movies/search">By Movie</a></li>
-        <li><a href="/actors/search">By Actor</a></li>
+        <li><a href="/movies/search" on:click={closeDrawer}>By Movie</a></li>
+        <li><a href="/actors/search" on:click={closeDrawer}>By Actor</a></li>
         <div class="divider" />
         <li class="menu-title">Popular</li>
-        <li><a href="/movies">Movies</a></li>
-        <li><a href="/actors">Actors</a></li>
+        <li><a href="/movies" on:click={closeDrawer}>Movies</a></li>
+        <li><a href="/actors" on:click={closeDrawer}>Actors</a></li>
         <div class="divider" />
         <li>
-          <a href="/api/graphql" target="_blank" rel="noreferrer">GraphQL</a>
+          <a
+            href="/api/graphql"
+            target="_blank"
+            rel="noreferrer"
+            on:click={closeDrawer}>GraphQL</a
+          >
         </li>
         <div class="divider" />
         <div class="form-control">
