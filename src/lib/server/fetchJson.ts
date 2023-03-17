@@ -2,11 +2,6 @@ import { camelize } from '$lib/server/graphql/utils'
 
 export type Fetch = typeof fetch
 
-export interface JsonErrorStatus {
-  status_code: number
-  status_message: string
-}
-
 export class JsonError extends Error {
   constructor(
     public readonly url: string,
@@ -42,7 +37,7 @@ export async function fetchJson<Result = Record<string, unknown>>(
       throw new JsonError(url, response.status, body)
     }
 
-    const payload = await response.json()
+    const payload = (await response.json()) as Record<string, unknown>
 
     // console.log('D', payload)
 

@@ -1,7 +1,10 @@
 import { derived, type Readable } from 'svelte/store'
-import type { ConfigurationStore, QueryStore } from '$houdini'
+import type {
+  Configuration$result,
+  ConfigurationStore,
+  QueryStore,
+} from '$houdini'
 import type { LocalGraphQLObject } from '$lib/types/graphql'
-import type { Configuration$result } from '$houdini'
 import { imagesStore } from './imagesStore'
 
 interface ResultItem {
