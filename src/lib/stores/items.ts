@@ -19,6 +19,11 @@ interface ResultList<T extends Result> extends LocalGraphQLObject {
   results?: T[]
 }
 
+export interface ItemList<T> {
+  list: T[]
+  variables: Record<string, unknown>
+}
+
 type Images = NonNullable<Configuration$result['configuration']['images']>
 
 export interface Pagination {
@@ -46,13 +51,16 @@ export function itemsStore<
 
   const images = imagesStore(config)
 
-  const items = derived([images, store], ([$images, { data }]) => {
+  const items = derived([images, store], ([$images, { data, variables }]) => {
     if (!data || !$images) return
 
     const results = listTransformer(data)
     if (!results) return
 
-    return results.map((result) => transformer(result, $images))
+    return {
+      list: results.map((result) => transformer(result, $images)),
+      variables,
+    } as ItemList<Item>
   })
 
   const fetching = derived(store, ({ fetching }) => fetching)
