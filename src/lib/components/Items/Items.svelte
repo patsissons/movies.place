@@ -18,12 +18,12 @@
   export let pagination: Readable<PaginationState | undefined> | undefined =
     undefined
   export let filterable = false
-  export let resetKey: Readable<string> | undefined = undefined
+  export let queryFilter: Readable<string> | undefined = undefined
 
   const itemMap = new Map<number, Item>()
   const filter = writable('')
 
-  resetKey?.subscribe(() => itemMap.clear())
+  queryFilter?.subscribe(() => itemMap.clear())
 
   const loadedItems = derived(items, ($items) => {
     if (!$items) return
@@ -65,12 +65,27 @@
     bind:value={$filter}
   />
 {/if}
-<Tabs>
-  <span slot="grid"><ItemGrid {baseUrl} items={filteredItems} /></span>
-  <span slot="table"
-    ><ItemTable {baseUrl} items={filteredItems} {descriptionLabel} />
-  </span>
-</Tabs>
+{#if $filteredItems.length > 0}
+  <Tabs>
+    <span slot="grid"><ItemGrid {baseUrl} items={filteredItems} /></span>
+    <span slot="table"
+      ><ItemTable {baseUrl} items={filteredItems} {descriptionLabel} />
+    </span>
+  </Tabs>
+{:else}
+  <div class="p-4 text-center">
+    {#if $queryFilter}
+      <p>{`No ${itemType} found for "${$queryFilter}"`}</p>
+    {:else}
+      <p>
+        Not sure what to look for? try browsing <a
+          class="text-secondary font-bold"
+          href={`/${itemType}`}>popular {itemType}</a
+        >
+      </p>
+    {/if}
+  </div>
+{/if}
 {#if pagination}
   <Pagination type={itemType} {pagination} />
 {/if}

@@ -66,7 +66,7 @@
   {errors}
   {items}
   {pagination}
-  resetKey={filter}
+  queryFilter={filter}
   itemType="actors"
   descriptionLabel="Known for"
 />

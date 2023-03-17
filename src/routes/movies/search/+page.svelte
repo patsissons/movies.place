@@ -89,7 +89,7 @@
   {errors}
   {items}
   {pagination}
-  resetKey={filter}
+  queryFilter={filter}
   itemType="movies"
   descriptionLabel="Release date"
 />
