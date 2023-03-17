@@ -31,11 +31,11 @@
           {description}
           {date}
         >
-          {#if ratings.rt || ratings.meta || ratings.imdb || ratings.tmdb}
+          {#if ratings.rottentomatoes || ratings.metacritic || ratings.imdb || ratings.tmdb}
             <div class="absolute left-0 top-0">
               <Rating
-                rating={ratings.rt ||
-                  ratings.meta ||
+                rating={ratings.rottentomatoes ||
+                  ratings.metacritic ||
                   ratings.imdb ||
                   ratings.tmdb}
               />
