@@ -107,5 +107,16 @@ export function itemsStorePaginated<
     return { page, totalPages, nextPage, fetching } as Pagination
   })
 
-  return { errors, pagination, items }
+  if (!conditional) return { errors, pagination, items }
+
+  return {
+    errors,
+    items,
+    pagination: derived(
+      [pagination, conditional],
+      ([$pagination, $conditional]) => {
+        return $conditional ? $pagination : undefined
+      },
+    ),
+  }
 }
