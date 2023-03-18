@@ -1,20 +1,36 @@
 <script lang="ts">
-  import type { Readable } from 'svelte/store'
+  import { derived, readable, type Readable } from 'svelte/store'
   import { Poster } from '$lib/components/Poster'
   import Rating from './Rating.svelte'
   import type { Item } from './types'
   import { lastLengthStore } from './stores'
+  import { createEventDispatcher } from 'svelte'
 
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
+  export let selectedItems: Readable<number[]> | undefined = undefined
+
+  const dispatch = createEventDispatcher<{
+    selectionChanged: { id: number }
+  }>()
+
+  const selectedSet = derived(
+    selectedItems ?? readable([]),
+    (values) => new Set(values),
+  )
 
   const lastLength = lastLengthStore(items)
+
+  function handleSelect(e: MouseEvent, id: number) {
+    e.preventDefault()
+    dispatch('selectionChanged', { id })
+  }
 </script>
 
 <ul
   class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 gap-y-2 justify-items-center overflow-x-hidden animate-stagger"
 >
-  {#each $items as { title, url, description, date, ratings = { }, image }, index}
+  {#each $items as { id, title, url, description, date, ratings = { }, image }, index}
     <li
       class="w-full animate-in ease-out animate-duration-500 slide-in-from-bottom slide-in-from-right fill-mode-both fade-in zoom-in"
       style={`--animation-delay-factor: ${(index - $lastLength) % 20}`}
@@ -39,6 +55,26 @@
                   ratings.imdb ||
                   ratings.tmdb}
               />
+            </div>
+          {/if}
+          {#if selectedItems}
+            <div class="absolute top-0 right-0">
+              <label>
+                {#if $selectedSet.has(id)}
+                  <input
+                    type="checkbox"
+                    class="checkbox checkbox-accent !bg-base-100"
+                    checked
+                    on:click={(e) => handleSelect(e, id)}
+                  />
+                {:else}
+                  <input
+                    type="checkbox"
+                    class="checkbox checkbox-accent bg-opacity-25 bg-black"
+                    on:click={(e) => handleSelect(e, id)}
+                  />
+                {/if}
+              </label>
             </div>
           {/if}
         </Poster>

@@ -1,7 +1,8 @@
 <script lang="ts">
   import orderBy from 'lodash/orderBy'
   import mapValues from 'lodash/mapValues'
-  import type { Readable } from 'svelte/store'
+  import { createEventDispatcher } from 'svelte'
+  import { derived, readable, type Readable } from 'svelte/store'
   import { PosterImage } from '$lib/components/Poster'
   import Rating from './Rating.svelte'
   import { allRatingIds, type Item, type RatingID } from './types'
@@ -10,16 +11,29 @@
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
   export let descriptionLabel: string | undefined = undefined
+  export let selectedItems: Readable<number[]> | undefined = undefined
 
-  type SortField = 'title' | 'description' | 'date' | RatingID
+  const dispatch = createEventDispatcher<{
+    selectionChanged: { id: number }
+  }>()
+
+  const selectedSet = derived(
+    selectedItems ?? readable([]),
+    (values) => new Set(values),
+  )
+
+  type SortField = 'order' | 'title' | 'description' | 'date' | RatingID
   type SortDir = 'asc' | 'desc'
 
-  let sort: SortField = 'title'
+  let sort: SortField = 'order'
   let dir: SortDir = 'asc'
 
+  $: hasOrder = $items.some(({ order }) => order != null)
   $: hasDates = $items.some(({ date }) => Boolean(date))
   $: tableItems = $items.map(
-    ({ title, description, date, image, url, ratings }) => ({
+    ({ id, order, title, description, date, image, url, ratings }) => ({
+      id,
+      order,
       title,
       description,
       date,
@@ -42,12 +56,33 @@
       dir = 'desc'
     }
   }
+
+  function handleSelect(e: MouseEvent, id: number) {
+    e.preventDefault()
+    dispatch('selectionChanged', { id })
+  }
 </script>
 
 <div class="overflow-x-auto w-full">
   <table class="table table-zebra table-compact w-full">
     <thead class="border-b border-slate-500">
       <tr>
+        {#if selectedItems}
+          <th class="w-auto" />
+        {/if}
+        {#if hasOrder}
+          <th class="p-0 w-10">
+            <button
+              class="btn btn-ghost btn-block h-20 justify-start rounded-none"
+              on:click={() => handleSort('order')}
+            >
+              Order
+              {#if sort === 'order' && dir}
+                {dir === 'asc' ? '↑' : '↓'}
+              {/if}
+            </button>
+          </th>
+        {/if}
         <th class="p-0 !static">
           <button
             class="btn btn-ghost btn-block h-20 justify-start rounded-none"
@@ -105,8 +140,40 @@
       </tr>
     </thead>
     <tbody>
-      {#each sortedItems as { title, description, date, image, url, ratings }}
+      {#each sortedItems as { id, order, title, description, date, image, url, ratings }}
         <tr class="hover">
+          {#if selectedItems}
+            <th class="w-0">
+              <label>
+                {#if $selectedSet.has(id)}
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    checked
+                    on:click={(e) => handleSelect(e, id)}
+                  />
+                {:else}
+                  <input
+                    type="checkbox"
+                    class="checkbox"
+                    on:click={(e) => handleSelect(e, id)}
+                  />
+                {/if}
+              </label>
+            </th>
+          {/if}
+          {#if hasOrder}
+            <td class="p-0">
+              {#if order != null}
+                <a
+                  class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+                  href={url}
+                >
+                  <p>{order}</p>
+                </a>
+              {/if}
+            </td>
+          {/if}
           <td class="p-0">
             <a
               class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"

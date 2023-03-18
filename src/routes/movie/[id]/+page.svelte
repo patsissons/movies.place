@@ -1,5 +1,6 @@
 <script lang="ts">
   import Time from 'svelte-time'
+  import { writable } from 'svelte/store'
   import dayjs from 'dayjs'
   import { page } from '$app/stores'
   import { Error } from '$lib/components/Errors'
@@ -21,6 +22,7 @@
   const { Configuration, MovieStore } = data
   const baseUrl = baseUrlStore(Configuration)
   const images = imagesStore(Configuration)
+  const selectedActors = writable<number[]>([])
 
   const currencyFormatter = new Intl.NumberFormat(undefined, {
     style: 'currency',
@@ -40,9 +42,10 @@
       Movie$result
     >,
     (data) => data.movie?.cast,
-    ({ id, name: title, character: description, profilePath }, images) =>
+    ({ id, order, name: title, character: description, profilePath }, images) =>
       ({
         id,
+        order,
         title,
         url: `/actor/${id}`,
         description,
@@ -64,6 +67,11 @@
         tmdb: movie.voteAverage * 10,
       }) as [RatingID, number | undefined][])
     : undefined
+
+  $: cast = new Map(
+    $items ? $items.list.map(({ id, title }) => [id, title]) : [],
+  )
+  $: selectedNames = $selectedActors.map((id) => cast.get(id)) as string[]
 </script>
 
 {#if movie}
@@ -319,6 +327,28 @@
                 {/if}
               </div>
             {/if}
+            {#if selectedNames.length > 0}
+              <label
+                for="coming-soon-modal"
+                class="btn btn-block btn-accent h-auto p-4"
+              >
+                Find movies starring {selectedNames.join(', ')}
+              </label>
+
+              <input
+                type="checkbox"
+                id="coming-soon-modal"
+                class="modal-toggle"
+              />
+              <div class="modal">
+                <div class="modal-box">
+                  <h3 class="font-bold text-lg">Feature is coming soon!</h3>
+                  <div class="modal-action">
+                    <label for="coming-soon-modal" class="btn">Yay!</label>
+                  </div>
+                </div>
+              </div>
+            {/if}
           </div>
         </div>
       </div>
@@ -331,6 +361,7 @@
       itemType="actors"
       descriptionLabel="Character"
       filterable
+      selectedItems={selectedActors}
     />
   </div>
 {:else if $MovieStore.data}

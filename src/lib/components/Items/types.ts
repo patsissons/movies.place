@@ -20,6 +20,7 @@ export type Ratings = Partial<
 
 export interface Item {
   id: number
+  order?: number
   title: string
   url: string
   description?: string
