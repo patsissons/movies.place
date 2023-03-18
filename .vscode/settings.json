@@ -6,9 +6,11 @@
     "source.fixAll.eslint": true
   },
   "files.associations": {
-    "*.css": "tailwindcss",
-    "*.scss": "tailwindcss"
+    "*.css": "scss"
   },
+  "css.validate": false,
+  "scss.validate": false,
+  "stylelint.validate": ["css", "scss", "postcss"],
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
   },

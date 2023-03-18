@@ -1,7 +1,10 @@
 import { derived, type Readable } from 'svelte/store'
-import type { ConfigurationStore, QueryStore } from '$houdini'
+import type {
+  Configuration$result,
+  ConfigurationStore,
+  QueryStore,
+} from '$houdini'
 import type { LocalGraphQLObject } from '$lib/types/graphql'
-import type { Configuration$result } from '$houdini'
 import { imagesStore } from './imagesStore'
 
 interface ResultItem {
@@ -14,6 +17,11 @@ interface ResultList<T extends Result> extends LocalGraphQLObject {
   page: number
   totalPages: number
   results?: T[]
+}
+
+export interface ItemList<T> {
+  list: T[]
+  variables: Record<string, unknown>
 }
 
 type Images = NonNullable<Configuration$result['configuration']['images']>
@@ -43,19 +51,29 @@ export function itemsStore<
 
   const images = imagesStore(config)
 
-  const items = derived([images, store], ([$images, { data }]) => {
+  const items = derived([images, store], ([$images, { data, variables }]) => {
     if (!data || !$images) return
 
     const results = listTransformer(data)
     if (!results) return
 
-    return results.map((result) => transformer(result, $images))
+    return {
+      list: results.map((result) => transformer(result, $images)),
+      variables,
+    } as ItemList<Item>
   })
 
-  if (!conditional) return { errors, items }
+  const fetching = derived(store, ({ fetching }) => fetching)
+
+  const result = {
+    errors,
+    fetching,
+  }
+
+  if (!conditional) return { ...result, items }
 
   return {
-    errors,
+    ...result,
     items: derived([items, conditional], ([$items, $conditional]) => {
       return $conditional ? $items : undefined
     }),
@@ -78,7 +96,7 @@ export function itemsStorePaginated<
   transformer: (result: T, images: Images) => Item,
   conditional?: Readable<boolean>,
 ) {
-  const { errors, items } = itemsStore(
+  const result = itemsStore(
     config,
     store,
     (data) => resultTransformer(data).results,
@@ -104,5 +122,15 @@ export function itemsStorePaginated<
     return { page, totalPages, nextPage, fetching } as Pagination
   })
 
-  return { errors, pagination, items }
+  if (!conditional) return { ...result, pagination }
+
+  return {
+    ...result,
+    pagination: derived(
+      [pagination, conditional],
+      ([$pagination, $conditional]) => {
+        return $conditional ? $pagination : undefined
+      },
+    ),
+  }
 }

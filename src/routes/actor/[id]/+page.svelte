@@ -20,7 +20,7 @@
   const images = imagesStore(Configuration)
 
   $: person = $PersonStore.data?.person
-  const { errors, items } = itemsStore(
+  const { errors, fetching, items } = itemsStore(
     Configuration,
     PersonStore,
     (data) => data.person?.cast,
@@ -256,6 +256,7 @@
     <Items
       {baseUrl}
       {errors}
+      {fetching}
       {items}
       itemType="movies"
       descriptionLabel="Character"

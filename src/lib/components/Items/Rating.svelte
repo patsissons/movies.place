@@ -12,16 +12,16 @@
 
 {#if rating}
   <div
-    class="radial-progress text-xs font-bold bg-black bg-opacity-75"
-    style={`--size:2.25rem; --thickness: 2px; --value:${
-      rating.value
-    }; --color:var(--${ratingColor(rating.value)});`}
+    class="tooltip tooltip-bottom"
+    data-tip={rating.description
+      ? `${rating.label} (${rating.description}) asdf as fdas df asdf as df asd fas df asd fas fd sadf as df asdf asd fasd fa sdf asd fas df sdf as dfa sdf asdf `
+      : rating.label}
   >
     <div
-      class="tooltip tooltip-bottom"
-      data-tip={rating.description
-        ? `${rating.label} (${rating.description})`
-        : rating.label}
+      class="radial-progress text-xs font-bold bg-black bg-opacity-75"
+      style={`--size:2.25rem; --thickness: 2px; --value:${
+        rating.value
+      }; --color:var(--${ratingColor(rating.value)});`}
     >
       <p>{Math.floor(rating.value)}</p>
     </div>

@@ -17,7 +17,7 @@
   const filter = writable('')
   const hasQuery = derived(filter, ($filter) => Boolean($filter))
 
-  const { errors, pagination, items } = itemsStorePaginated(
+  const { errors, fetching, items, pagination } = itemsStorePaginated(
     Configuration,
     store,
     (data) => data.movies,
@@ -87,9 +87,10 @@
 <Items
   {baseUrl}
   {errors}
+  {fetching}
   {items}
   {pagination}
-  resetKey={filter}
+  queryFilter={filter}
   itemType="movies"
   descriptionLabel="Release date"
 />

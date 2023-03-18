@@ -9,7 +9,7 @@
   const { Configuration, SortedMovies } = data
 
   const baseUrl = baseUrlStore(Configuration)
-  const { errors, pagination, items } = itemsStorePaginated(
+  const { errors, fetching, items, pagination } = itemsStorePaginated(
     Configuration,
     SortedMovies,
     (data) => data.sortedMovies,
@@ -67,5 +67,13 @@
   )
 </script>
 
-<Items {baseUrl} {errors} {items} {pagination} itemType="movies" filterable />
+<Items
+  {baseUrl}
+  {errors}
+  {fetching}
+  {items}
+  {pagination}
+  itemType="movies"
+  filterable
+/>
 <DebugData store={SortedMovies} />

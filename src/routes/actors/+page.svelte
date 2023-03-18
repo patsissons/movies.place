@@ -11,7 +11,7 @@
   const { Configuration, SortedPeople } = data
 
   const baseUrl = baseUrlStore(Configuration)
-  const { errors, pagination, items } = itemsStorePaginated(
+  const { errors, fetching, items, pagination } = itemsStorePaginated(
     Configuration,
     SortedPeople,
     (data) => data.sortedPeople,
@@ -45,6 +45,7 @@
 <Items
   {baseUrl}
   {errors}
+  {fetching}
   {items}
   {pagination}
   itemType="actors"

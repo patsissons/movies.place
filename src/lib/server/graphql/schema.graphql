@@ -90,6 +90,7 @@ type OMDBRating {
 
 type OMDBMovie {
   id: ID!
+  response: String!
   numericalRatings: OMDBNumericalRatings
   title: String
   year: String
@@ -109,13 +110,12 @@ type OMDBMovie {
   metascore: String
   imdbRating: String
   imdbVotes: String
-  imdbId: String!
+  imdbId: String
   type: String
   dvd: String
   boxOffice: String
   production: String
   website: String
-  response: String
 }
 
 type Movie {

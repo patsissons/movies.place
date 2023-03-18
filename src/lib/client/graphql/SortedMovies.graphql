@@ -16,6 +16,7 @@ query SortedMovies($page: Int) {
         }
         omdb {
           id
+          response
           numericalRatings {
             metascore
             imdbRating
