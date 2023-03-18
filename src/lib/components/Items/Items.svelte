@@ -3,7 +3,6 @@
   import { derived, writable, type Readable } from 'svelte/store'
   import Input from '$lib/components/Input.svelte'
   import { Errors } from '$lib/components/Errors'
-  import Spinner from '$lib/components/Spinner.svelte'
   import type { Pagination as PaginationState } from '$lib/stores'
   import ItemGrid from './ItemGrid.svelte'
   import Tabs from './Tabs.svelte'
@@ -86,6 +85,13 @@
     bind:value={$filter}
   />
 {/if}
+<div class="p-1 text-center">
+  {#if $fetching}
+    <progress class="progress progress-secondary w-80" />
+  {:else}
+    <progress class="progress w-80" value={0} max={100} />
+  {/if}
+</div>
 {#if $filteredItems.length > 0}
   <Tabs>
     <span slot="grid"><ItemGrid {baseUrl} items={filteredItems} /></span>
@@ -108,10 +114,6 @@
         </span>
       </p>
     {/if}
-  </div>
-{:else}
-  <div class="p-4 text-center">
-    <Spinner />
   </div>
 {/if}
 {#if pagination}
