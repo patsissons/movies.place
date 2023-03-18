@@ -1,5 +1,4 @@
 <script lang="ts">
-  import dayjs from 'dayjs'
   import { MoviesStore } from '$houdini'
   import Input from '$lib/components/Input.svelte'
   import { baseUrlStore, itemsStorePaginated } from '$lib/stores'
