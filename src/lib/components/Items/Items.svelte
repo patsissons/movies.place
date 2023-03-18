@@ -1,9 +1,8 @@
 <script lang="ts">
   import escapeRegExp from 'lodash/escapeRegExp'
-  import { derived, writable, type Readable } from 'svelte/store'
+  import { derived, writable, type Readable, type Writable } from 'svelte/store'
   import Input from '$lib/components/Input.svelte'
   import { Errors } from '$lib/components/Errors'
-  import Spinner from '$lib/components/Spinner.svelte'
   import type { Pagination as PaginationState } from '$lib/stores'
   import ItemGrid from './ItemGrid.svelte'
   import Tabs from './Tabs.svelte'
@@ -21,6 +20,7 @@
   export let pagination: Readable<PaginationState | undefined> | undefined =
     undefined
   export let filterable = false
+  export let selectedItems: Writable<number[]> | undefined = undefined
   export let queryFilter: Readable<string> | undefined = undefined
 
   const filter = writable('')
@@ -76,6 +76,19 @@
       return new RegExp(escapeRegExp(filter))
     }
   }
+
+  function handleSelectionChanged({
+    detail: { id },
+  }: CustomEvent<{ id: number }>) {
+    if (!selectedItems) return
+
+    selectedItems.update((values) => {
+      const selected = values.includes(id)
+      if (selected) return values.filter((value) => value !== id)
+
+      return values.concat(id)
+    })
+  }
 </script>
 
 <Errors {errors} />
@@ -86,11 +99,31 @@
     bind:value={$filter}
   />
 {/if}
+<div class="p-1 text-center">
+  {#if $fetching}
+    <progress class="progress progress-secondary w-80" />
+  {:else}
+    <progress class="progress w-80" value={0} max={100} />
+  {/if}
+</div>
 {#if $filteredItems.length > 0}
   <Tabs>
-    <span slot="grid"><ItemGrid {baseUrl} items={filteredItems} /></span>
-    <span slot="table"
-      ><ItemTable {baseUrl} items={filteredItems} {descriptionLabel} />
+    <span slot="grid">
+      <ItemGrid
+        {baseUrl}
+        items={filteredItems}
+        {selectedItems}
+        on:selectionChanged={handleSelectionChanged}
+      />
+    </span>
+    <span slot="table">
+      <ItemTable
+        {baseUrl}
+        items={filteredItems}
+        {descriptionLabel}
+        {selectedItems}
+        on:selectionChanged={handleSelectionChanged}
+      />
     </span>
   </Tabs>
 {:else if !$fetching}
@@ -102,16 +135,12 @@
         <span class="whitespace-nowrap"> Not sure what to look for? </span>
         <span class="whitespace-nowrap">
           Try browsing
-          <a class="text-secondary font-bold" href={`/${itemType}`}
-            >popular {itemType}</a
-          >
+          <a class="text-secondary font-bold" href={`/${itemType}`}>
+            popular {itemType}
+          </a>
         </span>
       </p>
     {/if}
-  </div>
-{:else}
-  <div class="p-4 text-center">
-    <Spinner />
   </div>
 {/if}
 {#if pagination}

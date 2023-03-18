@@ -2,6 +2,7 @@
   import type { QueryStore } from '$houdini'
   import { debuggingStore } from '$lib/stores/debugging'
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   export let store: QueryStore<any, Record<string, unknown>>
 </script>
 

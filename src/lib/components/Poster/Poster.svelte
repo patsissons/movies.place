@@ -28,7 +28,7 @@
 
 <div class="relative w-full h-full">
   <div
-    class="bg-slate-400 rounded-tl-[18px] overflow-hidden w-full aspect-[2/3]"
+    class="bg-slate-400 rounded-tl-[18px] rounded-tr-lg overflow-hidden w-full aspect-[2/3]"
   >
     {#if src}
       <PosterImage {baseUrl} {src} {widths} {sizes} alt={`${title} image`} />
