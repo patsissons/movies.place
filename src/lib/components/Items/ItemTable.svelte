@@ -68,10 +68,10 @@
     <thead class="border-b border-slate-500">
       <tr>
         {#if selectedItems}
-          <th class="w-auto" />
+          <th class="w-auto !static" />
         {/if}
         {#if hasOrder}
-          <th class="p-0 w-10">
+          <th class="p-0 w-10 !static">
             <button
               class="btn btn-ghost btn-block h-20 justify-start rounded-none"
               on:click={() => handleSort('order')}
@@ -143,7 +143,7 @@
       {#each sortedItems as { id, order, title, description, date, image, url, ratings }}
         <tr class="hover">
           {#if selectedItems}
-            <th class="w-0">
+            <th class="w-0 !static">
               <label>
                 {#if $selectedSet.has(id)}
                   <input
@@ -163,7 +163,7 @@
             </th>
           {/if}
           {#if hasOrder}
-            <td class="p-0">
+            <td class="p-0 !static">
               {#if order != null}
                 <a
                   class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
@@ -174,7 +174,7 @@
               {/if}
             </td>
           {/if}
-          <td class="p-0">
+          <td class="p-0 !static">
             <a
               class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
               href={url}
@@ -231,7 +231,7 @@
                   class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
                   href={url}
                 >
-                  <Rating rating={ratings[id]} />
+                  <Rating class="tooltip-left" rating={ratings[id]} />
                 </a>
               {/if}
             </td>
@@ -241,7 +241,7 @@
     </tbody>
     <tfoot class="border-t border-slate-500">
       <tr>
-        <th class="px-4">Title</th>
+        <th class="px-4 !static">Title</th>
         {#if descriptionLabel}
           <th class="px-4">{descriptionLabel}</th>
         {/if}
