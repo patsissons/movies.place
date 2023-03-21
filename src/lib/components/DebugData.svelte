@@ -8,7 +8,7 @@
 
 {#if $debuggingStore && $store.data}
   <div
-    class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box"
+    class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box mt-4"
   >
     <input type="checkbox" class="peer" />
     <div class="collapse-title text-center">View Raw Response</div>
