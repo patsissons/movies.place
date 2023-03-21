@@ -1,4 +1,5 @@
 // import { useGraphQlJit } from '@envelop/graphql-jit'
+import { useResponseCache } from '@graphql-yoga/plugin-response-cache'
 import { print } from 'graphql'
 import { createYoga } from 'graphql-yoga'
 import { context } from './context'
@@ -17,10 +18,18 @@ export const server = createYoga<Context>({
   logging: true,
   schema,
   context,
-  // graphql-jit is causing annoying error handling issues on data type mismatches
-  // e.g., Cannot destructure property 'http' of 'err.extensions' as it is undefined.
-  // see: omitInternalsFromError in graphql-yoga
-  // plugins: [useGraphQlJit()],
+  plugins: [
+    // graphql-jit is causing annoying error handling issues on data type mismatches
+    // e.g., Cannot destructure property 'http' of 'err.extensions' as it is undefined.
+    // see: omitInternalsFromError in graphql-yoga
+    // useGraphQlJit(),
+
+    useResponseCache({
+      // global cache
+      session: () => null,
+      // default TTL is Infinity
+    }),
+  ],
   graphqlEndpoint: '/api/graphql',
   graphiql: {
     title: 'movies.place GraphiQL explorer',

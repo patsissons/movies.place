@@ -703,6 +703,17 @@
     "@envelop/types" "3.0.2"
     tslib "^2.5.0"
 
+"@envelop/response-cache@^4.0.6":
+  version "4.0.7"
+  resolved "https://registry.yarnpkg.com/@envelop/response-cache/-/response-cache-4.0.7.tgz#d0ae21791c2abe9d1bb1ad79b18ed21ba4929942"
+  integrity sha512-BBMSzSFgi0PHq4fUr3fN6PGOms9oJ1M/DHuAURKulnrMGtEs/MDEnPeMYrvhXLGmGCHOYMZgO2xapv70pYpc3g==
+  dependencies:
+    "@graphql-tools/utils" "^8.8.0"
+    "@whatwg-node/fetch" "^0.6.5"
+    fast-json-stable-stringify "^2.1.0"
+    lru-cache "^6.0.0"
+    tslib "^2.5.0"
+
 "@envelop/types@3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@envelop/types/-/types-3.0.2.tgz#a4b29375b7fcee39bb5830f87f66bbc815cf305e"
@@ -1234,6 +1245,13 @@
     "@graphql-typed-document-node/core" "^3.1.1"
     tslib "^2.4.0"
 
+"@graphql-tools/utils@^8.8.0":
+  version "8.13.1"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/utils/-/utils-8.13.1.tgz#b247607e400365c2cd87ff54654d4ad25a7ac491"
+  integrity sha512-qIh9yYpdUFmctVqovwMdheVNJqFh+DQNWIhX87FJStfXYnmweBUDATok9fWPleKeFwxnW8IapKmY8m8toJEkAw==
+  dependencies:
+    tslib "^2.4.0"
+
 "@graphql-tools/wrap@^9.3.6":
   version "9.3.6"
   resolved "https://registry.yarnpkg.com/@graphql-tools/wrap/-/wrap-9.3.6.tgz#23beaf9c3713160adda511c6a498d1c7077c2848"
@@ -1249,6 +1267,13 @@
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.1.tgz#076d78ce99822258cf813ecc1e7fa460fa74d052"
   integrity sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==
+
+"@graphql-yoga/plugin-response-cache@^1.7.3":
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/@graphql-yoga/plugin-response-cache/-/plugin-response-cache-1.7.3.tgz#20e6a2d3173f981598a20fdcc52722d8161f6543"
+  integrity sha512-MZ6A5MP7F/iSTW//J6bslKl71M8Bmz53RpEpY/jPuxkwOyn2hfcZ/nQh9VkuAovsRv8zQ4cKeWdsQiOLybfCCw==
+  dependencies:
+    "@envelop/response-cache" "^4.0.6"
 
 "@graphql-yoga/subscription@^3.1.0":
   version "3.1.0"
@@ -1740,7 +1765,7 @@
   resolved "https://registry.yarnpkg.com/@whatwg-node/events/-/events-0.0.2.tgz#7b7107268d2982fc7b7aff5ee6803c64018f84dd"
   integrity sha512-WKj/lI4QjnLuPrim0cfO7i+HsDSXHxNv1y0CrJhdntuO3hxWZmnXCwNDnwOvry11OjRin6cgWNF+j/9Pn8TN4w==
 
-"@whatwg-node/fetch@^0.6.0":
+"@whatwg-node/fetch@^0.6.0", "@whatwg-node/fetch@^0.6.5":
   version "0.6.9"
   resolved "https://registry.yarnpkg.com/@whatwg-node/fetch/-/fetch-0.6.9.tgz#6cc694cc0378e27b8dfed427c5bf633eda6972b9"
   integrity sha512-JfrBCJdMu9n9OARc0e/hPHcD98/8Nz1CKSdGYDg6VbObDkV/Ys30xe5i/wPOatYbxuvatj1kfWeHf7iNX3i17w==
