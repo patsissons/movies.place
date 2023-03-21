@@ -1,4 +1,7 @@
 <script lang="ts">
+  let className: string | undefined = undefined
+  export { className as class }
+
   export let rating:
     | { label: string; value: number; description?: string }
     | undefined
@@ -12,9 +15,9 @@
 
 {#if rating}
   <div
-    class="tooltip tooltip-bottom"
+    class={`tooltip tooltip-bottom before:whitespace-normal ${className}`}
     data-tip={rating.description
-      ? `${rating.label} (${rating.description}) asdf as fdas df asdf as df asd fas df asd fas fd sadf as df asdf asd fasd fa sdf asd fas df sdf as dfa sdf asdf `
+      ? `${rating.label} (${rating.description})`
       : rating.label}
   >
     <div
