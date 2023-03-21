@@ -38,6 +38,7 @@
                 label: 'TMDB',
                 value: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
                 description: `${knownFor.length} movies`,
+                disabled: knownFor.length === 0,
               }
             : undefined,
       },

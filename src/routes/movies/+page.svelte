@@ -21,40 +21,21 @@
         voteAverage,
         voteCount,
         posterPath,
-        movie: { omdb },
+        movie: {
+          externalIds: { imdbId },
+        },
       },
       images,
     ) => ({
       id,
+      imdbId: imdbId ?? undefined,
       title,
       date: releaseDate ?? undefined,
-      ratings: {
-        ...(omdb?.numericalRatings && {
-          rottentomatoes: omdb.numericalRatings.rottenTomatoesScore
-            ? {
-                label: 'Rotten Tomatoes',
-                value: omdb.numericalRatings.rottenTomatoesScore,
-              }
-            : undefined,
-          metacritic: omdb.numericalRatings.metascore
-            ? {
-                label: 'Metacritic',
-                value: omdb.numericalRatings.metascore,
-              }
-            : undefined,
-          imdb: omdb.numericalRatings.imdbRating
-            ? {
-                label: 'IMDB',
-                value: omdb.numericalRatings.imdbRating * 10,
-                description: `${omdb.numericalRatings.imdbVotes} votes`,
-              }
-            : undefined,
-        }),
-        tmdb: {
-          label: 'TMDB',
-          value: voteAverage * 10,
-          description: `${voteCount} votes`,
-        },
+      tmdbRating: {
+        label: 'TMDB',
+        value: voteAverage * 10,
+        description: `${voteCount} votes`,
+        disabled: voteCount === 0,
       },
       url: `/movie/${id}`,
       image: posterPath

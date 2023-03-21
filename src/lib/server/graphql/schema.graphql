@@ -272,6 +272,7 @@ type Query {
     primaryReleaseYear: Int
   ): MovieListResultsPage!
   movie(id: Int!): Movie
+  omdbMovie(imdbId: String!): OMDBMovie
   sortedPeople(
     sort: PeopleSortType
     page: Int

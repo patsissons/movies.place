@@ -1,17 +1,21 @@
 <script lang="ts">
   import orderBy from 'lodash/orderBy'
-  import mapValues from 'lodash/mapValues'
   import { createEventDispatcher } from 'svelte'
-  import { derived, readable, type Readable } from 'svelte/store'
+  import { derived, readable, writable, type Readable } from 'svelte/store'
   import { PosterImage } from '$lib/components/Poster'
   import Rating from './Rating.svelte'
-  import { allRatingIds, type Item, type RatingID } from './types'
+  import type { Item, RatingData, RatingID, Ratings } from './types'
   import { Icon } from '../Icon'
+  import { OMDBMovieStore } from '$houdini'
 
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
   export let descriptionLabel: string | undefined = undefined
   export let selectedItems: Readable<number[]> | undefined = undefined
+
+  const omdbStore = new OMDBMovieStore()
+  const ratingsStore = writable<Map<string, Ratings> | undefined>()
+  const loadingRatingsStore = writable(false)
 
   const dispatch = createEventDispatcher<{
     selectionChanged: { id: number }
@@ -28,24 +32,44 @@
   let sort: SortField = 'order'
   let dir: SortDir = 'asc'
 
+  $: canLoadRatings = $items.some(({ imdbId }) => Boolean(imdbId))
+  $: ratingIds = $ratingsStore
+    ? Array.from(
+        Array.from($ratingsStore.values()).reduce(
+          (set, ratings) =>
+            Object.entries(ratings as Record<string, RatingData>)
+              .filter(([, rating]) => rating != null)
+              .reduce((set, [id]) => set.add(id as RatingID), set),
+          new Set<RatingID>(),
+        ),
+      )
+    : []
+  $: hasRating = $items.some(({ tmdbRating }) => Boolean(tmdbRating))
   $: hasOrder = $items.some(({ order }) => order != null)
   $: hasDates = $items.some(({ date }) => Boolean(date))
   $: tableItems = $items.map(
-    ({ id, order, title, description, date, image, url, ratings }) => ({
+    ({
       id,
+      imdbId,
       order,
       title,
       description,
       date,
       image,
       url,
-      ratings,
-      ...mapValues(ratings, (rating) => rating?.value ?? 0),
+      tmdbRating,
+    }) => ({
+      id,
+      imdbId,
+      order,
+      title,
+      description,
+      date,
+      image,
+      url,
+      tmdbRating,
     }),
   )
-  $: ratingIds = Object.keys(tableItems[0]).filter((key) =>
-    allRatingIds.includes(key as RatingID),
-  ) as RatingID[]
   $: sortedItems = orderBy(tableItems, [sort], [dir])
 
   function handleSort(field: typeof sort) {
@@ -61,8 +85,91 @@
     e.preventDefault()
     dispatch('selectionChanged', { id })
   }
+
+  async function handleLoadRatings() {
+    try {
+      loadingRatingsStore.set(true)
+
+      const imdbIds = tableItems
+        .map(({ imdbId }) => imdbId)
+        .filter((imdbId): imdbId is string => Boolean(imdbId))
+
+      const results = await Promise.all(
+        imdbIds.map((imdbId) => omdbStore.fetch({ variables: { imdbId } })),
+      )
+
+      const ratings = results
+        .map((result) => ({
+          imdbId: result.variables?.imdbId,
+          numericalRatings: result.data?.omdbMovie?.numericalRatings,
+        }))
+        .reduce((ratings, result) => {
+          if (
+            !result ||
+            !result.imdbId ||
+            !result.numericalRatings ||
+            !Object.values(result.numericalRatings).some(Boolean)
+          )
+            return ratings
+
+          return ratings.set(result.imdbId, {
+            rottentomatoes: result.numericalRatings.rottenTomatoesScore
+              ? {
+                  label: 'Rotten Tomatoes',
+                  value: result.numericalRatings.rottenTomatoesScore,
+                  disabled: result.numericalRatings.rottenTomatoesScore === 0,
+                }
+              : undefined,
+            metacritic: result.numericalRatings.metascore
+              ? {
+                  label: 'Metacritic',
+                  value: result.numericalRatings.metascore,
+                  disabled: result.numericalRatings.metascore === 0,
+                }
+              : undefined,
+            imdb: result.numericalRatings.imdbRating
+              ? {
+                  label: 'IMDB',
+                  value: result.numericalRatings.imdbRating * 10,
+                  description: `${result.numericalRatings.imdbVotes} votes`,
+                  disabled: result.numericalRatings.imdbVotes === 0,
+                }
+              : undefined,
+          })
+        }, new Map<string, Ratings>())
+
+      console.info(`loaded ${ratings.size} external ratings`)
+      ratingsStore.set(ratings)
+    } catch (error) {
+      console.error('Error loading external ratings', error)
+    } finally {
+      loadingRatingsStore.set(false)
+    }
+    if (!canLoadRatings) return
+  }
+
+  function ratingsForImdbId(
+    ratingsMap?: Map<string, Ratings>,
+    imdbId?: string,
+  ) {
+    if (!ratingsMap || !imdbId) return ratingIds.map(() => undefined)
+
+    const ratings = ratingsMap.get(imdbId)
+    if (!ratings) return ratingIds.map(() => undefined)
+
+    return ratingIds.map((id) => ratings[id])
+  }
 </script>
 
+{#if canLoadRatings && !$ratingsStore}
+  <button
+    class="btn btn-secondary btn-block mb-4"
+    class:btn-disabled={$loadingRatingsStore}
+    on:click={handleLoadRatings}
+  >
+    Load External Ratings
+  </button>
+{/if}
 <div class="overflow-x-auto w-full">
   <table class="table table-zebra table-compact w-full">
     <thead class="border-b border-slate-500">
@@ -120,6 +227,19 @@
             </button>
           </th>
         {/if}
+        {#if hasRating}
+          <th class="p-0 w-[68px]">
+            <button
+              class="btn btn-ghost btn-block h-20 justify-center rounded-none"
+              on:click={() => handleSort('tmdb')}
+            >
+              <Icon icon={'tmdb'} size={36} />
+              {#if sort === 'tmdb' && dir}
+                {dir === 'asc' ? '↑' : '↓'}
+              {/if}
+            </button>
+          </th>
+        {/if}
         {#each ratingIds as id}
           <th class="p-0 w-[68px]">
             <button
@@ -140,7 +260,7 @@
       </tr>
     </thead>
     <tbody>
-      {#each sortedItems as { id, order, title, description, date, image, url, ratings }}
+      {#each sortedItems as { id, imdbId, order, title, description, date, image, url, tmdbRating }}
         <tr class="hover">
           {#if selectedItems}
             <th class="w-0 !static">
@@ -224,14 +344,26 @@
               {/if}
             </td>
           {/if}
-          {#each ratingIds as id}
+          {#if hasRating}
             <td class="p-0">
-              {#if ratings && ratings[id]}
+              {#if tmdbRating}
                 <a
                   class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
                   href={url}
                 >
-                  <Rating class="tooltip-left" rating={ratings[id]} />
+                  <Rating class="tooltip-left" rating={tmdbRating} />
+                </a>
+              {/if}
+            </td>
+          {/if}
+          {#each ratingsForImdbId($ratingsStore, imdbId) as rating}
+            <td class="p-0">
+              {#if rating}
+                <a
+                  class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+                  href={url}
+                >
+                  <Rating class="tooltip-left" {rating} />
                 </a>
               {/if}
             </td>
@@ -247,6 +379,11 @@
         {/if}
         {#if hasDates}
           <th class="px-4">Date</th>
+        {/if}
+        {#if hasRating}
+          <th class="px-4">
+            <Icon icon="tmdb" size={36} />
+          </th>
         {/if}
         {#each ratingIds as id}
           <th class="px-4">

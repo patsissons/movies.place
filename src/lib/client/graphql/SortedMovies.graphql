@@ -14,16 +14,6 @@ query SortedMovies($page: Int) {
           twitterId
           wikidataId
         }
-        omdb {
-          id
-          response
-          numericalRatings {
-            metascore
-            imdbRating
-            imdbVotes
-            rottenTomatoesScore
-          }
-        }
       }
       title
       posterPath

@@ -1,10 +1,10 @@
 <script lang="ts">
+  import type { RatingData } from './types'
+
   let className: string | undefined = undefined
   export { className as class }
 
-  export let rating:
-    | { label: string; value: number; description?: string }
-    | undefined
+  export let rating: RatingData | undefined
 
   export function ratingColor(rating: number) {
     if (rating >= 70) return 'su'
@@ -15,7 +15,9 @@
 
 {#if rating}
   <div
-    class={`tooltip tooltip-bottom before:whitespace-normal ${className}`}
+    class={`tooltip tooltip-bottom before:whitespace-normal ${className} ${
+      rating.disabled ? 'grayscale' : ''
+    }`}
     data-tip={rating.description
       ? `${rating.label} (${rating.description})`
       : rating.label}

@@ -38,16 +38,6 @@ query Person($id: Int!) {
           twitterId
           wikidataId
         }
-        omdb {
-          id
-          response
-          numericalRatings {
-            metascore
-            imdbRating
-            imdbVotes
-            rottenTomatoesScore
-          }
-        }
       }
       character
       creditId

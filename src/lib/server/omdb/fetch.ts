@@ -59,6 +59,7 @@ export async function fetchOMDBJson<Result = Record<string, unknown>>(
   const url = [baseUrl, urlParams].join('?')
 
   try {
+    console.info('fetching OMDB:', url)
     const result = await fetchJson<Result | OMDBErrorResponse>(
       fetch,
       url,

@@ -25,28 +25,39 @@
     PersonStore,
     (data) => data.person?.cast,
     (
-      { id, title, character, releaseDate, voteAverage, voteCount, posterPath },
+      {
+        id,
+        title,
+        character,
+        releaseDate,
+        voteAverage,
+        voteCount,
+        posterPath,
+        movie: {
+          externalIds: { imdbId },
+        },
+      },
       images,
     ) =>
       ({
         id,
+        imdbId: imdbId ?? undefined,
         title,
-        url: `/movie/${id}`,
-        description: character,
-        ratings: {
-          tmdb: {
-            label: 'TMDB',
-            value: voteAverage * 10,
-            description: `${voteCount} votes`,
-          },
-        },
         date: releaseDate ?? undefined,
+        tmdbRating: {
+          label: 'TMDB',
+          value: voteAverage * 10,
+          description: `${voteCount} votes`,
+          disabled: voteCount === 0,
+        },
+        url: `/movie/${id}`,
         image: posterPath
           ? {
               src: posterPath,
               widths: images.posterSizes,
             }
           : undefined,
+        description: character,
       } as Item),
   )
 </script>

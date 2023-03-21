@@ -1,0 +1,12 @@
+query OMDBMovie($imdbId: String!) {
+  omdbMovie(imdbId: $imdbId) {
+    id
+    response
+    numericalRatings {
+      metascore
+      imdbRating
+      imdbVotes
+      rottenTomatoesScore
+    }
+  }
+}
