@@ -29,6 +29,16 @@ export const server = createYoga<Context>({
       session: () => null,
       // default TTL is Infinity
     }),
+
+    {
+      // vercel edge caching for 1 day
+      onResponse({ response }) {
+        response.headers.set(
+          'cache-control',
+          'public, max-age=86400, s-maxage=86400',
+        )
+      },
+    },
   ],
   graphqlEndpoint: '/api/graphql',
   graphiql: {

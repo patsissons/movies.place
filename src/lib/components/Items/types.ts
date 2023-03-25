@@ -15,18 +15,23 @@ export interface RatingData {
 }
 export type Ratings = Partial<Record<RatingID, RatingData>>
 
+export interface ItemImage {
+  src: string
+  widths: string[]
+  sizes?: string
+  alt?: string
+}
+
 export interface Item {
   id: number
   imdbId?: string
   order?: number
+  count?: number
+  refId?: number
   title: string
   url: string
   description?: string
   date?: string
   tmdbRating?: RatingData
-  image?: {
-    src: string
-    widths: string[]
-    sizes?: string
-  }
+  image?: ItemImage
 }

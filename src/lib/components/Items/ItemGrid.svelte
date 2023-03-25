@@ -30,7 +30,7 @@
 <ul
   class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 gap-y-2 justify-items-center overflow-x-hidden animate-stagger"
 >
-  {#each $items as { id, title, url, description, date, ratings = { }, image }, index}
+  {#each $items as { id, title, url, description, date, tmdbRating, image }, index}
     <li
       class="w-full animate-in ease-out animate-duration-500 slide-in-from-bottom slide-in-from-right fill-mode-both fade-in zoom-in"
       style={`--animation-delay-factor: ${(index - $lastLength) % 20}`}
@@ -47,14 +47,9 @@
           {description}
           {date}
         >
-          {#if ratings.rottentomatoes || ratings.metacritic || ratings.imdb || ratings.tmdb}
+          {#if tmdbRating}
             <div class="absolute left-0 top-0">
-              <Rating
-                rating={ratings.rottentomatoes ||
-                  ratings.metacritic ||
-                  ratings.imdb ||
-                  ratings.tmdb}
-              />
+              <Rating rating={tmdbRating} />
             </div>
           {/if}
           {#if selectedItems}

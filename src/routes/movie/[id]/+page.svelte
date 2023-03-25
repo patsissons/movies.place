@@ -41,7 +41,8 @@
       typeof MovieStore,
       Movie$result
     >,
-    (data) => data.movie?.cast,
+    (data) => data.movie,
+    (movie) => movie.cast,
     ({ id, order, name: title, character: description, profilePath }, images) =>
       ({
         id,
@@ -328,26 +329,13 @@
               </div>
             {/if}
             {#if selectedNames.length > 0}
-              <label
-                for="coming-soon-modal"
+              <a
                 class="btn btn-block btn-accent h-auto p-4"
+                role="button"
+                href={`/actors/${$selectedActors.join(',')}`}
               >
                 Find movies starring {selectedNames.join(', ')}
-              </label>
-
-              <input
-                type="checkbox"
-                id="coming-soon-modal"
-                class="modal-toggle"
-              />
-              <div class="modal">
-                <div class="modal-box">
-                  <h3 class="font-bold text-lg">Feature is coming soon!</h3>
-                  <div class="modal-action">
-                    <label for="coming-soon-modal" class="btn">Yay!</label>
-                  </div>
-                </div>
-              </div>
+              </a>
             {/if}
           </div>
         </div>

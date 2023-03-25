@@ -23,7 +23,8 @@
   const { errors, fetching, items } = itemsStore(
     Configuration,
     PersonStore,
-    (data) => data.person?.cast,
+    (data) => data.person,
+    (person) => person.cast,
     (
       {
         id,

@@ -6,7 +6,7 @@
   import type { Pagination as PaginationState } from '$lib/stores'
   import ItemGrid from './ItemGrid.svelte'
   import Tabs from './Tabs.svelte'
-  import type { Item } from './types'
+  import type { Item, ItemImage } from './types'
   import Pagination from '../Pagination.svelte'
   import ItemTable from './ItemTable.svelte'
   import type { ItemList } from '$lib/stores/items'
@@ -22,6 +22,9 @@
   export let filterable = false
   export let selectedItems: Writable<number[]> | undefined = undefined
   export let queryFilter: Readable<string> | undefined = undefined
+  export let refImages:
+    | Readable<Record<number, ItemImage | undefined> | undefined>
+    | undefined = undefined
 
   const filter = writable('')
   const loaded = writable<{
@@ -122,6 +125,7 @@
         items={filteredItems}
         {descriptionLabel}
         {selectedItems}
+        {refImages}
         on:selectionChanged={handleSelectionChanged}
       />
     </span>
