@@ -170,7 +170,7 @@
           })
         }, new Map<string, Ratings>())
 
-      console.info(`loaded ${ratings.size} external ratings`)
+      console.info(`loaded ${ratings.size} external ratings`, ratings)
       ratingsStore.set(ratings)
     } catch (error) {
       console.error('Error loading external ratings', error)
