@@ -3,8 +3,9 @@ import type { Maybe, OmdbMovie } from '$lib/types/graphql.generated'
 import type { IObjectTypeResolver } from '@graphql-tools/utils'
 
 export const OMDBMovie: IObjectTypeResolver<OmdbMovie, Context, unknown> = {
-  numericalRatings: ({ metascore, imdbRating, imdbVotes, ratings }) => {
+  numericalRatings: ({ id, metascore, imdbRating, imdbVotes, ratings }) => {
     return {
+      id,
       metascore: toNumber(metascore),
       imdbRating: toNumber(imdbRating),
       imdbVotes: toNumber(imdbVotes, (value) => value.replaceAll(',', '')),

@@ -3,6 +3,7 @@ query OMDBMovie($imdbId: String!) {
     id
     response
     numericalRatings {
+      id
       metascore
       imdbRating
       imdbVotes
