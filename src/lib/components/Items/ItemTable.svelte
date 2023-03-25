@@ -379,7 +379,7 @@
               {/if}
             </td>
           {/if}
-          <td class="p-0 !static max-w-[300px]">
+          <td class="p-0 !static max-w-[300px] truncate">
             <a
               class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
               href={url}
@@ -398,7 +398,7 @@
                   </div>
                 </div>
                 <div class="flex flex-col">
-                  <p class="w-full text-center font-bold truncate">
+                  <p class="w-full text-center font-bold">
                     {title}
                   </p>
                 </div>
@@ -406,13 +406,13 @@
             </a>
           </td>
           {#if descriptionLabel}
-            <td class="p-0 max-w-[300px]">
+            <td class="p-0 max-w-[300px] truncate">
               {#if description}
                 <a
                   class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
                   href={url}
                 >
-                  <p class="truncate">{description}</p>
+                  <p>{description}</p>
                 </a>
               {/if}
             </td>
