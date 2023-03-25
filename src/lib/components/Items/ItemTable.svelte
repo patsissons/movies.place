@@ -360,7 +360,7 @@
                 {@const image = refImageMap[refId]}
                 <a
                   class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
-                  href={url}
+                  href={`/actor/${refId}`}
                 >
                   {#if image}
                     <div class="avatar">
