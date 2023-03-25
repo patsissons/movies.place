@@ -95,10 +95,10 @@
 </script>
 
 <Errors {errors} />
-{#if filterable}
+{#if filterable && $loaded.list}
   <Input
     center
-    placeholder={`Filter ${itemType} below...`}
+    placeholder={`Filter ${$loaded.list.length} ${itemType} below...`}
     bind:value={$filter}
   />
 {/if}

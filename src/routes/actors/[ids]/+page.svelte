@@ -82,7 +82,8 @@
                   return map
                 }
 
-                return map.set(item.id, { ...item, count: 1 })
+                item.count = 1
+                return map.set(item.id, item)
               })
 
               return map
@@ -101,7 +102,7 @@
       return peopleStores.reduce((map, { data }) => {
         if (data?.person) {
           const { id, name, profilePath } = data.person
-          map[data.person.id] = profilePath
+          map[id] = profilePath
             ? {
                 src: profilePath,
                 widths: profileSizes,

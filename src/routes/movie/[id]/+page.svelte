@@ -332,7 +332,7 @@
               <a
                 class="btn btn-block btn-accent h-auto p-4"
                 role="button"
-                href={`/actors/${$selectedActors.join(',')}`}
+                href={`/actors/${$selectedActors.join(',')}#table`}
               >
                 Find movies starring {selectedNames.join(', ')}
               </a>

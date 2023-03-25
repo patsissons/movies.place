@@ -8,7 +8,6 @@
   import type { Item, ItemImage, RatingData, RatingID, Ratings } from './types'
   import { Icon } from '../Icon'
   import { OMDBMovieStore } from '$houdini'
-  import { denull } from '$lib/utils/typescript'
 
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
@@ -102,9 +101,6 @@
       tmdb: item.tmdbRating?.value,
     }
   })
-  $: {
-    console.log('D', tableItemsWithRatings)
-  }
   $: sortedItems = orderBy(tableItemsWithRatings, [sort], [dir])
   $: refImageMap = $refImages ?? {}
 
@@ -198,13 +194,15 @@
 </script>
 
 {#if canLoadRatings && !$ratingsStore}
-  <button
-    class="btn btn-secondary btn-block mb-4"
-    class:btn-disabled={$loadingRatingsStore}
-    on:click={handleLoadRatings}
-  >
-    Load External Ratings
-  </button>
+  <div class="mb-4 px-4 xs:px-0">
+    <button
+      class="btn btn-secondary btn-block"
+      class:btn-disabled={$loadingRatingsStore}
+      on:click={handleLoadRatings}
+    >
+      Load External Ratings
+    </button>
+  </div>
 {/if}
 <div class="overflow-x-auto w-full">
   <table class="table table-zebra table-compact w-full">
@@ -359,18 +357,19 @@
           {#if hasRefs}
             <td class="p-0 !static">
               {#if refId != null}
+                {@const image = refImageMap[refId]}
                 <a
                   class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
                   href={url}
                 >
-                  {#if refImageMap[refId]}
+                  {#if image}
                     <div class="avatar">
                       <div class="w-8 !aspect-auto">
                         <PosterImage
                           {baseUrl}
                           sizes="32px"
                           alt={`${refId} image`}
-                          {...denull(refImageMap[refId])}
+                          {...image}
                         />
                       </div>
                     </div>
@@ -392,8 +391,8 @@
                       <PosterImage
                         {baseUrl}
                         sizes="32px"
-                        {...image}
                         alt={`${title} image`}
+                        {...image}
                       />
                     {/if}
                   </div>
@@ -449,7 +448,7 @@
                   class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
                   href={url}
                 >
-                  <Rating class="tooltip-left" rating={tmdbRating} />
+                  <Rating rating={tmdbRating} simple />
                 </a>
               {/if}
             </td>
@@ -461,7 +460,7 @@
                   class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
                   href={url}
                 >
-                  <Rating class="tooltip-left" {rating} />
+                  <Rating {rating} simple />
                 </a>
               {/if}
             </td>
