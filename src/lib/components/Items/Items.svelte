@@ -95,19 +95,22 @@
 </script>
 
 <Errors {errors} />
-{#if filterable && $loaded.list}
-  <Input
-    center
-    placeholder={`Filter ${$loaded.list.length} ${itemType} below...`}
-    bind:value={$filter}
-  />
-{/if}
-<div class="p-1 text-center">
-  {#if $fetching}
-    <progress class="progress progress-secondary w-80" />
-  {:else}
-    <progress class="progress w-80" value={0} max={100} />
+<div class="w-80">
+  {#if filterable && $loaded.list}
+    <Input
+      placeholder={`Filter ${$loaded.list.length} ${itemType} below...`}
+      center
+      fullWidth
+      bind:value={$filter}
+    />
   {/if}
+  <div class="p-1 text-center">
+    {#if $fetching}
+      <progress class="progress progress-secondary w-full" />
+    {:else}
+      <progress class="progress w-full" value={0} max={100} />
+    {/if}
+  </div>
 </div>
 {#if $filteredItems.length > 0}
   <Tabs>

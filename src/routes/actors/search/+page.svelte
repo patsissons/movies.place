@@ -1,5 +1,6 @@
 <script lang="ts">
   import meanBy from 'lodash/meanBy'
+  import sumBy from 'lodash/sumBy'
   import { PeopleStore } from '$houdini'
   import Input from '$lib/components/Input.svelte'
   import { Items } from '$lib/components/Items'
@@ -37,6 +38,7 @@
             ? {
                 label: 'TMDB',
                 value: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
+                count: sumBy(knownFor, ({ voteCount }) => voteCount),
                 description: `${knownFor.length} movies`,
                 disabled: knownFor.length === 0,
               }

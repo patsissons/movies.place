@@ -1,5 +1,6 @@
 <script lang="ts">
   import meanBy from 'lodash/meanBy'
+  import sumBy from 'lodash/sumBy'
   import type { PageData } from './$houdini'
   import { Items } from '$lib/components/Items'
   import { baseUrlStore, itemsStorePaginated } from '$lib/stores'
@@ -28,6 +29,7 @@
         tmdb: {
           label: 'TMDB',
           value: meanBy(knownFor, ({ voteAverage }) => voteAverage * 10),
+          count: sumBy(knownFor, ({ voteCount }) => voteCount),
           description: `${knownFor.length} movies`,
           disabled: knownFor.length === 0,
         },

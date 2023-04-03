@@ -48,6 +48,7 @@
         tmdbRating: {
           label: 'TMDB',
           value: voteAverage * 10,
+          count: voteCount,
           description: `${voteCount} votes`,
           disabled: voteCount === 0,
         },

@@ -9,18 +9,17 @@ export const load = (async (event) => {
 
   if (!ids) throw error(404, { message: 'Actors ids missing' })
 
-  const idList = ids.split(',')
+  const idList = ids.split(',').map((id) => Number(id))
   if (idList.length === 0) throw error(404, { message: 'Actors ids empty' })
 
   const PeopleStores = await Promise.all(
     idList.map((id) =>
-      load_Person({ event, variables: { id: Number(id) } }).then(
-        ({ Person }) => Person,
-      ),
+      load_Person({ event, variables: { id } }).then(({ Person }) => Person),
     ),
   )
 
   return {
     PeopleStores,
+    ids: idList,
   }
 }) satisfies PageLoad

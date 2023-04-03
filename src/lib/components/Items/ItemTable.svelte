@@ -163,6 +163,7 @@
               ? {
                   label: 'IMDB',
                   value: result.numericalRatings.imdbRating * 10,
+                  count: result.numericalRatings.imdbVotes ?? undefined,
                   description: `${result.numericalRatings.imdbVotes} votes`,
                   disabled: result.numericalRatings.imdbVotes === 0,
                 }
@@ -200,7 +201,7 @@
       class:btn-disabled={$loadingRatingsStore}
       on:click={handleLoadRatings}
     >
-      Load External Ratings
+      Load External Ratings for {tableItems.length} items
     </button>
   </div>
 {/if}

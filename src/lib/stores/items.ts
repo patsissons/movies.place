@@ -53,24 +53,31 @@ export function itemsStore<
 
   const images = imagesStore(config)
 
-  const items = derived([images, store], ([$images, { data, variables }]) => {
-    if (!data || !$images) return
+  const source = derived(store, ({ data }) => {
+    if (!data) return
 
-    const source = sourceTransformer(data)
-    if (!source) return
-
-    const results = listTransformer(source)
-    if (!results) return
-
-    return {
-      list: results.map((result) => transformer(result, $images, source)),
-      variables,
-    } as ItemList<Item>
+    return sourceTransformer(data)
   })
+
+  const items = derived(
+    [source, images, store],
+    ([$source, $images, { data, variables }]) => {
+      if (!data || !$source || !$images) return
+
+      const results = listTransformer($source)
+      if (!results) return
+
+      return {
+        list: results.map((result) => transformer(result, $images, $source)),
+        variables,
+      } as ItemList<Item>
+    },
+  )
 
   const fetching = derived(store, ({ fetching }) => fetching)
 
   const result = {
+    source,
     errors,
     fetching,
   }

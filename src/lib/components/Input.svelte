@@ -7,6 +7,7 @@
   export let center = false
   export let wait = 300
   export let value = ''
+  export let fullWidth = false
 
   const dispatch = createEventDispatcher<{ value: string }>()
 
@@ -23,6 +24,7 @@
 <div class="flex" class:justify-center={center}>
   <input
     class="input input-ghost input-bordered focus:input-info !outline-none w-full max-w-xs"
+    class:w-full={fullWidth}
     type="text"
     {placeholder}
     on:input={handleInput}

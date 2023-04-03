@@ -12,6 +12,7 @@ export interface RatingData {
   value: number
   description?: string
   disabled?: boolean
+  count?: number
 }
 export type Ratings = Partial<Record<RatingID, RatingData>>
 
@@ -28,6 +29,7 @@ export interface Item {
   order?: number
   count?: number
   refId?: number
+  watchable?: boolean
   title: string
   url: string
   description?: string

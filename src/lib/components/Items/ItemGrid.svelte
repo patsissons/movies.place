@@ -9,6 +9,7 @@
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
   export let selectedItems: Readable<number[]> | undefined = undefined
+  export let center: boolean | undefined = false
 
   const dispatch = createEventDispatcher<{
     selectionChanged: { id: number }
@@ -28,7 +29,11 @@
 </script>
 
 <ul
-  class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 gap-y-2 justify-items-center overflow-x-hidden animate-stagger"
+  class={`gap-y-2 justify-items-center overflow-x-hidden animate-stagger ${
+    center
+      ? 'flex flex-flow'
+      : 'grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10'
+  }`}
 >
   {#each $items as { id, title, url, description, date, tmdbRating, image }, index}
     <li
