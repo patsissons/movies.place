@@ -95,7 +95,7 @@
 </script>
 
 <Errors {errors} />
-<div class="w-80">
+<div class="w-80 mx-auto">
   {#if filterable && $loaded.list}
     <Input
       placeholder={`Filter ${$loaded.list.length} ${itemType} below...`}
