@@ -92,7 +92,7 @@
         <div
           class="hero-content flex-col lg:flex-row lg:items-start text-white"
         >
-          <div class="indicator w-full lg:w-auto">
+          <div class="indicator w-full self-stretch">
             {#if movie.adult}
               <span
                 class="indicator-item indicator-start indicator-top badge badge-secondary"
