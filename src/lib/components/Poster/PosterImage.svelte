@@ -16,7 +16,7 @@
     <img class={className} {alt} src={[$baseUrl, src].join('')} />
   {:else}
     <img
-      class={`w-full ${className}`}
+      class={`h-full aspect-[2/3] ${className}`}
       {alt}
       {sizes}
       src={[$baseUrl, widths[widths.length - 1], src].join('')}
