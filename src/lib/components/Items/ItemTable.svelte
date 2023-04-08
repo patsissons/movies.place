@@ -195,7 +195,7 @@
 </script>
 
 {#if canLoadRatings && !$ratingsStore}
-  <div class="mb-4 px-4 xs:px-0">
+  <div class="mb-4 px-4">
     <button
       class="btn btn-secondary btn-block"
       class:btn-disabled={$loadingRatingsStore}
@@ -205,7 +205,7 @@
     </button>
   </div>
 {/if}
-<div class="overflow-x-auto w-full">
+<div class="overflow-x-auto w-screen px-4">
   <table class="table table-zebra table-compact w-full">
     <thead class="border-b border-slate-500">
       <tr>
