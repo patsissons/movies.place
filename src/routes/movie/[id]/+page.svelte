@@ -80,21 +80,20 @@
     <div class="flex flex-col gap-4">
       <div class="hero min-h-screen bg-base-200">
         {#if movie.backdropPath && $images}
-          <div class="">
-            <PosterImage
-              {baseUrl}
-              src={movie.backdropPath}
-              widths={$images.backdropSizes}
-              sizes="(min-width: 1280px) 1280px, (min-width: 1024px) 1024px, (min-width: 640px) 640px, (min-width: 480px) 480px, 100vw"
-              alt={`${movie.title} backdrop image`}
-            />
-          </div>
+          <PosterImage
+            class="object-cover"
+            {baseUrl}
+            src={movie.backdropPath}
+            widths={$images.backdropSizes}
+            sizes="(min-width: 1280px) 1280px, (min-width: 1024px) 1024px, (min-width: 640px) 640px, (min-width: 480px) 480px, 100vw"
+            alt={`${movie.title} backdrop image`}
+          />
         {/if}
         <div class="hero-overlay backdrop-blur-sm" />
         <div
           class="hero-content flex-col lg:flex-row lg:items-start text-white"
         >
-          <div class="indicator w-full self-stretch">
+          <div class="indicator w-full">
             {#if movie.adult}
               <span
                 class="indicator-item indicator-start indicator-top badge badge-secondary"
@@ -104,7 +103,7 @@
             {/if}
             {#if movie.posterPath && $images}
               <PosterImage
-                class="rounded-lg shadow-2xl"
+                class="w-full rounded-lg shadow-2xl"
                 {baseUrl}
                 src={movie.posterPath}
                 widths={$images.posterSizes}

@@ -68,7 +68,7 @@
   <div class="flex flex-col gap-2">
     <div class="hero min-h-screen bg-base-200">
       <div class="hero-content flex-col lg:flex-row lg:items-start text-white">
-        <div class="indicator w-full self-stretch">
+        <div class="indicator w-full">
           {#if person.adult}
             <span
               class="indicator-item indicator-start indicator-top badge badge-secondary"
@@ -78,11 +78,11 @@
           {/if}
           {#if person.profilePath && $images}
             <PosterImage
-              class="rounded-lg shadow-2xl"
+              class="w-full rounded-lg shadow-2xl"
               {baseUrl}
               src={person.profilePath}
               widths={$images.profileSizes}
-              sizes="(min-width: 1280px) 183px, (min-width: 1024px) 119px, 100vw"
+              sizes="(min-width: 1280px) 460px, (min-width: 1024px) 254px, 100vw"
               alt={`${person.name} image`}
             />
           {/if}
