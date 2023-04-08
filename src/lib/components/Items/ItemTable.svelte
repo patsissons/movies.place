@@ -367,6 +367,7 @@
                     <div class="avatar">
                       <div class="w-8 !aspect-auto">
                         <PosterImage
+                          class="w-full"
                           {baseUrl}
                           sizes="32px"
                           alt={`${refId} image`}
@@ -390,6 +391,7 @@
                   <div class="w-8 !aspect-auto">
                     {#if image}
                       <PosterImage
+                        class="w-full"
                         {baseUrl}
                         sizes="32px"
                         alt={`${title} image`}

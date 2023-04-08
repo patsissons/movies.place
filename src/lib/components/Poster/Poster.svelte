@@ -33,6 +33,7 @@
   >
     {#if src}
       <PosterImage
+        class="w-full"
         {baseUrl}
         {src}
         {widths}
