@@ -7,7 +7,7 @@
   export let widths: string[] | undefined = undefined
   export let sizes: string | undefined = undefined
 
-  let className: string | undefined = undefined
+  let className = ''
   export { className as class }
 </script>
 

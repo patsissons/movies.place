@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { RatingData } from './types'
 
-  let className: string | undefined = undefined
+  let className = ''
   export { className as class }
 
   export let rating: RatingData | undefined
