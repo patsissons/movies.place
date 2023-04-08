@@ -33,6 +33,10 @@
     page?: number
   }>({})
 
+  items.subscribe(() => {
+    loaded.set({})
+  })
+
   derived([loaded, items, fetching], (x) => x).subscribe(
     ([$loaded, $items, $fetching]) => {
       if ($fetching) return
