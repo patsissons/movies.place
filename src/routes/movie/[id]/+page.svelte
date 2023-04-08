@@ -106,7 +106,7 @@
                 {baseUrl}
                 src={movie.posterPath}
                 widths={$images.posterSizes}
-                sizes="(max-width: 1280px) 460px, (max-width: 1024px) 254px, 100vw"
+                sizes="(min-width: 1280px) 460px, (min-width: 1024px) 254px, 100vw"
                 alt={`${movie.title} image`}
               />
             {/if}

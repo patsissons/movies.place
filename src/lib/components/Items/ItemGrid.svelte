@@ -47,7 +47,7 @@
         <Poster
           {title}
           {baseUrl}
-          sizes="(max-width: 1024px) 10vw, (max-width: 480px) 20vw, 33vw"
+          sizes="(min-width: 1024px) 10vw, (min-width: 480px) 20vw, 33vw"
           {...image}
           {description}
           {date}

@@ -82,7 +82,7 @@
               {baseUrl}
               src={person.profilePath}
               widths={$images.profileSizes}
-              sizes="(max-width: 1280px) 183px, (max-width: 1024px) 119px, 100vw"
+              sizes="(min-width: 1280px) 183px, (min-width: 1024px) 119px, 100vw"
               alt={`${person.name} image`}
             />
           {/if}
