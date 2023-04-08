@@ -219,54 +219,42 @@
           on:selectionChanged={handleSelectionChanged}
         />
         <div
-          class="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box"
+          class="flex flex-col sm:flex-row items-center sm:items-end gap-4 w-full p-4 border border-base-300 bg-base-200 rounded-box"
         >
-          <input type="checkbox" class="peer" checked />
-          <div class="collapse-title text-center">Filters</div>
-          <div class="collapse-content">
-            <div
-              class="flex flex-col sm:flex-row items-center sm:items-end gap-4"
-            >
-              <label class="flex gap-2 label cursor-pointer">
-                <span class="label-text">Watchable?</span>
-                <input
-                  type="checkbox"
-                  class="checkbox"
-                  bind:checked={watchable}
-                />
-              </label>
-              <div class="flex flex-col items-center gap-1">
-                <p>Min Rating: {filterRating}</p>
-                <label class="flex gap-2 label cursor-pointer">
-                  <input
-                    type="range"
-                    min={0}
-                    max={100}
-                    bind:value={filterRating}
-                    class="range"
-                    step={1}
-                  />
-                </label>
-              </div>
-              {#if minYear && maxYear && filterYear}
-                <div class="flex flex-col items-center gap-1">
-                  <p>Min Year: {filterYear}</p>
-                  <label class="flex gap-2 label cursor-pointer">
-                    <span class="label-text">{minYear}</span>
-                    <input
-                      type="range"
-                      min={minYear}
-                      max={maxYear}
-                      bind:value={filterYear}
-                      class="range"
-                      step={1}
-                    />
-                    <span class="label-text">{maxYear}</span>
-                  </label>
-                </div>
-              {/if}
-            </div>
+          <label class="flex gap-2 label cursor-pointer">
+            <span class="label-text">Watchable?</span>
+            <input type="checkbox" class="checkbox" bind:checked={watchable} />
+          </label>
+          <div class="flex flex-col items-center gap-1">
+            <p>Min Rating: {filterRating}</p>
+            <label class="flex gap-2 label cursor-pointer">
+              <input
+                type="range"
+                min={0}
+                max={100}
+                bind:value={filterRating}
+                class="range"
+                step={1}
+              />
+            </label>
           </div>
+          {#if minYear && maxYear && filterYear}
+            <div class="flex flex-col items-center gap-1">
+              <p>Min Year: {filterYear}</p>
+              <label class="flex gap-2 label cursor-pointer">
+                <span class="label-text">{minYear}</span>
+                <input
+                  type="range"
+                  min={minYear}
+                  max={maxYear}
+                  bind:value={filterYear}
+                  class="range"
+                  step={1}
+                />
+                <span class="label-text">{maxYear}</span>
+              </label>
+            </div>
+          {/if}
         </div>
       </div>
     </div>
