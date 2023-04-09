@@ -45,7 +45,10 @@
           id,
           refId: source.id,
           watchable:
-            source.imdbId != null && voteCount > 5 && genreIds.length > 0,
+            source.imdbId != null &&
+            voteAverage > 0 &&
+            voteCount > 5 &&
+            genreIds.length > 0,
           imdbId: imdbId ?? undefined,
           title,
           date: releaseDate ?? undefined,
@@ -167,30 +170,23 @@
   const filteredItems = writable<ItemList<Item>>()
 
   $: {
-    if (!$filteredItems) {
-      filteredItems.set($items)
-    } else {
-      const list = $items.list.filter((item) => {
-        if (watchable && !item.watchable) return false
-        if (item.refId && !$selectedActors.includes(item.refId)) return false
-        if (filterYear && item.date) {
-          if (dayjs(item.date).year() < filterYear) return false
-        }
+    const { list, variables } = $items
+    const filteredList = list.filter((item) => {
+      if (watchable && !item.watchable) return false
+      if (item.refId && !$selectedActors.includes(item.refId)) return false
+      if (filterYear && item.date) {
+        if (dayjs(item.date).year() < filterYear) return false
+      }
 
-        if (item.tmdbRating && item.tmdbRating.value < filterRating)
-          return false
+      if (item.tmdbRating && item.tmdbRating.value < filterRating) return false
 
-        return true
-      })
+      return true
+    })
 
-      console.log('update', list)
-      filteredItems.update((items) => {
-        return {
-          ...items,
-          list,
-        }
-      })
-    }
+    filteredItems.set({
+      variables,
+      list: filteredList,
+    })
   }
 
   function handleSelectionChanged({
