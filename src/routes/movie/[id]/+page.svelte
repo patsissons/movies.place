@@ -124,7 +124,7 @@
                     )} (${dayjs(movie.releaseDate).fromNow()})`}
                   >
                     <Time
-                      class="font-mono font-light text-base-content"
+                      class="font-mono font-light"
                       timestamp={movie.releaseDate}
                       format="(YYYY)"
                     />
