@@ -4,7 +4,7 @@
   import type { PageData } from './$houdini'
   import { Items } from '$lib/components/Items'
   import { baseUrlStore, itemsStorePaginated } from '$lib/stores'
-  import DebugData from '$lib/components/DebugData.svelte'
+  import { DebugQuery } from '$lib/components/Debug'
   import dayjs from 'dayjs'
 
   export let data: PageData
@@ -55,4 +55,4 @@
   descriptionLabel="Known for"
   filterable
 />
-<DebugData store={SortedPeople} />
+<DebugQuery store={SortedPeople} />

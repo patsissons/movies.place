@@ -7,6 +7,7 @@
   import ItemGrid from '$lib/components/Items/ItemGrid.svelte'
   import type { Person$result } from '$houdini'
   import dayjs from 'dayjs'
+  import DebugData from '$lib/components/Debug/DebugData.svelte'
 
   export let data: PageData
 
@@ -271,3 +272,4 @@
     filterable
   />
 </div>
+<DebugData data={$filteredItems} />

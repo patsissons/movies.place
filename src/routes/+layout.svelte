@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import '$lib/styles/global.scss'
-  import { debuggingStore } from '$lib/stores/debugging'
+  import { debuggingEnabled } from '$lib/stores/debugging'
 
   let documentElement: HTMLElement | undefined
   let dark = true
@@ -26,7 +26,7 @@
   }
 
   function toggleDebugging() {
-    debuggingStore.update((value) => !value)
+    debuggingEnabled.update((value) => !value)
   }
 </script>
 
@@ -102,7 +102,7 @@
             <input
               type="checkbox"
               class="toggle"
-              checked={$debuggingStore}
+              checked={$debuggingEnabled}
               on:change={toggleDebugging}
             />
           </label>

@@ -5,7 +5,7 @@
   import { Items } from '$lib/components/Items'
   import type { PageData } from './$houdini'
   import { derived, writable } from 'svelte/store'
-  import DebugData from '$lib/components/DebugData.svelte'
+  import { DebugQuery } from '$lib/components/Debug'
 
   export let data: PageData
 
@@ -75,4 +75,4 @@
   itemType="movies"
   descriptionLabel="Release date"
 />
-<DebugData {store} />
+<DebugQuery {store} />

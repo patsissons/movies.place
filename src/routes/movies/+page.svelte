@@ -2,7 +2,7 @@
   import type { PageData } from './$houdini'
   import { Items } from '$lib/components/Items'
   import { baseUrlStore, itemsStorePaginated } from '$lib/stores'
-  import DebugData from '$lib/components/DebugData.svelte'
+  import { DebugQuery } from '$lib/components/Debug'
 
   export let data: PageData
 
@@ -58,4 +58,4 @@
   itemType="movies"
   filterable
 />
-<DebugData store={SortedMovies} />
+<DebugQuery store={SortedMovies} />

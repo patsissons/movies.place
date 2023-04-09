@@ -11,7 +11,7 @@
   import { Items, type Item, type RatingID } from '$lib/components/Items'
   import type { Movie$result } from '$houdini'
   import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
-  import DebugData from '$lib/components/DebugData.svelte'
+  import { DebugQuery } from '$lib/components/Debug'
   import { PosterImage } from '$lib/components/Poster'
   import { imagesStore } from '$lib/stores/imagesStore'
   import Rating from '$lib/components/Items/Rating.svelte'
@@ -356,4 +356,4 @@
 {:else if $MovieStore.data}
   <Error error={`Movie ${id} not found`} />
 {/if}
-<DebugData store={MovieStore} />
+<DebugQuery store={MovieStore} />
