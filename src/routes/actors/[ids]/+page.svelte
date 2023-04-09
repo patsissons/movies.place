@@ -8,6 +8,7 @@
   import type { Person$result } from '$houdini'
   import dayjs from 'dayjs'
   import DebugData from '$lib/components/Debug/DebugData.svelte'
+  import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
 
   export let data: PageData
 
@@ -21,7 +22,10 @@
   const people = PeopleStores.map((personStore) =>
     itemsStore(
       Configuration,
-      personStore,
+      personStore as QueryStoreWithoutCustomScalars<
+        typeof personStore,
+        Person$result
+      >,
       (data) => data.person,
       (person) => person.cast,
       (
@@ -32,9 +36,13 @@
           releaseDate,
           voteAverage,
           voteCount,
+          popularity,
           posterPath,
           movie: {
             externalIds: { imdbId },
+            budget,
+            revenue,
+            runtime,
           },
           genreIds,
         },
@@ -45,10 +53,15 @@
           id,
           refId: source.id,
           watchable:
-            source.imdbId != null &&
+            Boolean(source.imdbId) &&
             voteAverage > 0 &&
             voteCount > 5 &&
-            genreIds.length > 0,
+            popularity > 0 &&
+            genreIds.length > 0 &&
+            (budget as bigint) > 0 &&
+            (revenue as bigint) > 0 &&
+            (runtime || 0) > 60 &&
+            Boolean(character),
           imdbId: imdbId ?? undefined,
           title,
           date: releaseDate ?? undefined,
@@ -151,7 +164,7 @@
   const actors = derived(
     [refImages, ...people.map(({ source }) => source)],
     ([refImages, ...sources]) =>
-      sources
+      (sources as (Person$result['person'] | null)[])
         .filter((source): source is NonNullable<Person$result['person']> =>
           Boolean(source),
         )
@@ -206,16 +219,17 @@
 <div class="flex flex-col items-center gap-4">
   <div class="collapse collapse-arrow">
     <input type="checkbox" class="peer" checked />
-    <div class="collapse-title">Filters</div>
+    <div class="collapse-title text-center">Filters</div>
     <div class="collapse-content">
       <div class="flex flex-col items-center justify-center gap-2">
-        <ItemGrid
-          {baseUrl}
-          items={actors}
-          selectedItems={selectedActors}
-          center
-          on:selectionChanged={handleSelectionChanged}
-        />
+        <div class="w-full">
+          <ItemGrid
+            {baseUrl}
+            items={actors}
+            selectedItems={selectedActors}
+            on:selectionChanged={handleSelectionChanged}
+          />
+        </div>
         <div
           class="flex flex-col sm:flex-row items-center sm:items-end gap-4 w-full p-4 border border-base-300 bg-base-200 rounded-box"
         >
