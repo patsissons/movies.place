@@ -152,10 +152,11 @@
           Boolean(source),
         )
         .map(
-          ({ id, name: title }) =>
+          ({ id, name: title, cast }) =>
             ({
               id,
               title,
+              description: `${cast.length} movies`,
               url: `/actor/${id}`,
               image: refImages?.[id],
             } as Item),
