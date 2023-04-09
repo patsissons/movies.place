@@ -43,6 +43,7 @@ export async function fetchJson<Result = Record<string, unknown>>(
 
     return camelize<Result>(payload)
   } catch (error) {
+    // console.log('E', error)
     if (fallbackUrl) {
       return await fetchJson<Result>(fetch, fallbackUrl)
     }

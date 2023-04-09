@@ -11,7 +11,7 @@
   import { Items, type Item, type RatingID } from '$lib/components/Items'
   import type { Movie$result } from '$houdini'
   import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
-  import DebugData from '$lib/components/DebugData.svelte'
+  import { DebugQuery } from '$lib/components/Debug'
   import { PosterImage } from '$lib/components/Poster'
   import { imagesStore } from '$lib/stores/imagesStore'
   import Rating from '$lib/components/Items/Rating.svelte'
@@ -41,7 +41,8 @@
       typeof MovieStore,
       Movie$result
     >,
-    (data) => data.movie?.cast,
+    (data) => data.movie,
+    (movie) => movie.cast,
     ({ id, order, name: title, character: description, profilePath }, images) =>
       ({
         id,
@@ -77,21 +78,22 @@
 {#if movie}
   <div class="flex flex-col gap-2">
     <div class="flex flex-col gap-4">
-      <div
-        class="hero min-h-screen bg-base-200"
-        style={movie.backdropPath
-          ? `background-image: url(${[
-              $baseUrl,
-              'original',
-              movie.backdropPath,
-            ].join('')});`
-          : undefined}
-      >
+      <div class="hero min-h-screen bg-base-200">
+        {#if movie.backdropPath && $images}
+          <PosterImage
+            class="object-cover"
+            {baseUrl}
+            src={movie.backdropPath}
+            widths={$images.backdropSizes}
+            sizes="(min-width: 1280px) 1280px, (min-width: 1024px) 1024px, (min-width: 640px) 640px, (min-width: 480px) 480px, 100vw"
+            alt={`${movie.title} backdrop image`}
+          />
+        {/if}
         <div class="hero-overlay backdrop-blur-sm" />
         <div
           class="hero-content flex-col lg:flex-row lg:items-start text-white"
         >
-          <div class="indicator w-full lg:w-auto">
+          <div class="indicator w-full">
             {#if movie.adult}
               <span
                 class="indicator-item indicator-start indicator-top badge badge-secondary"
@@ -101,11 +103,11 @@
             {/if}
             {#if movie.posterPath && $images}
               <PosterImage
-                class="rounded-lg shadow-2xl"
+                class="w-full rounded-lg shadow-2xl"
                 {baseUrl}
                 src={movie.posterPath}
                 widths={$images.posterSizes}
-                sizes="(max-width: 1280px) 460px, (max-width: 1024px) 254px, 100vw"
+                sizes="(min-width: 1280px) 460px, (min-width: 1024px) 254px, 100vw"
                 alt={`${movie.title} image`}
               />
             {/if}
@@ -328,26 +330,13 @@
               </div>
             {/if}
             {#if selectedNames.length > 0}
-              <label
-                for="coming-soon-modal"
+              <a
                 class="btn btn-block btn-accent h-auto p-4"
+                role="button"
+                href={`/actors/${$selectedActors.join(',')}#table`}
               >
                 Find movies starring {selectedNames.join(', ')}
-              </label>
-
-              <input
-                type="checkbox"
-                id="coming-soon-modal"
-                class="modal-toggle"
-              />
-              <div class="modal">
-                <div class="modal-box">
-                  <h3 class="font-bold text-lg">Feature is coming soon!</h3>
-                  <div class="modal-action">
-                    <label for="coming-soon-modal" class="btn">Yay!</label>
-                  </div>
-                </div>
-              </div>
+              </a>
             {/if}
           </div>
         </div>
@@ -367,4 +356,4 @@
 {:else if $MovieStore.data}
   <Error error={`Movie ${id} not found`} />
 {/if}
-<DebugData store={MovieStore} />
+<DebugQuery store={MovieStore} />

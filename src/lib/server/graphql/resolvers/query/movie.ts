@@ -19,6 +19,7 @@ export const movie = (async (_source, { id }, { fetch }) => {
   try {
     const {
       credits: { cast },
+      externalIds,
       ...payload
     } = await fetchTMDBJson<MoviePayload>(
       fetch,
@@ -30,6 +31,10 @@ export const movie = (async (_source, { id }, { fetch }) => {
 
     return {
       ...payload,
+      externalIds: {
+        id,
+        ...externalIds,
+      },
       cast,
     }
   } catch (error) {

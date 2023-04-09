@@ -9,7 +9,7 @@
   import type { PageData } from './$houdini'
   import dayjs from 'dayjs'
   import { Items, type Item } from '$lib/components/Items'
-  import DebugData from '$lib/components/DebugData.svelte'
+  import { DebugQuery } from '$lib/components/Debug'
   import { imagesStore } from '$lib/stores/imagesStore'
 
   export let data: PageData
@@ -23,7 +23,8 @@
   const { errors, fetching, items } = itemsStore(
     Configuration,
     PersonStore,
-    (data) => data.person?.cast,
+    (data) => data.person,
+    (person) => person.cast,
     (
       {
         id,
@@ -47,6 +48,7 @@
         tmdbRating: {
           label: 'TMDB',
           value: voteAverage * 10,
+          count: voteCount,
           description: `${voteCount} votes`,
           disabled: voteCount === 0,
         },
@@ -66,7 +68,7 @@
   <div class="flex flex-col gap-2">
     <div class="hero min-h-screen bg-base-200">
       <div class="hero-content flex-col lg:flex-row lg:items-start text-white">
-        <div class="indicator w-full lg:w-auto">
+        <div class="indicator w-full">
           {#if person.adult}
             <span
               class="indicator-item indicator-start indicator-top badge badge-secondary"
@@ -76,11 +78,11 @@
           {/if}
           {#if person.profilePath && $images}
             <PosterImage
-              class="rounded-lg shadow-2xl"
+              class="w-full rounded-lg shadow-2xl"
               {baseUrl}
               src={person.profilePath}
               widths={$images.profileSizes}
-              sizes="(max-width: 1280px) 183px, (max-width: 1024px) 119px, 100vw"
+              sizes="(min-width: 1280px) 460px, (min-width: 1024px) 254px, 100vw"
               alt={`${person.name} image`}
             />
           {/if}
@@ -277,4 +279,4 @@
 {:else if $PersonStore.data}
   <Error error={`Actor ${id} not found`} />
 {/if}
-<DebugData store={PersonStore} />
+<DebugQuery store={PersonStore} />

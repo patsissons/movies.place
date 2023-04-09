@@ -1,5 +1,5 @@
 <script lang="ts">
-  let className: string | undefined = undefined
+  let className = ''
   export { className as class }
 </script>
 

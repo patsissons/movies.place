@@ -13,6 +13,7 @@ query Movie($id: Int!) {
       id
       response
       numericalRatings {
+        id
         metascore
         imdbRating
         imdbVotes

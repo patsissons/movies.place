@@ -7,7 +7,7 @@
   export let widths: string[] | undefined = undefined
   export let sizes: string | undefined = undefined
 
-  let className: string | undefined = undefined
+  let className = ''
   export { className as class }
 </script>
 
@@ -16,7 +16,7 @@
     <img class={className} {alt} src={[$baseUrl, src].join('')} />
   {:else}
     <img
-      class={`w-full ${className}`}
+      class={`aspect-[2/3] ${className}`}
       {alt}
       {sizes}
       src={[$baseUrl, widths[widths.length - 1], src].join('')}

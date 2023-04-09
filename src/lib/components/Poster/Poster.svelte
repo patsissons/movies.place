@@ -10,6 +10,7 @@
   export let sizes: string | undefined = undefined
   export let description: string | undefined = undefined
   export let date: string | Date | undefined = undefined
+  export let alt: string | undefined = undefined
 
   let desc: string | undefined
 
@@ -31,7 +32,14 @@
     class="bg-slate-400 rounded-tl-[18px] rounded-tr-lg overflow-hidden w-full aspect-[2/3]"
   >
     {#if src}
-      <PosterImage {baseUrl} {src} {widths} {sizes} alt={`${title} image`} />
+      <PosterImage
+        class="w-full"
+        {baseUrl}
+        {src}
+        {widths}
+        {sizes}
+        alt={alt ?? `${title} image`}
+      />
     {/if}
   </div>
   <p class="w-full text-center font-bold">

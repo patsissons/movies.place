@@ -6,7 +6,7 @@
   import type { Pagination as PaginationState } from '$lib/stores'
   import ItemGrid from './ItemGrid.svelte'
   import Tabs from './Tabs.svelte'
-  import type { Item } from './types'
+  import type { Item, ItemImage } from './types'
   import Pagination from '../Pagination.svelte'
   import ItemTable from './ItemTable.svelte'
   import type { ItemList } from '$lib/stores/items'
@@ -22,6 +22,9 @@
   export let filterable = false
   export let selectedItems: Writable<number[]> | undefined = undefined
   export let queryFilter: Readable<string> | undefined = undefined
+  export let refImages:
+    | Readable<Record<number, ItemImage | undefined> | undefined>
+    | undefined = undefined
 
   const filter = writable('')
   const loaded = writable<{
@@ -29,6 +32,10 @@
     query?: string
     page?: number
   }>({})
+
+  items.subscribe(() => {
+    loaded.set({})
+  })
 
   derived([loaded, items, fetching], (x) => x).subscribe(
     ([$loaded, $items, $fetching]) => {
@@ -92,19 +99,22 @@
 </script>
 
 <Errors {errors} />
-{#if filterable}
-  <Input
-    center
-    placeholder={`Filter ${itemType} below...`}
-    bind:value={$filter}
-  />
-{/if}
-<div class="p-1 text-center">
-  {#if $fetching}
-    <progress class="progress progress-secondary w-80" />
-  {:else}
-    <progress class="progress w-80" value={0} max={100} />
+<div class="w-80 mx-auto">
+  {#if filterable && $loaded.list}
+    <Input
+      placeholder={`Filter ${$loaded.list.length} ${itemType} below...`}
+      center
+      fullWidth
+      bind:value={$filter}
+    />
   {/if}
+  <div class="p-1 text-center">
+    {#if $fetching}
+      <progress class="progress progress-secondary w-full" />
+    {:else}
+      <progress class="progress w-full" value={0} max={100} />
+    {/if}
+  </div>
 </div>
 {#if $filteredItems.length > 0}
   <Tabs>
@@ -122,6 +132,7 @@
         items={filteredItems}
         {descriptionLabel}
         {selectedItems}
+        {refImages}
         on:selectionChanged={handleSelectionChanged}
       />
     </span>

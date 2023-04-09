@@ -35,13 +35,15 @@ export interface Pagination {
 
 export function itemsStore<
   Data extends LocalGraphQLObject,
-  T extends Result,
+  TSource extends Record<string, unknown>,
+  TList extends Result,
   Item extends ResultItem,
 >(
   config: ConfigurationStore,
   store: QueryStore<Data, Record<string, unknown>>,
-  listTransformer: (data: Data) => T[] | undefined,
-  transformer: (result: T, images: Images) => Item,
+  sourceTransformer: (data: Data) => TSource | null | undefined,
+  listTransformer: (source: TSource) => TList[] | undefined,
+  transformer: (result: TList, images: Images, source: TSource) => Item,
   conditional?: Readable<boolean>,
 ) {
   const errors = derived(store, ({ errors, fetching }) => {
@@ -51,21 +53,31 @@ export function itemsStore<
 
   const images = imagesStore(config)
 
-  const items = derived([images, store], ([$images, { data, variables }]) => {
-    if (!data || !$images) return
+  const source = derived(store, ({ data }) => {
+    if (!data) return
 
-    const results = listTransformer(data)
-    if (!results) return
-
-    return {
-      list: results.map((result) => transformer(result, $images)),
-      variables,
-    } as ItemList<Item>
+    return sourceTransformer(data)
   })
+
+  const items = derived(
+    [source, images, store],
+    ([$source, $images, { data, variables }]) => {
+      if (!data || !$source || !$images) return
+
+      const results = listTransformer($source)
+      if (!results) return
+
+      return {
+        list: results.map((result) => transformer(result, $images, $source)),
+        variables,
+      } as ItemList<Item>
+    },
+  )
 
   const fetching = derived(store, ({ fetching }) => fetching)
 
   const result = {
+    source,
     errors,
     fetching,
   }
@@ -87,19 +99,24 @@ export interface PaginatedInput extends Record<string, unknown> {
 export function itemsStorePaginated<
   Data extends LocalGraphQLObject,
   Input extends PaginatedInput,
-  T extends Result,
+  TList extends Result,
   Item extends ResultItem,
 >(
   config: ConfigurationStore,
   store: QueryStore<Data, Input>,
-  resultTransformer: (data: Data) => ResultList<T>,
-  transformer: (result: T, images: Images) => Item,
+  resultTransformer: (data: Data) => ResultList<TList>,
+  transformer: (
+    result: TList,
+    images: Images,
+    source: ResultList<TList>,
+  ) => Item,
   conditional?: Readable<boolean>,
 ) {
   const result = itemsStore(
     config,
     store,
-    (data) => resultTransformer(data).results,
+    (data) => resultTransformer(data),
+    (result) => result.results,
     transformer,
     conditional,
   )

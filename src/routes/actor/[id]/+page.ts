@@ -7,7 +7,7 @@ export const load = (async (event) => {
     params: { id },
   } = event
 
-  if (!id) throw error(404, { message: `Actor ${id} not found` })
+  if (!id) throw error(404, { message: 'Actor id missing' })
 
   const { Person } = await load_Person({ event, variables: { id: Number(id) } })
 

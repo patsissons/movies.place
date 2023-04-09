@@ -9,6 +9,7 @@
   export let items: Readable<Item[]>
   export let baseUrl: Readable<string | undefined>
   export let selectedItems: Readable<number[]> | undefined = undefined
+  export let center: boolean | undefined = false
 
   const dispatch = createEventDispatcher<{
     selectionChanged: { id: number }
@@ -28,9 +29,13 @@
 </script>
 
 <ul
-  class="grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10 gap-y-2 justify-items-center overflow-x-hidden animate-stagger"
+  class={`gap-y-2 justify-items-center overflow-x-hidden animate-stagger ${
+    center
+      ? 'flex flex-flow'
+      : 'grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10'
+  }`}
 >
-  {#each $items as { id, title, url, description, date, ratings = { }, image }, index}
+  {#each $items as { id, title, url, description, date, tmdbRating, image }, index}
     <li
       class="w-full animate-in ease-out animate-duration-500 slide-in-from-bottom slide-in-from-right fill-mode-both fade-in zoom-in"
       style={`--animation-delay-factor: ${(index - $lastLength) % 20}`}
@@ -42,19 +47,14 @@
         <Poster
           {title}
           {baseUrl}
-          sizes="(max-width: 1024px) 10vw, (max-width: 480px) 20vw, 33vw"
+          sizes="(min-width: 1024px) 10vw, (min-width: 480px) 20vw, 33vw"
           {...image}
           {description}
           {date}
         >
-          {#if ratings.rottentomatoes || ratings.metacritic || ratings.imdb || ratings.tmdb}
+          {#if tmdbRating}
             <div class="absolute left-0 top-0">
-              <Rating
-                rating={ratings.rottentomatoes ||
-                  ratings.metacritic ||
-                  ratings.imdb ||
-                  ratings.tmdb}
-              />
+              <Rating rating={tmdbRating} />
             </div>
           {/if}
           {#if selectedItems}
