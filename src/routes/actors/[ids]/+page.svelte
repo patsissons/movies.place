@@ -16,6 +16,7 @@
   const baseUrl = baseUrlStore(Configuration)
 
   const selectedActors = writable<number[]>(ids)
+  const selectedMovieIds = writable<number[]>([])
 
   let watchable: boolean = true
 
@@ -144,6 +145,10 @@
     },
   )
 
+  const selectedMovies = derived([selectedMovieIds, items], ([$ids, $items]) =>
+    $items.list.filter((item) => $ids.includes(item.id)),
+  )
+
   let minYear: number | undefined
   let maxYear: number | undefined
   let filterYear: number | undefined
@@ -205,8 +210,6 @@
   function handleSelectionChanged({
     detail: { id },
   }: CustomEvent<{ id: number }>) {
-    if (!selectedActors) return
-
     selectedActors.update((values) => {
       const selected = values.includes(id)
       if (selected) return values.filter((value) => value !== id)
@@ -214,9 +217,41 @@
       return values.concat(id)
     })
   }
+
+  function handleShortlistChanged({
+    detail: { id },
+  }: CustomEvent<{ id: number }>) {
+    selectedMovieIds.update((values) => {
+      const selected = values.some((value) => value === id)
+      if (selected) return values.filter((value) => value !== id)
+
+      return values.concat(id)
+    })
+  }
+
+  function handleShortlistRemoved({
+    detail: { id },
+  }: CustomEvent<{ id: number }>) {
+    selectedMovieIds.update((values) => values.filter((value) => value !== id))
+  }
 </script>
 
 <div class="flex flex-col items-center gap-4">
+  {#if $selectedMovies.length > 0}
+    <div class="p-4">
+      <div
+        class="flex flex-col gap-4 p-2 border border-base-300 bg-base-200 rounded-box"
+      >
+        <p class="text-xl text-center">Short list</p>
+        <ItemGrid
+          {baseUrl}
+          items={selectedMovies}
+          selectedItems={selectedMovieIds}
+          on:selectionChanged={handleShortlistRemoved}
+        />
+      </div>
+    </div>
+  {/if}
   <div class="collapse collapse-arrow">
     <input type="checkbox" class="peer" checked />
     <div class="collapse-title text-center">Filters</div>
@@ -280,6 +315,8 @@
     itemType="movies"
     descriptionLabel="Character"
     filterable
+    selectedItems={selectedMovieIds}
+    on:selectionChanged={handleShortlistChanged}
   />
 </div>
 <DebugData data={$filteredItems} />
