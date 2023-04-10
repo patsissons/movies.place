@@ -108,7 +108,7 @@
       bind:value={$filter}
     />
   {/if}
-  <div class="p-1 text-center">
+  <div class="text-center">
     {#if $fetching}
       <progress class="progress progress-secondary w-full" />
     {:else}

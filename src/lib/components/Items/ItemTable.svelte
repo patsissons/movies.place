@@ -360,12 +360,12 @@
               {#if refId != null}
                 {@const image = refImageMap[refId]}
                 <a
-                  class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+                  class="btn btn-ghost btn-block h-20 justify-start rounded-none px-4 py-1"
                   href={`/actor/${refId}`}
                 >
                   {#if image}
                     <div class="avatar">
-                      <div class="w-8 !aspect-auto">
+                      <div class="w-12 !aspect-auto">
                         <PosterImage
                           class="w-full"
                           {baseUrl}
@@ -383,12 +383,12 @@
           {/if}
           <td class="p-0 !static max-w-[300px] truncate">
             <a
-              class="btn btn-ghost btn-block h-20 justify-start rounded-none p-4"
+              class="btn btn-ghost btn-block h-20 justify-start rounded-none px-4 py-1"
               href={url}
             >
               <div class="flex items-center gap-4">
                 <div class="avatar">
-                  <div class="w-8 !aspect-auto">
+                  <div class="w-12 !aspect-auto">
                     {#if image}
                       <PosterImage
                         class="w-full"

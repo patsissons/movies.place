@@ -30,9 +30,7 @@
 
 <ul
   class={`gap-y-2 justify-items-center overflow-x-hidden animate-stagger ${
-    center
-      ? 'flex flex-flow'
-      : 'grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10'
+    center ? 'flex' : 'grid grid-cols-3 xs:grid-cols-5 lg:grid-cols-10'
   }`}
 >
   {#each $items as { id, title, url, description, date, tmdbRating, image }, index}

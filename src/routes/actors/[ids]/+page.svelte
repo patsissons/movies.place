@@ -8,6 +8,7 @@
   import type { Person$result } from '$houdini'
   import dayjs from 'dayjs'
   import DebugData from '$lib/components/Debug/DebugData.svelte'
+  import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
 
   export let data: PageData
 
@@ -15,13 +16,17 @@
   const baseUrl = baseUrlStore(Configuration)
 
   const selectedActors = writable<number[]>(ids)
+  const selectedMovieIds = writable<number[]>([])
 
   let watchable: boolean = true
 
   const people = PeopleStores.map((personStore) =>
     itemsStore(
       Configuration,
-      personStore,
+      personStore as QueryStoreWithoutCustomScalars<
+        typeof personStore,
+        Person$result
+      >,
       (data) => data.person,
       (person) => person.cast,
       (
@@ -32,9 +37,13 @@
           releaseDate,
           voteAverage,
           voteCount,
+          popularity,
           posterPath,
           movie: {
             externalIds: { imdbId },
+            budget,
+            revenue,
+            runtime,
           },
           genreIds,
         },
@@ -45,10 +54,15 @@
           id,
           refId: source.id,
           watchable:
-            source.imdbId != null &&
+            Boolean(source.imdbId) &&
             voteAverage > 0 &&
             voteCount > 5 &&
-            genreIds.length > 0,
+            popularity > 0 &&
+            genreIds.length > 0 &&
+            (budget as bigint) > 0 &&
+            (revenue as bigint) > 0 &&
+            (runtime || 0) > 60 &&
+            Boolean(character),
           imdbId: imdbId ?? undefined,
           title,
           date: releaseDate ?? undefined,
@@ -131,6 +145,10 @@
     },
   )
 
+  const selectedMovies = derived([selectedMovieIds, items], ([$ids, $items]) =>
+    $items.list.filter((item) => $ids.includes(item.id)),
+  )
+
   let minYear: number | undefined
   let maxYear: number | undefined
   let filterYear: number | undefined
@@ -151,7 +169,7 @@
   const actors = derived(
     [refImages, ...people.map(({ source }) => source)],
     ([refImages, ...sources]) =>
-      sources
+      (sources as (Person$result['person'] | null)[])
         .filter((source): source is NonNullable<Person$result['person']> =>
           Boolean(source),
         )
@@ -192,8 +210,6 @@
   function handleSelectionChanged({
     detail: { id },
   }: CustomEvent<{ id: number }>) {
-    if (!selectedActors) return
-
     selectedActors.update((values) => {
       const selected = values.includes(id)
       if (selected) return values.filter((value) => value !== id)
@@ -201,21 +217,54 @@
       return values.concat(id)
     })
   }
+
+  function handleShortlistChanged({
+    detail: { id },
+  }: CustomEvent<{ id: number }>) {
+    selectedMovieIds.update((values) => {
+      const selected = values.some((value) => value === id)
+      if (selected) return values.filter((value) => value !== id)
+
+      return values.concat(id)
+    })
+  }
+
+  function handleShortlistRemoved({
+    detail: { id },
+  }: CustomEvent<{ id: number }>) {
+    selectedMovieIds.update((values) => values.filter((value) => value !== id))
+  }
 </script>
 
 <div class="flex flex-col items-center gap-4">
-  <div class="collapse collapse-arrow">
-    <input type="checkbox" class="peer" checked />
-    <div class="collapse-title">Filters</div>
-    <div class="collapse-content">
-      <div class="flex flex-col items-center justify-center gap-2">
+  {#if $selectedMovies.length > 0}
+    <div class="p-4">
+      <div
+        class="flex flex-col gap-4 p-2 border border-base-300 bg-base-200 rounded-box"
+      >
+        <p class="text-xl text-center">Short list</p>
         <ItemGrid
           {baseUrl}
-          items={actors}
-          selectedItems={selectedActors}
-          center
-          on:selectionChanged={handleSelectionChanged}
+          items={selectedMovies}
+          selectedItems={selectedMovieIds}
+          on:selectionChanged={handleShortlistRemoved}
         />
+      </div>
+    </div>
+  {/if}
+  <div class="collapse collapse-arrow">
+    <input type="checkbox" class="peer" checked />
+    <div class="collapse-title text-center">Filters</div>
+    <div class="collapse-content">
+      <div class="flex flex-col items-center justify-center gap-2">
+        <div class="w-full">
+          <ItemGrid
+            {baseUrl}
+            items={actors}
+            selectedItems={selectedActors}
+            on:selectionChanged={handleSelectionChanged}
+          />
+        </div>
         <div
           class="flex flex-col sm:flex-row items-center sm:items-end gap-4 w-full p-4 border border-base-300 bg-base-200 rounded-box"
         >
@@ -266,6 +315,8 @@
     itemType="movies"
     descriptionLabel="Character"
     filterable
+    selectedItems={selectedMovieIds}
+    on:selectionChanged={handleShortlistChanged}
   />
 </div>
 <DebugData data={$filteredItems} />

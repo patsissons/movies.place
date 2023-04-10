@@ -38,6 +38,9 @@ query Person($id: Int!) {
           twitterId
           wikidataId
         }
+        budget
+        revenue
+        runtime
       }
       character
       creditId
