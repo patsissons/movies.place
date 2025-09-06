@@ -10,7 +10,6 @@
   import { Icon } from '$lib/components/Icon'
   import { Items, type Item, type RatingID } from '$lib/components/Items'
   import type { Movie$result } from '$houdini'
-  import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
   import { DebugQuery } from '$lib/components/Debug'
   import { PosterImage } from '$lib/components/Poster'
   import { imagesStore } from '$lib/stores/imagesStore'
@@ -37,10 +36,7 @@
   $: movie = $MovieStore.data?.movie
   const { errors, fetching, items } = itemsStore(
     Configuration,
-    MovieStore as QueryStoreWithoutCustomScalars<
-      typeof MovieStore,
-      Movie$result
-    >,
+    MovieStore,
     (data) => data.movie,
     (movie) => movie.cast,
     ({ id, order, name: title, character: description, profilePath }, images) =>
@@ -56,7 +52,7 @@
               widths: images.profileSizes,
             }
           : undefined,
-      } as Item),
+      }) as Item,
   )
   $: ratings = movie
     ? (Object.entries({
@@ -89,7 +85,7 @@
             alt={`${movie.title} backdrop image`}
           />
         {/if}
-        <div class="hero-overlay backdrop-blur-sm" />
+        <div class="hero-overlay backdrop-blur-sm"></div>
         <div
           class="hero-content flex-col lg:flex-row lg:items-start text-white"
         >

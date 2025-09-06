@@ -110,9 +110,9 @@
   {/if}
   <div class="text-center">
     {#if $fetching}
-      <progress class="progress progress-secondary w-full" />
+      <progress class="progress progress-secondary w-full"></progress>
     {:else}
-      <progress class="progress w-full" value={0} max={100} />
+      <progress class="progress w-full" value={0} max={100}></progress>
     {/if}
   </div>
 </div>

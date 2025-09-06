@@ -1,0 +1,13 @@
+diff --git a/build/runtime-esm/lib/types.d.ts b/build/runtime-esm/lib/types.d.ts
+index 50de1a2065a86f0dc0a9de11856b444cf7fb7eba..bbb15a6c71fe054efd1b57e237d91e2e163f6532 100644
+--- a/build/runtime-esm/lib/types.d.ts
++++ b/build/runtime-esm/lib/types.d.ts
+@@ -157,7 +157,7 @@ export type MutationOperation = {
+ export type GraphQLObject = {
+     [key: string]: GraphQLValue;
+ };
+-export type GraphQLDefaultScalar = string | number | boolean;
++export type GraphQLDefaultScalar = string | number | boolean | bigint;
+ export type GraphQLValue = GraphQLDefaultScalar | null | GraphQLObject | GraphQLValue[] | undefined;
+ export type GraphQLVariables = {
+     [key: string]: any;

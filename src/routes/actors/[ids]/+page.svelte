@@ -8,7 +8,6 @@
   import type { Person$result } from '$houdini'
   import dayjs from 'dayjs'
   import DebugData from '$lib/components/Debug/DebugData.svelte'
-  import type { QueryStoreWithoutCustomScalars } from '$lib/types/graphql'
 
   export let data: PageData
 
@@ -23,10 +22,7 @@
   const people = PeopleStores.map((personStore) =>
     itemsStore(
       Configuration,
-      personStore as QueryStoreWithoutCustomScalars<
-        typeof personStore,
-        Person$result
-      >,
+      personStore,
       (data) => data.person,
       (person) => person.cast,
       (
@@ -81,7 +77,7 @@
               }
             : undefined,
           description: character,
-        } as Item),
+        }) as Item,
     ),
   )
 
@@ -119,7 +115,7 @@
             }, new Map<number, Item>())
             .values(),
         ),
-      } as ItemList<Item>),
+      }) as ItemList<Item>,
   )
   const refImages = derived(
     [Configuration, ...PeopleStores],
@@ -128,20 +124,23 @@
 
       const { profileSizes } = configuration.data.configuration.images
 
-      return peopleStores.reduce((map, { data }) => {
-        if (data?.person) {
-          const { id, name, profilePath } = data.person
-          map[id] = profilePath
-            ? {
-                src: profilePath,
-                widths: profileSizes,
-                alt: `${name} image`,
-              }
-            : undefined
-        }
+      return peopleStores.reduce(
+        (map, { data }) => {
+          if (data?.person) {
+            const { id, name, profilePath } = data.person
+            map[id] = profilePath
+              ? {
+                  src: profilePath,
+                  widths: profileSizes,
+                  alt: `${name} image`,
+                }
+              : undefined
+          }
 
-        return map
-      }, {} as Record<number, ItemImage | undefined>)
+          return map
+        },
+        {} as Record<number, ItemImage | undefined>,
+      )
     },
   )
 
@@ -181,7 +180,7 @@
               description: `${cast.length} movies`,
               url: `/actor/${id}`,
               image: refImages?.[id],
-            } as Item),
+            }) as Item,
         ),
   )
 

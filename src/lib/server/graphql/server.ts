@@ -61,5 +61,5 @@ ${print(PersonQuery)
 ${print(ConfigurationQuery)}
 `.trim(),
   },
-  fetchAPI: globalThis,
+  fetchAPI: { Response },
 })

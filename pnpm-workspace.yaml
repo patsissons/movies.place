@@ -1,0 +1,3 @@
+patchedDependencies:
+  graphql-scalars: patches/graphql-scalars.patch
+  houdini: patches/houdini.patch
