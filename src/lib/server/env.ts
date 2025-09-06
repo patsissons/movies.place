@@ -10,3 +10,5 @@ export const OMDB_API_KEY = import.meta.env.VITE_OMDB_API_KEY
 // env transformations
 export const isDevelopment = Boolean(NODE_ENV === 'development')
 export const isProduction = Boolean(NODE_ENV === 'production')
+
+export const useFallbacks = isDevelopment && Boolean(process.env.USE_FALLBACKS)

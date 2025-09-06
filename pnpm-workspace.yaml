@@ -1,3 +1,4 @@
 patchedDependencies:
   graphql-scalars: patches/graphql-scalars.patch
   houdini: patches/houdini.patch
+  vite-plugin-svelte-svg: patches/vite-plugin-svelte-svg.patch

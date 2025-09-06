@@ -5,6 +5,7 @@ module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   daisyui: {
     themes: ['dark', 'light'],
+    logs: false,
   },
   darkMode: 'class',
   plugins: [

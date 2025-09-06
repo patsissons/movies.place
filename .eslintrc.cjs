@@ -11,7 +11,8 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: ['./tsconfig.json'],
+    sourceType: 'module',
+    ecmaVersion: 2020,
     extraFileExtensions: ['.svelte'],
   },
   overrides: [
@@ -19,8 +20,9 @@ module.exports = {
       files: ['*.svelte'],
       parser: 'svelte-eslint-parser',
       parserOptions: {
-        parser: '@typescript-eslint/parser'
-      }
+        project: ['./tsconfig.json'],
+        parser: '@typescript-eslint/parser',
+      },
     },
     {
       files: ['*.ts'],
@@ -45,13 +47,10 @@ module.exports = {
       parser: '@typescript-eslint/parser',
       parserOptions: {
         project: ['./tsconfig.json'],
+        parser: '@typescript-eslint/parser',
       },
     },
   ],
-  parserOptions: {
-    sourceType: 'module',
-    ecmaVersion: 2020,
-  },
   env: {
     browser: true,
     es2017: true,

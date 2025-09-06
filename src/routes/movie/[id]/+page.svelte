@@ -76,7 +76,7 @@
       <div class="hero min-h-screen bg-base-200">
         {#if movie.backdropPath && $images}
           <PosterImage
-            class="object-cover"
+            class="object-cover max-h-[672px]"
             {baseUrl}
             src={movie.backdropPath}
             widths={$images.backdropSizes}
@@ -280,9 +280,7 @@
                             movie.revenue,
                           )} revenue`}
                         >
-                          {currencyFormatter.format(
-                            Number(movie.revenue - movie.budget) / 1e6,
-                          )}M profit
+                          {`${currencyFormatter.format(Number(movie.revenue - movie.budget) / 1_000_000)}M profit`}
                         </div>
                       {:else}
                         -
@@ -298,9 +296,8 @@
                           {movie.revenue > movie.budget ? '↗︎' : '↘︎'}
                           {percentFormatter.format(
                             Number(
-                              ((movie.revenue - movie.budget) * 100n) /
-                                movie.budget,
-                            ) / 100.0,
+                              (movie.revenue - movie.budget) / movie.budget,
+                            ),
                           )}
                         </span>
                       {/if}
@@ -313,9 +310,9 @@
                           )} budget`}
                         >
                           <span class="opacity-60">
-                            ({currencyFormatter.format(
-                              Number(movie.budget) / 1e6,
-                            )}M)
+                            ({`${currencyFormatter.format(
+                              Number(movie.budget) / 1_000_000,
+                            )}M`})
                           </span>
                         </div>
                       {/if}
