@@ -9,7 +9,6 @@
   import type { PageData } from './$houdini'
   import { Icon } from '$lib/components/Icon'
   import { Items, type Item, type RatingID } from '$lib/components/Items'
-  import type { Movie$result } from '$houdini'
   import { DebugQuery } from '$lib/components/Debug'
   import { PosterImage } from '$lib/components/Poster'
   import { imagesStore } from '$lib/stores/imagesStore'

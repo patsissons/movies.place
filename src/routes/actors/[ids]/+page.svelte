@@ -17,7 +17,7 @@
   const selectedActors = writable<number[]>(ids)
   const selectedMovieIds = writable<number[]>([])
 
-  let watchable: boolean = true
+  let watchable = true
 
   const people = PeopleStores.map((personStore) =>
     itemsStore(
@@ -102,8 +102,8 @@
               items.list.forEach((item) => {
                 const actor = map.get(item.id)
 
-                if (actor) {
-                  actor.count!++
+                if (actor?.count) {
+                  actor.count++
                   return map
                 }
 
