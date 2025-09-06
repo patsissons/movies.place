@@ -1,3 +1,3 @@
-import { SortedMoviesStore } from '$houdini'
+import { ConfigurationStore, SortedMoviesStore } from '$houdini'
 
-export const _houdini_load = [new SortedMoviesStore()]
+export const _houdini_load = [new ConfigurationStore(), new SortedMoviesStore()]

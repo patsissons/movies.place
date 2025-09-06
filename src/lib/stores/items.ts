@@ -2,18 +2,19 @@ import { derived, type Readable } from 'svelte/store'
 import type {
   Configuration$result,
   ConfigurationStore,
+  GraphQLObject,
+  GraphQLVariables,
   QueryStore,
 } from '$houdini'
-import type { LocalGraphQLObject } from '$lib/types/graphql'
 import { imagesStore } from './imagesStore'
 
 interface ResultItem {
   id: number
 }
 
-interface Result extends LocalGraphQLObject, ResultItem {}
+interface Result extends GraphQLObject, ResultItem {}
 
-interface ResultList<T extends Result> extends LocalGraphQLObject {
+interface ResultList<T extends Result> extends GraphQLObject {
   page: number
   totalPages: number
   results?: T[]
@@ -34,13 +35,14 @@ export interface Pagination {
 }
 
 export function itemsStore<
-  Data extends LocalGraphQLObject,
+  Data extends GraphQLObject,
+  Input extends GraphQLVariables,
   TSource extends Record<string, unknown>,
   TList extends Result,
   Item extends ResultItem,
 >(
   config: ConfigurationStore,
-  store: QueryStore<Data, Record<string, unknown>>,
+  store: QueryStore<Data, Input>,
   sourceTransformer: (data: Data) => TSource | null | undefined,
   listTransformer: (source: TSource) => TList[] | undefined,
   transformer: (result: TList, images: Images, source: TSource) => Item,
@@ -92,12 +94,12 @@ export function itemsStore<
   }
 }
 
-export interface PaginatedInput extends Record<string, unknown> {
+export type PaginatedInput = GraphQLVariables & {
   page?: number | null
 }
 
 export function itemsStorePaginated<
-  Data extends LocalGraphQLObject,
+  Data extends GraphQLObject,
   Input extends PaginatedInput,
   TList extends Result,
   Item extends ResultItem,

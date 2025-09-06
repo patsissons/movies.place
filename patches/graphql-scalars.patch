@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 3498c0a63c7dca90bd926c059d56391c6607f914..94b20180d92a3f1e722a4f90518e38b4f9f6066e 100644
+--- a/package.json
++++ b/package.json
+@@ -39,6 +39,7 @@
+         "default": "./esm/index.js"
+       }
+     },
++    "./typings/scalars/*": "./typings/scalars/*.d.ts",
+     "./package.json": "./package.json"
+   }
+ }

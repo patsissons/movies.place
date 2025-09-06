@@ -1,1 +1,1 @@
-export { BigInt, Date, DateTime } from '$lib/types/graphql'
+export { BigInt, Date, DateTime } from '$lib/types/scalars'

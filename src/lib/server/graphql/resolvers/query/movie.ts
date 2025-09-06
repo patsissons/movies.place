@@ -32,8 +32,8 @@ export const movie = (async (_source, { id }, { fetch }) => {
     return {
       ...payload,
       externalIds: {
-        id,
         ...externalIds,
+        id,
       },
       cast,
     }

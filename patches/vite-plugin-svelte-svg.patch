@@ -1,0 +1,13 @@
+diff --git a/index.js b/index.js
+index dd84c16aef22c9c0758be8113294c22cc5a047b1..29bfc96bbb56f35c2c6333ce7c070d3483840318 100644
+--- a/index.js
++++ b/index.js
+@@ -9,7 +9,7 @@ function compileSvg(source, filename, ssr) {
+     generate: ssr ? "ssr" : "dom",
+     dev: process.env.NODE_ENV === "development",
+     hydratable: true,
+-    css: false,
++    css: 'external',
+   });
+   return { code, map };
+ }

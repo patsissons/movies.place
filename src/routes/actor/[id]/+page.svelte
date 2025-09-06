@@ -60,7 +60,7 @@
             }
           : undefined,
         description: character,
-      } as Item),
+      }) as Item,
   )
 </script>
 

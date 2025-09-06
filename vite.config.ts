@@ -2,9 +2,9 @@ import graphql from '@rollup/plugin-graphql'
 import { sveltekit } from '@sveltejs/kit/vite'
 import houdini from 'houdini/vite'
 // import codegen from 'vite-plugin-graphql-codegen'
-import watchAndRun from 'vite-plugin-watch-and-run'
+import { watchAndRun } from 'vite-plugin-watch-and-run'
 import svelteSVG from 'vite-plugin-svelte-svg'
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from 'vite'
 
 export default defineConfig({
   plugins: [
@@ -39,7 +39,4 @@ export default defineConfig({
       },
     ]),
   ],
-  test: {
-    include: ['src/**/*.{test,spec}.{js,ts}'],
-  },
 })

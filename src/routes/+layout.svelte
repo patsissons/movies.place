@@ -77,16 +77,16 @@
       </div>
     </div>
     <div class="drawer-side" class:overflow-hidden={!drawerOpen}>
-      <label for="drawer" class="drawer-overlay" />
+      <label for="drawer" class="drawer-overlay"></label>
       <ul class="menu p-4 w-80 bg-base-100 text-base-content">
         <li class="menu-title">Search</li>
         <li><a href="/movies/search" on:click={closeDrawer}>By Movie</a></li>
         <li><a href="/actors/search" on:click={closeDrawer}>By Actor</a></li>
-        <div class="divider" />
+        <div class="divider"></div>
         <li class="menu-title">Popular</li>
         <li><a href="/movies" on:click={closeDrawer}>Movies</a></li>
         <li><a href="/actors" on:click={closeDrawer}>Actors</a></li>
-        <div class="divider" />
+        <div class="divider"></div>
         <li>
           <a
             href="/api/graphql"
@@ -95,7 +95,7 @@
             on:click={closeDrawer}>GraphQL</a
           >
         </li>
-        <div class="divider" />
+        <div class="divider"></div>
         <div class="form-control">
           <label class="label cursor-pointer px-4 py-3">
             <span>Debugging</span>

@@ -6,4 +6,4 @@ export { BigInt } from './BigInt'
 export { Date } from './Date'
 export { DateTime } from './DateTime'
 
-export type LocalGraphQLValue = BigIntType | DateType | DateTimeType
+export type LocalGraphQLScalars = BigIntType | DateType | DateTimeType

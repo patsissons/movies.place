@@ -210,7 +210,7 @@
     <thead class="border-b border-slate-500">
       <tr>
         {#if selectedItems}
-          <th class="!static w-[40px]" />
+          <th class="!static w-[40px]"></th>
         {/if}
         {#if hasOrders}
           <th class="p-0 !static w-[100px]">
@@ -474,7 +474,7 @@
     <tfoot class="border-t border-slate-500">
       <tr>
         {#if selectedItems}
-          <th class="px-4 !static" />
+          <th class="px-4 !static"></th>
         {/if}
         {#if hasOrders}
           <th class="px-4 !static">Order</th>
